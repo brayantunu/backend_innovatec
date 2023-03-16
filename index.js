@@ -6,7 +6,7 @@ import app from "./app.js";
 
 async function main(){
     try {
-        await sequelize.sync({})
+        await sequelize.sync({force:true})
         app.listen(3000)
         console.log("el proyecto y la base de datos estan conectados");
 

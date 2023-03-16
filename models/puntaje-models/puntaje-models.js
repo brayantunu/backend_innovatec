@@ -9,7 +9,7 @@ export const puntaje = sequelize.define('puntaje',{
         autoIncrement:true
         
     },
-    puntaje_puntucacion:{
+    puntaje_puntuacion:{
         type:DataTypes.DOUBLE
     }
 },
