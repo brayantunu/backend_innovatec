@@ -12,8 +12,8 @@ router.delete('/puntaje',deletepuntaje)
 // ROUTER THE PRODUCTO
 router.get('/producto',GETPRODUCTO)
 router.post('/producto',CREATEPRODUCTO)
-router.delete('/producto/:PRODUCTO_ID',UPDATEPRODUCTO)
-router.put('/producto/:PRODUCTO_ID',DELETEPRODUCTO)
+router.delete('/producto/:PRODUCTO_ID',DELETEPRODUCTO)
+router.put('/producto/:PRODUCTO_ID',UPDATEPRODUCTO)
 
 
 
