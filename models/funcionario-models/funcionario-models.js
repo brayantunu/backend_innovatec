@@ -6,7 +6,7 @@ import { funcionario_semillero } from "../funcionario-semilleros-models/funciona
 
 
 export const funcionario = sequelize.define('funcionario', {
-    id: {
+    funcionario_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
