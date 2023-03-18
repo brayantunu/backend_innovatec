@@ -1,6 +1,6 @@
 import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
-import { funcionario_producto } from "../funcionario-producto-models/funcionario-producto.-models.js"; 
+import { funcionario_producto } from "../funcionario-producto-models/funcionario-producto-models.js"; 
 import { funcionario_proyecto } from "../funcionario-proyecto/funcionario-proyecto-models.js";
 import { funcionario_semillero } from "../funcionario-semilleros-models/funcionario-semillero-models.js";
 
@@ -42,24 +42,24 @@ export const funcionario = sequelize.define('funcionario', {
 
     
 //relacion entre funcionario y producto
-funcionario.hasMany(funcionario_producto,{
-    foreignKey: 'funcionarioid',
-    sourceKey: 'id'
+funcionario.belongsToMany(funcionario_producto,{
+    foreignKey:'FUNCIONARIO_ID',
+    sourceKey:'id'
 })
 
-funcionario_producto.hasMany(funcionario,{
-    foreignKey: 'funcionario_productoid',
+funcionario_producto.belongsToMany(funcionario,{
+    foreignKey: 'FUNCIONARIO_ID',
     targetId: 'id'
 })
 
 
 //relacion entre funcionario y proyecto
- funcionario.hasMany(funcionario_proyecto,{
-    foreignKey: 'funcionarioid',
+ funcionario.belongsToMany(funcionario_proyecto,{
+    foreignKey: 'FUNCIONARIO_ID',
     sourceKey: 'id'
  })
- funcionario_proyecto.hasMany(funcionario,{
-    foreignKey: 'funcionario_proyectoid',
+ funcionario_proyecto.belongsToMany(funcionario,{
+    foreignKey: 'FUNCIONARIO_ID',
     targetId: 'id'
  })
 
@@ -67,12 +67,12 @@ funcionario_producto.hasMany(funcionario,{
 
 
  //relacion entre funcionario y semilleros
- funcionario.hasMany( funcionario_semillero,{
-    foreignKey: 'funcionarioid',
+ funcionario.belongsToMany( funcionario_semillero,{
+    foreignKey: 'FUNCIONARIO_ID',
     sourceKey: 'id'
 
  })
- funcionario_semillero.hasMany(funcionario,{
-    foreignKey: 'funcionario_semilleroid',
+ funcionario_semillero.belongsToMany(funcionario,{
+    foreignKey: 'FUNCIONARIO_ID',
     targetId: 'id'
  })

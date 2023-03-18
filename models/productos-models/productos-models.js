@@ -1,6 +1,6 @@
 import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
-import { funcionario_producto } from "../funcionario-producto-models/funcionario-producto.-models.js";
+import { funcionario_producto } from "../funcionario-producto-models/funcionario-producto-models.js";
 import { semillero_producto } from "../semillero-producto-models/semillero-product-models.js";
 import { producto_proyecto } from "../producto-proyecto-models/producto-proyecto-models.js";
 export const PRODUCTOS = sequelize.define('PRODUCTOS',{
@@ -40,36 +40,36 @@ export const PRODUCTOS = sequelize.define('PRODUCTOS',{
 })
 
 //relacion entre funcionario y productos
-PRODUCTOS.hasMany(funcionario_producto,{
-    foreignKey: 'PRODUCTOSID',
+PRODUCTOS.belongsToMany(funcionario_producto,{
+    foreignKey: 'PRODUCTOS_ID',
     sourceKey: 'id'
 })
 
-funcionario_producto.hasMany(PRODUCTOS,{
-    foreignKey: 'funcionario_productoid',
+funcionario_producto.belongsToMany(PRODUCTOS,{
+    foreignKey: 'PRODUCTOS_ID',
     targetId: 'id'
 })
 
 //relacion prodcuto y proyecto
-PRODUCTOS.hasMany (producto_proyecto,{
-    foreignKey: 'proyectoid',
+PRODUCTOS.belongsToMany(producto_proyecto,{
+    foreignKey: 'PRODUCTOS_ID',
     sourceKey: 'id'
 })
 
-producto_proyecto.hasMany (PRODUCTOS,{
-    foreignKey: 'producto_proyectoid',
+producto_proyecto.belongsToMany(PRODUCTOS,{
+    foreignKey: 'PRODUCTOS_ID',
     sourceKey: 'id'
 })
 
 
 //relacion entre producto y semillero
-PRODUCTOS.hasMany(semillero_producto,{
-    foreignKey: 'PRODUCTOSID',
+PRODUCTOS.belongsToMany(semillero_producto,{
+    foreignKey: 'PRODUCTOS_ID',
     sourceKey: 'id'
 })
 
-semillero_producto.hasMany(PRODUCTOS,{
-    foreignKey: 'semillero_productoid',
+semillero_producto.belongsToMany(PRODUCTOS,{
+    foreignKey: 'PRODUCTOS_ID',
     targetId: 'id'
 })
 
