@@ -45,10 +45,10 @@ router.get('/SEMILLEROS/:id',GET_SEMILLERO_ID)
 
 //ROUTER THE SEMILLERO PROYECTO
 
-router.get('/SEMILLEROS_PROYECTO',GET_SEMILLERO_PROYECTO)
-router.post('/SEMILLEROS_PROYECTO',CREATE_SEMILLERO_PROYECTO)
-router.put('/SEMILLEROS_PROYECTO/:id',UPDATE_SEMILLERO_PROYECTO)
-router.delete('/SEMILLEROS_PROYECTO/:id',DELETE_SEMILLERO_PROYECTO)
-router.get('/SEMILLEROS/:id',GET_SEMILLERO_PROYECTO_ID)
+router.get('/semilleros_proyecto',GET_SEMILLERO_PROYECTO)
+router.post('/semilleros_proyecto',CREATE_SEMILLERO_PROYECTO)
+router.put('/semilleros_proyecto/:id',UPDATE_SEMILLERO_PROYECTO)
+router.delete('/semilleros_proyecto/:id',DELETE_SEMILLERO_PROYECTO)
+router.get('/semilleros_proyecto/:id',GET_SEMILLERO_PROYECTO_ID)
 
 export default router
