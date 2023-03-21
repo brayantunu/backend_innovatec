@@ -2,7 +2,7 @@ import { semilleros } from "../../../models/semilleros-models/semilleros-models.
 
 export const GET_SEMILLERO = async (req,res)=>{
     try {
-        const NEW_SEMILLERO = await semilleros.findALL()
+        const NEW_SEMILLERO = await semilleros.findAll()
         res.status(200).json({message:"datos obtenidos",NEW_SEMILLERO})
     } catch (error) {
         return res.status(400).json({message:error.message})

@@ -4,6 +4,7 @@ import { createpuntaje, deletepuntaje, getpuntaje, updatepuntaje } from "../../c
 import {getfuncionario,getfuncionarioid,createfuncionario,updatefuncionario,deletefuncionario} from   "../../controller/models-controller/funcionario-controller/funcionario-controller.js";
 import { CREATE_FUNCIONARIO_PRODUCTO, DELETE_FUNCIONARIO_PRODUCTO, GET_FUNCIONARIO_PRODUCTO, GET_FUNCIONARIO_PRODUCTO_ID, UPDATE_FUNCIONARIO_PRODUCTO } from "../../controller/models-controller/funcionario-producto-controller/funcionario-producto-controller.js";
 import { CREATE_SEMILLERO, DELETE_SEMILLERO, GET_SEMILLERO, GET_SEMILLERO_ID, UPDATE_SEMILLERO } from "../../controller/models-controller/semillero-controller/semillero-controller.js";
+import{GET_SEMILLERO_PROYECTO,CREATE_SEMILLERO_PROYECTO,UPDATE_SEMILLERO_PROYECTO,DELETE_SEMILLERO_PROYECTO,GET_SEMILLERO_PROYECTO_ID} from "../../controller/models-controller/semillero-proyecto/semillero-proyecto-controller.js";
 const router = Router()
 
 // ROUTER THE PUNTAJES
@@ -41,5 +42,13 @@ router.post('/SEMILLEROS',CREATE_SEMILLERO)
 router.put('/SEMILLEROS/:id',UPDATE_SEMILLERO)
 router.delete('/SEMILLEROS/:id',DELETE_SEMILLERO)
 router.get('/SEMILLEROS/:id',GET_SEMILLERO_ID)
+
+//ROUTER THE SEMILLERO PROYECTO
+
+router.get('/SEMILLEROS_PROYECTO',GET_SEMILLERO_PROYECTO)
+router.post('/SEMILLEROS_PROYECTO',CREATE_SEMILLERO_PROYECTO)
+router.put('/SEMILLEROS_PROYECTO/:id',UPDATE_SEMILLERO_PROYECTO)
+router.delete('/SEMILLEROS_PROYECTO/:id',DELETE_SEMILLERO_PROYECTO)
+router.get('/SEMILLEROS/:id',GET_SEMILLERO_PROYECTO_ID)
 
 export default router
