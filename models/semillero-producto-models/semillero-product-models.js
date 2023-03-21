@@ -1,7 +1,7 @@
 import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
 
-export const semillero_producto= sequelize.define('semillero_product0',{
+export const SEMILLEROPRODUCTO= sequelize.define('SEMILLEROPRODUCTO',{
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,

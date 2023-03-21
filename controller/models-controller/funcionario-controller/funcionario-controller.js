@@ -15,9 +15,7 @@ export const getfuncionarioid = async (req, res) => {
     const { funcionario_id } = req.params
     try {
         const funcionario = await task.findOne({
-            where: { funcionario_id },
-            
-            
+            where: { funcionario_id },      
         })
         res.json(funcionario)
 
@@ -51,13 +49,15 @@ export const updatefuncionario = async (req,res) => {
 
     try {
         const { funcionario_id } = req.params;
-        const funcionario = await funcionario.findOne({
-            where: { funcionario_id }
-        })
-
-        funcionario.set(req.body);
-        await task.save();
-        return res.json(funcionario)
+        const {funcionario_iden,funcionario_nombre,funcionario_apellido,funcionario_correo,funcionario_telefono} = req.body
+        const funcionarios = await funcionario.findByPk(funcionario_id)
+        funcionarios.funcionario_nombre=funcionario_nombre,
+        funcionarios.funcionario_apellido=funcionario_apellido,
+        funcionarios.funcionario_correo=funcionario_correo,
+        funcionarios.funcionario_telefono=funcionario_telefono
+        funcionarios.funcionario_iden=funcionario_iden
+        await funcionarios.save();
+        return res.status(200).json({message: "se ha actualizado el item", funcionarios})
 
     } catch (error) {
         return res.status(500).json({ message: error.message })
@@ -66,12 +66,13 @@ export const updatefuncionario = async (req,res) => {
   }
 
   export const deletefuncionario = async (req, res) => {
-    const { funcionario_id } = req.params
+
     try {
+        const { funcionario_id } = req.params
         const result = await funcionario.destroy({
             where: { funcionario_id }
         })
-        res.status(200).json({message:'funcionario eliminado satisfactoriamente', funcionario_id})
+        res.status(200).json({message:'funcionario eliminado satisfactoriamente',result})
 
 
     } catch (error) {

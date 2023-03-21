@@ -1,8 +1,11 @@
 import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
-import { funcionario_producto } from "../funcionario-producto-models/funcionario-producto-models.js"; 
+import { funcionario_producto } from "../funcionario-producto-models/funcionario-producto.-models.js"; 
 import { funcionario_proyecto } from "../funcionario-proyecto/funcionario-proyecto-models.js";
 import { funcionario_semillero } from "../funcionario-semilleros-models/funcionario-semillero-models.js";
+import { PRODUCTOS } from "../productos-models/productos-models.js";
+import { proyecto } from "../proyecto-models/proyecto-models.js";
+import { semilleros } from "../semilleros-models/semilleros-models.js";
 
 
 export const funcionario = sequelize.define('funcionario', {
@@ -29,7 +32,7 @@ export const funcionario = sequelize.define('funcionario', {
     },
 
     funcionario_telefono: {
-        type: DataTypes.NUMBER
+        type: DataTypes.STRING
     },
 
     funcionario_administrador: {
@@ -42,37 +45,43 @@ export const funcionario = sequelize.define('funcionario', {
 
     
 //relacion entre funcionario y producto
-funcionario.belongsToMany(funcionario_producto,{
-    foreignKey:'FUNCIONARIO_ID',
-    sourceKey:'id'
-})
+funcionario.belongsToMany(PRODUCTOS,{
+    through:funcionario_producto,
+    // foreignKey:'FUNCIONARIO_ID',
+    // sourceKey:'id'
+});
 
-funcionario_producto.belongsToMany(funcionario,{
-    foreignKey: 'FUNCIONARIO_ID',
-    targetId: 'id'
-})
+PRODUCTOS.belongsToMany(funcionario,{
+    through:funcionario_producto,
+    // foreignKey: 'FUNCIONARIO_ID',
+    // targetId: 'id'
+});
 
 
 //relacion entre funcionario y proyecto
- funcionario.belongsToMany(funcionario_proyecto,{
-    foreignKey: 'FUNCIONARIO_ID',
-    sourceKey: 'id'
- })
- funcionario_proyecto.belongsToMany(funcionario,{
-    foreignKey: 'FUNCIONARIO_ID',
-    targetId: 'id'
- })
+ funcionario.belongsToMany(proyecto,{
+    through:funcionario_proyecto,
+    // foreignKey: 'FUNCIONARIO_ID',
+    // sourceKey: 'id'
+ });
+ proyecto.belongsToMany(funcionario,{
+    through:funcionario_proyecto,
+    // foreignKey: 'FUNCIONARIO_ID',
+    // targetId: 'id'
+ });
 
 
 
 
  //relacion entre funcionario y semilleros
- funcionario.belongsToMany( funcionario_semillero,{
-    foreignKey: 'FUNCIONARIO_ID',
-    sourceKey: 'id'
+ funcionario.belongsToMany(semilleros,{
+    through:funcionario_semillero
+    // foreignKey: 'FUNCIONARIO_ID',
+    // sourceKey: 'id'
 
  })
- funcionario_semillero.belongsToMany(funcionario,{
-    foreignKey: 'FUNCIONARIO_ID',
-    targetId: 'id'
+ semilleros.belongsToMany(funcionario,{
+    through:funcionario_semillero
+    // foreignKey: 'FUNCIONARIO_ID',
+    // targetId: 'id'
  })

@@ -1,8 +1,11 @@
 import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
-import { funcionario_producto } from "../funcionario-producto-models/funcionario-producto-models.js";
-import { semillero_producto } from "../semillero-producto-models/semillero-product-models.js";
+import { SEMILLEROPRODUCTO } from "../semillero-producto-models/semillero-product-models.js";
 import { producto_proyecto } from "../producto-proyecto-models/producto-proyecto-models.js";
+import { proyecto } from "../proyecto-models/proyecto-models.js";
+import { semilleros } from "../semilleros-models/semilleros-models.js";
+import { puntaje } from "../puntaje-models/puntaje-models.js";
+
 export const PRODUCTOS = sequelize.define('PRODUCTOS',{
     PRODUCTO_ID:{
         type:DataTypes.INTEGER,
@@ -39,37 +42,43 @@ export const PRODUCTOS = sequelize.define('PRODUCTOS',{
     timestamps:false
 })
 
-//relacion entre funcionario y productos
-PRODUCTOS.belongsToMany(funcionario_producto,{
-    foreignKey: 'PRODUCTOS_ID',
-    sourceKey: 'id'
-})
 
-funcionario_producto.belongsToMany(PRODUCTOS,{
-    foreignKey: 'PRODUCTOS_ID',
-    targetId: 'id'
-})
 
 //relacion prodcuto y proyecto
-PRODUCTOS.belongsToMany(producto_proyecto,{
-    foreignKey: 'PRODUCTOS_ID',
-    sourceKey: 'id'
+PRODUCTOS.belongsToMany(proyecto,{
+    through:producto_proyecto
+    // foreignKey: 'PRODUCTOS_ID',
+    // sourceKey: 'id'
 })
 
-producto_proyecto.belongsToMany(PRODUCTOS,{
-    foreignKey: 'PRODUCTOS_ID',
-    sourceKey: 'id'
+proyecto.belongsToMany(PRODUCTOS,{
+    through:producto_proyecto
+    // foreignKey: 'PRODUCTOS_ID',
+    // sourceKey: 'id'
 })
 
 
 //relacion entre producto y semillero
-PRODUCTOS.belongsToMany(semillero_producto,{
-    foreignKey: 'PRODUCTOS_ID',
-    sourceKey: 'id'
+PRODUCTOS.belongsToMany(semilleros,{
+    through:SEMILLEROPRODUCTO
+    // foreignKey: 'PRODUCTOS_ID',
+    // sourceKey: 'id'
 })
 
-semillero_producto.belongsToMany(PRODUCTOS,{
-    foreignKey: 'PRODUCTOS_ID',
-    targetId: 'id'
+semilleros.belongsToMany(PRODUCTOS,{
+    through:SEMILLEROPRODUCTO
+    // foreignKey: 'PRODUCTOS_ID',
+    // targetId: 'id'
+})
+
+
+PRODUCTOS.hasMany(puntaje,{
+    foreingKey:'PRODUCTO_ID',
+    sourceKey:'PRODUCTO_ID'
+})
+
+puntaje.belongsTo(PRODUCTOS,{
+    foreingKey:'PRODUCTO_ID',
+    targetId:'PRODUCTO_ID'
 })
 

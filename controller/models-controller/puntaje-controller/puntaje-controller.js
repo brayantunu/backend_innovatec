@@ -11,10 +11,12 @@ export const getpuntaje = async (req,res)=>{
 
 export const createpuntaje = async (req,res)=>{
 
-    const {puntaje_puntuacion} = req.body
+    const {puntaje_puntuacion,PRODUCTOPRODUCTOID} = req.body
     try {
         const newpuntaje_puntuacion = await puntaje.create({
-            puntaje_puntuacion
+            puntaje_puntuacion,
+            PRODUCTOPRODUCTOID
+            
         })
         res.status(200).json({message:'se creo el puntaje',newpuntaje_puntuacion})
     } catch (error) {
