@@ -4,12 +4,8 @@ import { createpuntaje, deletepuntaje, getpuntaje, updatepuntaje } from "../../c
 import {getfuncionario,getfuncionarioid,createfuncionario,updatefuncionario,deletefuncionario} from   "../../controller/models-controller/funcionario-controller/funcionario-controller.js";
 import { CREATE_FUNCIONARIO_PRODUCTO, DELETE_FUNCIONARIO_PRODUCTO, GET_FUNCIONARIO_PRODUCTO, GET_FUNCIONARIO_PRODUCTO_ID, UPDATE_FUNCIONARIO_PRODUCTO } from "../../controller/models-controller/funcionario-producto-controller/funcionario-producto-controller.js";
 import { CREATE_SEMILLERO, DELETE_SEMILLERO, GET_SEMILLERO, GET_SEMILLERO_ID, UPDATE_SEMILLERO } from "../../controller/models-controller/semillero-controller/semillero-controller.js";
-<<<<<<< HEAD
 import { CREATE_PRODUCTO_PROYECTO, DELETE_PRODUCTO_PROYECTO, GET_PRODUCTO_PROYECTO, GET_PRODUCTO_PROYECTO_ID, UPDATE_PRODUCTO_PROYECTO } from "../../controller/models-controller/producto_proyecto_controller/producto-proyecto-controller.js";
 import { CREATE_PROYECTO, DELETE_PROYECTO, GET_PROYECTO, GET_PROYECTO_ID, UPDATE_PROYECTO } from "../../controller/models-controller/proyecto-controller/proyecto_controller.js";
-=======
-import{GET_SEMILLERO_PROYECTO,CREATE_SEMILLERO_PROYECTO,UPDATE_SEMILLERO_PROYECTO,DELETE_SEMILLERO_PROYECTO,GET_SEMILLERO_PROYECTO_ID} from "../../controller/models-controller/semillero-proyecto/semillero-proyecto-controller.js";
->>>>>>> 5d6a1d5ba31f87ef95f3b81c50c8490e1831a27e
 const router = Router()
 
 // ROUTER THE PUNTAJES
@@ -48,13 +44,12 @@ router.put('/SEMILLEROS/:id',UPDATE_SEMILLERO)
 router.delete('/SEMILLEROS/:id',DELETE_SEMILLERO)
 router.get('/SEMILLEROS/:id',GET_SEMILLERO_ID)
 
-<<<<<<< HEAD
 // ROUTER PRODUCTO PROYECTO 
 router.get('/PRODUCTO_PROYECTO',GET_PRODUCTO_PROYECTO)
-router.post('/PROYECTO_PROYECTO',CREATE_PRODUCTO_PROYECTO)
-router.put('/PROYECTO_PROYECTO',UPDATE_PRODUCTO_PROYECTO)
-router.delete('/PROYECTO_PROYECTO',DELETE_PRODUCTO_PROYECTO)
-router.get('/PROYECTO_PROYECTO',GET_PRODUCTO_PROYECTO_ID)
+router.post('/PRODUCTO_PROYECTO',CREATE_PRODUCTO_PROYECTO)
+router.put('/PRODUCTO_PROYECTO',UPDATE_PRODUCTO_PROYECTO)
+router.delete('/PRODUCTO_PROYECTO',DELETE_PRODUCTO_PROYECTO)
+router.get('/PRODUCTO_PROYECTO',GET_PRODUCTO_PROYECTO_ID)
 
 // ROUTER PROYECTO
 router.get('/PROYECTO',GET_PROYECTO)
@@ -62,14 +57,5 @@ router.post('/PROYECTO',CREATE_PROYECTO)
 router.put('/PROYECTO',UPDATE_PROYECTO)
 router.delete('/PROYECTO',DELETE_PROYECTO)
 router.get('/PROYECTO',GET_PROYECTO_ID)
-=======
-//ROUTER THE SEMILLERO PROYECTO
-
-router.get('/SEMILLEROS_PROYECTO',GET_SEMILLERO_PROYECTO)
-router.post('/SEMILLEROS_PROYECTO',CREATE_SEMILLERO_PROYECTO)
-router.put('/SEMILLEROS_PROYECTO/:id',UPDATE_SEMILLERO_PROYECTO)
-router.delete('/SEMILLEROS_PROYECTO/:id',DELETE_SEMILLERO_PROYECTO)
-router.get('/SEMILLEROS/:id',GET_SEMILLERO_PROYECTO_ID)
->>>>>>> 5d6a1d5ba31f87ef95f3b81c50c8490e1831a27e
 
 export default router
