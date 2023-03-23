@@ -5,7 +5,7 @@ import  controolerrouter  from "./router/controller-router/controller-router.js"
 
 const app = Express()
 app.use(Express.json())
-app.use(bodyParser.urlencoded({extended:true}))
+app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json());
 app.use(indexrouter)
 app.use(controolerrouter)
