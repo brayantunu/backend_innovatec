@@ -6,19 +6,16 @@ import { proyecto } from "../proyecto-models/proyecto-models.js";
 import { semilleros } from "../semilleros-models/semilleros-models.js";
 import { puntaje } from "../puntaje-models/puntaje-models.js";
 
-<<<<<<< HEAD
-export const producto= sequelize.define('producto',{
+
+export const producto = sequelize.define('producto',{
     producto_id:{
-=======
-export const PRODUCTOS = sequelize.define('productos',{
-    PRODUCTO_ID:{
->>>>>>> 377416f4552893202e31e28301f0f780ea866e21
+ 
         type:DataTypes.INTEGER,
         primaryKey:true,
         autoIncrement:true
         
     },
-    producto_titulo:{
+    productos_titulo:{
         type:DataTypes.STRING(200)
     },
     productos_ano:{
