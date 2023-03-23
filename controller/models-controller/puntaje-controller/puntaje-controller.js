@@ -1,6 +1,6 @@
 import { puntaje } from "../../../models/puntaje-models/puntaje-models.js";
 
-export const getpuntaje = async (req,res)=>{
+export const get_puntaje = async (req,res)=>{
     try {
         const Puntaje = await puntaje.findAll()
         res.status(200).json({succes:true, message:'listado',Puntaje})
@@ -9,7 +9,7 @@ export const getpuntaje = async (req,res)=>{
     }
 }
 
-export const createpuntaje = async (req,res)=>{
+export const create_puntaje = async (req,res)=>{
 
     const {puntaje_puntuacion,PRODUCTOPRODUCTOID} = req.body
     try {
@@ -24,7 +24,7 @@ export const createpuntaje = async (req,res)=>{
     }
 }
 
-export const updatepuntaje = async (req,res) => {
+export const update_puntaje = async (req,res) => {
     try {
       const { id } = req.params;
       const {puntaje_puntuacion} = req.body
@@ -40,7 +40,7 @@ export const updatepuntaje = async (req,res) => {
     }
   }
 
-  export const deletepuntaje = async(req,res) => {
+  export const delete_puntaje = async(req,res) => {
     try {
         const {id} = req.params;
     await puntaje.destroy({

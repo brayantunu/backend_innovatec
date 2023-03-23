@@ -1,70 +1,86 @@
-import { PRODUCTOS } from "../../../models/productos-models/productos-models.js";
+import { producto } from "../../../models/productos-models/productos-models.js";
 
-export const GETPRODUCTO= async (req,res)=>{
+export const getproducto= async (req,res)=>{
     try {
-        const NEWPRODUCTO = await PRODUCTOS.findAll()
-        res.status(200).json({succes:true, message:'listado',NEWPRODUCTO})
+        const new_producto= await producto.findAll()
+        res.status(200).json({succes:true, message:'listado',new_producto})
     } catch (error) {
         return res.status(400).json({message:error.message})
     }
 }
 
-export const CREATEPRODUCTO = async (req,res)=>{
+export const create_producto = async (req,res)=>{
 
-    const {PRODUCTO_TITULO,PRODUCTOS_ANO,PRODUCTOS_URL,PRODUCTOS_TIPO,PRODUCTOS_SUBTIPO,PRODUCTOS_DETALLE,PRODUCTOS_IDIOMA,PRODUCTOS_LINEA} = req.body
+    const {productos_titulo,productos_ano,productos_url,productos_tipo,productos_subtipo,productos_detalle,productos_idioma,productos_linea} = req.body
     try {
-        const NEWPRODUCTO = await PRODUCTOS.create({
-            PRODUCTO_TITULO,
-            PRODUCTOS_URL,
-            PRODUCTOS_ANO,
-            PRODUCTOS_DETALLE,
-            PRODUCTOS_TIPO,
-            PRODUCTOS_SUBTIPO,
-            PRODUCTOS_IDIOMA,
-            PRODUCTOS_LINEA  
+        const new_producto = await producto.create({
+            productos_titulo,
+            productos_ano,
+            productos_url,
+            productos_detalle,
+            productos_tipo,
+            productos_subtipo,
+            productos_idioma,
+            productos_linea  
         })
-        res.status(200).json({message:'se creo el puntaje',NEWPRODUCTO})
+        res.status(200).json({message:'se creo el puntaje',new_producto})
     } catch (error) {
         return res.status(500).json({message:error.message})
     }
 }
 
-export const UPDATEPRODUCTO = async (req,res) => {
+export const update_producto = async (req,res) => {
     try {
-      const { PRODUCTO_ID } = req.params;
-      const {PRODUCTOS_ANO,PRODUCTOS_DETALLE,PRODUCTOS_IDIOMA,PRODUCTOS_LINEA,PRODUCTOS_SUBTIPO,PRODUCTOS_TIPO,PRODUCTOS_URL,PRODUCTO_TITULO} = req.body
+      const { producto_id } = req.params;
+      const {productos_ano,productos_detalle,productos_idioma,productos_linea,productos_subtipo,productos_titulo,productos_url,productos_tipo} = req.body
   
-      const PRODUCTO = await PRODUCTOS.findByPk(PRODUCTO_ID);
-      PRODUCTO.PRODUCTOS_ANO=PRODUCTOS_ANO,
-      PRODUCTO.PRODUCTOS_DETALLE=PRODUCTOS_DETALLE,
-      PRODUCTO.PRODUCTOS_IDIOMA=PRODUCTOS_IDIOMA,
-      PRODUCTO.PRODUCTOS_LINEA=PRODUCTOS_LINEA,
-      PRODUCTO.PRODUCTOS_SUBTIPO=PRODUCTOS_SUBTIPO,
-      PRODUCTO.PRODUCTOS_TIPO=PRODUCTOS_TIPO,
-      PRODUCTO.PRODUCTOS_URL=PRODUCTOS_URL,
-      PRODUCTO.PRODUCTO_TITULO=PRODUCTO_TITULO,
-      await PRODUCTO.save();
+      const PRODUCTO = await producto.findByPk(producto_id);
+      PRODUCTO.productos_titulo=productos_titulo    
+      PRODUCTO.productos_ano=productos_ano
+      PRODUCTO.productos_url=productos_url
+      PRODUCTO.productos_detalle=productos_detalle
+      PRODUCTO.productos_tipo=productos_tipo
+      PRODUCTO.productos_subtipo=productos_subtipo
+      PRODUCTO.productos_idioma=productos_idioma
+      PRODUCTO.productos_linea=productos_linea
+      await producto.save();
       res.status(201).json({message: 'se ha actualizado el proyecto'
   })
-      console.log(PRODUCTO_ID)
+      console.log(producto_id)
     } catch (error) {
       return res.status(500).json({message: error.message})
     }
   }
 
-  export const DELETEPRODUCTO = async(req,res) => {
+  export const delete_producto = async(req,res) => {
     try {
-        const {PRODUCTO_ID} = req.params;
-    await PRODUCTOS.destroy({
+        const {producto_id} = req.params;
+    await producto.destroy({
         where:{
-            PRODUCTO_ID,    
+            producto_id,    
         },
     });
     // res.sendStatus(204)
     // api.setEstado("success", "success", "se ah creado exitosamente la especie")
     // res.json("eliminado")
-    res.status(200).json({message:'projecto eliminado correctamente',PRODUCTO_ID})
+    res.status(200).json({message:'projecto eliminado correctamente', producto_id})
     } catch (error) {
         return res.status(500).json({message:error.message})
     }
+}
+
+
+export const get_producto_id = async (req, res) => {
+    const { producto_id } = req.params
+    try {
+        const new_producto = await producto_proyecto.findOne({
+            where: { producto_id },      
+        })
+        res.status(200).json({message:"item obtenido por id",new_producto})
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+
+
 }

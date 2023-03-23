@@ -1,24 +1,24 @@
 import {funcionario_producto} from "../../../models/funcionario-producto-models/funcionario-producto.-models.js"
 
 
-export const GET_FUNCIONARIO_PRODUCTO = async (req,res)=>{
+export const get_funcionario_producto = async (req,res)=>{
 
     try {
-        const NEW_FUNCIONARIO_PRODUCTO = await funcionario_producto.findAll()
-        res.status(200).json({message: "datos obtenidos",NEW_FUNCIONARIO_PRODUCTO})
+        const new_funcionario_producto = await funcionario_producto.findAll()
+        res.status(200).json({message: "datos obtenidos",new_funcionario_producto})
     } catch (error) {
         return res.status(500).json({message:error.message})
     }
 }
 
-export const CREATE_FUNCIONARIO_PRODUCTO = async (req,res)=>{
+export const create_funcionario_producto = async (req,res)=>{
     try {
         const {funcionarioFuncionarioId,PRODUCTOPRODUCTOID} = req.body;
-        const NEW_FUNCIONARIO_PRODUCTO = await funcionario_producto.create({
+        const new_funcionario_producto = await funcionario_producto.create({
             funcionarioFuncionarioId,
             PRODUCTOPRODUCTOID
         })
-        res.status(200).json({message: "recurso creado",NEW_FUNCIONARIO_PRODUCTO})
+        res.status(200).json({message: "recurso creado",new_funcionario_producto})
         
     } catch (error) {
         return res.status(500).json({message:error.message})
@@ -26,16 +26,16 @@ export const CREATE_FUNCIONARIO_PRODUCTO = async (req,res)=>{
     }
 }
 
-export const UPDATE_FUNCIONARIO_PRODUCTO = async (req,res)=>{
+export const update_funcionario_producto = async (req,res)=>{
     try {
         const {id} = req.params
         const {funcionarioFuncionarioId,PRODUCTOPRODUCTOID} = req.body
-        const NEW_FUNCIONARIO_PRODUCTO = await funcionario_producto.findByPk(id)
-        NEW_FUNCIONARIO_PRODUCTO.funcionarioFuncionarioId=funcionarioFuncionarioId,
-        NEW_FUNCIONARIO_PRODUCTO.PRODUCTOPRODUCTOID = PRODUCTOPRODUCTOID
+        const new_funcionario_producto = await funcionario_producto.findByPk(id)
+        new_funcionario_producto.funcionarioFuncionarioId=funcionarioFuncionarioId,
+        new_funcionario_producto.PRODUCTOPRODUCTOID = PRODUCTOPRODUCTOID
 
-        await NEW_FUNCIONARIO_PRODUCTO.save()
-        return res.status(200).json({message: "se ha actualizado el item",NEW_FUNCIONARIO_PRODUCTO})
+        await new_funcionario_producto.save()
+        return res.status(200).json({message: "se ha actualizado el item",new_funcionario_producto})
 
         
     } catch (error) {
@@ -44,7 +44,7 @@ export const UPDATE_FUNCIONARIO_PRODUCTO = async (req,res)=>{
     }
 }
 
-export const DELETE_FUNCIONARIO_PRODUCTO = async (req,res)=>{
+export const delete_funcionario_producto = async (req,res)=>{
     try {
         const {id} = req.params
         await funcionario_producto.destroy({
@@ -59,13 +59,13 @@ export const DELETE_FUNCIONARIO_PRODUCTO = async (req,res)=>{
     }
 }
 
-export const GET_FUNCIONARIO_PRODUCTO_ID = async (req, res) => {
+export const get_funcionario_producto_id = async (req, res) => {
     const { id } = req.params
     try {
-        const NEW_FUNCIONARIO_PRODUCTO = await funcionario_producto.findOne({
+        const new_funcionario_producto = await funcionario_producto.findOne({
             where: { id },      
         })
-        res.status(200).json({message:"item obtenido por id",NEW_FUNCIONARIO_PRODUCTO})
+        res.status(200).json({message:"item obtenido por id",new_funcionario_producto})
 
     } catch (error) {
         return res.status(500).json({ message: error.message })

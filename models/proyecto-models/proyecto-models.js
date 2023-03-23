@@ -1,7 +1,7 @@
 import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
 import { semilleros } from "../semilleros-models/semilleros-models.js";
-import { SEMILLEROPROYECTO } from "../semillero-proyecto-model/semillero-proyecto-models.js";
+import { semillero_proyecto } from "../semillero-proyecto-model/semillero-proyecto-models.js";
 export const proyecto= sequelize.define('proyecto',{
     id: {
         type: DataTypes.INTEGER,
@@ -26,15 +26,13 @@ export const proyecto= sequelize.define('proyecto',{
 
 
 
-//relacion entre semillero y proyecto
+
 proyecto.belongsToMany(semilleros,{
-    through:SEMILLEROPROYECTO
-    // foreignKey: 'proyectoid',
-    // sourceKey: 'id'
+    through:semillero_proyecto
+ 
 })
 
 semilleros.belongsToMany(proyecto,{
-    through:SEMILLEROPROYECTO
-    // foreignKey: 'semillero_proyectoid',
-    // targetId: 'id'
+    through:semillero_proyecto
+  
 })

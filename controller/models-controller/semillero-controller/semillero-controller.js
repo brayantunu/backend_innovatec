@@ -1,50 +1,50 @@
 import { semilleros } from "../../../models/semilleros-models/semilleros-models.js";
 
-export const GET_SEMILLERO = async (req,res)=>{
+export const get_semillero = async (req,res)=>{
     try {
-        const NEW_SEMILLERO = await semilleros.findAll()
-        res.status(200).json({message:"datos obtenidos",NEW_SEMILLERO})
+        const new_semillero = await semilleros.findAll()
+        res.status(200).json({message:"datos obtenidos",new_semillero})
     } catch (error) {
         return res.status(400).json({message:error.message})
         
     }
 }
 
-export const GET_SEMILLERO_ID = async (req,res) =>{
+export const get_semillero_id = async (req,res) =>{
     try {
         const {id} = req.params;
-        const NEW_SEMILLERO = await semilleros.findOne({
+        const new_semillero = await semilleros.findOne({
             where:{
                 id
             }
         })
-        res.status(200).json({message:"item creado",NEW_SEMILLERO})
+        res.status(200).json({message:"item creado", new_semillero})
     } catch (error) {
         
     }
 }
 
-export const CREATE_SEMILLERO = async (req,res)=>{
+export const create_semillero = async (req,res)=>{
     const {semillero_nombre} = req.body
     try {
-        const NEW_SEMILLERO = await semilleros.create({
+        const new_semillero = await semilleros.create({
             semillero_nombre
         })
-        res.status(200).json({message:"item creado",NEW_SEMILLERO})
+        res.status(200).json({message:"item creado",new_semillero})
     } catch (error) {
         return res.status(400).json({message:error.message})
         
     }
 }
 
-export const UPDATE_SEMILLERO = async (req,res)=>{
+export const update_semillero = async (req,res)=>{
     try {
         const {id} = req.params;
         const {semillero_nombre} = req.body
-        const NEW_SEMILLERO = await semilleros.findByPk(id)
-        NEW_SEMILLERO.semillero_nombre=semillero_nombre
-        await NEW_SEMILLERO.save()
-        return res.status(200).json({message: "se ha actualizado el item", NEW_SEMILLERO})
+        const new_semillero = await semilleros.findByPk(id)
+        new_semillero.semillero_nombre=semillero_nombre
+        await new_semillero.save()
+        return res.status(200).json({message: "se ha actualizado el item", new_semillero})
 
     } catch (error) {
         return res.status(500).json({ message: error.message })
@@ -52,15 +52,15 @@ export const UPDATE_SEMILLERO = async (req,res)=>{
     }
 }
 
-export const DELETE_SEMILLERO = async (req,res) =>{
+export const delete_semillero = async (req,res) =>{
     try {
         const {id} = req.params;
-        const NEW_SEMILLERO = await semilleros.destroy({
+        const new_semillero = await semilleros.destroy({
             where:{
                 id
             }
         })
-        res.status(200).json({message:'funcionario eliminado satisfactoriamente',NEW_SEMILLERO})
+        res.status(200).json({message:'funcionario eliminado satisfactoriamente',new_semillero})
 
     } catch (error) {
         return res.status(500).json({ message: error.message })

@@ -1,26 +1,26 @@
   
-import { proyecto } from "../../../models/proyecto-models/proyecto-models"
+import { proyecto } from "../../../models/proyecto-models/proyecto-models.js"
 
-export const GET_PROYECTO = async (req,res)=>{
+export const get_proyecto = async (req,res)=>{
 
     try {
-        const NEW_PROYECTO = await proyecto.findAll()
-        res.status(200).json({message: "datos obtenidos",NEW_PROYECTO})
+        const new_proyecto = await proyecto.findAll()
+        res.status(200).json({message: "datos obtenidos",new_proyecto})
     } catch (error) {
         return res.status(500).json({message:error.message})
     }
 }
 
-export const CREATE_PROYECTO = async (req,res)=>{
+export const create_proyecto = async (req,res)=>{
     try {
         const {proyecto_codigo,proyecto_linea,proyecto_nombre,proyecto_presupuesto} = req.body;
-        const NEW_PROYECTO = await proyecto.create({
+        const new_proyecto = await proyecto.create({
             proyecto_codigo,
             proyecto_linea,
             proyecto_nombre,
             proyecto_presupuesto
         })
-        res.status(200).json({message: "recurso creado",NEW_PROYECTO})
+        res.status(200).json({message: "recurso creado",new_proyecto})
         
     } catch (error) {
         return res.status(500).json({message:error.message})
@@ -28,17 +28,17 @@ export const CREATE_PROYECTO = async (req,res)=>{
     }
 }
 
-export const UPDATE_PROYECTO = async (req,res)=>{
+export const update_proyecto = async (req,res)=>{
     try {
         const {id} = req.params
-        const {proyecto_codigo,proyecto_linea,proyecto_nombre,proyecto_presupuesto} = req.body
-        const NEW_PROYECTO = await proyecto.findByPk(id)
-        NEW_PROYECTO.proyecto_codigo=proyecto_codigo,
-        NEW_PROYECTO.proyecto_linea=proyecto_linea,
-        NEW_PROYECTO.proyecto_nombre=proyecto_nombre,
-        NEW_PROYECTO.proyecto_presupuesto=proyecto_presupuesto
+        const { proyecto_codigo,proyecto_linea,proyecto_nombre,proyecto_presupuesto} = req.body
+        const new_proyecto = await proyecto.findByPk(id)
+        new_proyecto.proyecto_codigo= proyecto_codigo,
+        new_proyecto.proyecto_linea=proyecto_linea,
+        new_proyecto.proyecto_nombre=proyecto_nombre,
+        new_proyecto.proyecto_presupuesto=proyecto_presupuesto
 
-        await NEW_FUNCIONARIO_PRODUCTO.save()
+        await new_proyecto.save()
         return res.status(200).json({message: "se ha actualizado el item",NEW_PROYECTO})
 
         
@@ -49,7 +49,7 @@ export const UPDATE_PROYECTO = async (req,res)=>{
 }
 
 
-export const DELETE_PROYECTO = async (req,res)=>{
+export const delete_proyecto = async (req,res)=>{
     try {
         const {id} = req.params
         await proyecto.destroy({
@@ -65,13 +65,13 @@ export const DELETE_PROYECTO = async (req,res)=>{
 }
 
 
-export const GET_PROYECTO_ID= async (req, res) => {
+export const get_proyecto_id= async (req, res) => {
     const { id } = req.params
     try {
-        const NEW_PROYECTO = await proyecto.findOne({
+        const new_proyecto = await proyecto.findOne({
             where: { id },      
         })
-        res.status(200).json({message:"item obtenido por id",NEW_PROYECTO})
+        res.status(200).json({message:"item obtenido por id",new_proyecto})
 
     } catch (error) {
         return res.status(500).json({ message: error.message })

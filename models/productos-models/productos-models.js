@@ -1,40 +1,40 @@
 import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
-import { SEMILLEROPRODUCTO } from "../semillero-producto-models/semillero-product-models.js";
+import { semillero_producto } from "../semillero-producto-models/semillero-product-models.js";
 import { producto_proyecto } from "../producto-proyecto-models/producto-proyecto-models.js";
 import { proyecto } from "../proyecto-models/proyecto-models.js";
 import { semilleros } from "../semilleros-models/semilleros-models.js";
 import { puntaje } from "../puntaje-models/puntaje-models.js";
 
-export const PRODUCTOS = sequelize.define('PRODUCTOS',{
-    PRODUCTO_ID:{
+export const producto= sequelize.define('producto',{
+    producto_id:{
         type:DataTypes.INTEGER,
         primaryKey:true,
         autoIncrement:true
         
     },
-    PRODUCTO_TITULO:{
+    producto_titulo:{
         type:DataTypes.STRING(200)
     },
-    PRODUCTOS_ANO:{
+    productos_ano:{
         type:DataTypes.DATE
     },
-    PRODUCTOS_URL:{
+    productos_url:{
         type:DataTypes.STRING(100)
     },
-    PRODUCTOS_TIPO:{
+    productos_tipo:{
         type:DataTypes.STRING
     },
-    PRODUCTOS_SUBTIPO:{
+    productos_subtipo:{
            type:DataTypes.STRING
     },
-    PRODUCTOS_DETALLE:{
+    productos_detalle:{
         type:DataTypes.STRING(400)
     },
-    PRODUCTOS_IDIOMA:{
+    productos_idioma:{
         type:DataTypes.STRING
     },
-    PRODUCTOS_LINEA:{
+    productos_linea:{
         type:DataTypes.STRING
     }
 },
@@ -45,40 +45,36 @@ export const PRODUCTOS = sequelize.define('PRODUCTOS',{
 
 
 //relacion prodcuto y proyecto
-PRODUCTOS.belongsToMany(proyecto,{
+producto.belongsToMany(proyecto,{
     through:producto_proyecto
-    // foreignKey: 'PRODUCTOS_ID',
-    // sourceKey: 'id'
+   
 })
 
-proyecto.belongsToMany(PRODUCTOS,{
+proyecto.belongsToMany(producto,{
     through:producto_proyecto
-    // foreignKey: 'PRODUCTOS_ID',
-    // sourceKey: 'id'
+
 })
 
 
 //relacion entre producto y semillero
-PRODUCTOS.belongsToMany(semilleros,{
-    through:SEMILLEROPRODUCTO
-    // foreignKey: 'PRODUCTOS_ID',
-    // sourceKey: 'id'
+producto.belongsToMany(semilleros,{
+    through:semillero_producto
+
 })
 
-semilleros.belongsToMany(PRODUCTOS,{
-    through:SEMILLEROPRODUCTO
-    // foreignKey: 'PRODUCTOS_ID',
-    // targetId: 'id'
+semilleros.belongsToMany(producto,{
+    through:semillero_producto
+
 })
 
 
-PRODUCTOS.hasMany(puntaje,{
-    foreingKey:'PRODUCTO_ID',
-    sourceKey:'PRODUCTO_ID'
+producto.hasMany(puntaje,{
+    foreingKey:'producto_id',
+    sourceKey:'producto_id'
 })
 
-puntaje.belongsTo(PRODUCTOS,{
-    foreingKey:'PRODUCTO_ID',
-    targetId:'PRODUCTO_ID'
+puntaje.belongsTo(producto,{
+    foreingKey:'producto_id',
+    targetId:'producto_id'
 })
 
