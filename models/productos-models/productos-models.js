@@ -82,3 +82,5 @@ puntaje.belongsTo(PRODUCTOS,{
     targetId:'PRODUCTO_ID'
 })
 
+
+// como hacer un buscador controlador nodejs express

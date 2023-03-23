@@ -68,3 +68,20 @@ export const UPDATEPRODUCTO = async (req,res) => {
         return res.status(500).json({message:error.message})
     }
 }
+
+
+export const BUSCADOR_PRODUCTO = async(req,res)=>{
+    try {
+            const { q } = req.query;
+            const productos = await PRODUCTOS.find({
+              $or: [
+                { PRODUCTO_TITULO: { $regex: q, $options: 'i' } }
+              ],
+            });
+            res.json(productos);
+          
+           
+    } catch (error) {
+        return res.status(500).json({message:error.message})
+    }
+}

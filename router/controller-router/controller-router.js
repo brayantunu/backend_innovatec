@@ -1,5 +1,5 @@
 import  {Router} from "express";
-import { CREATEPRODUCTO, DELETEPRODUCTO, GETPRODUCTO, UPDATEPRODUCTO } from "../../controller/models-controller/producto-controller/producto-controller.js";
+import { BUSCADOR_PRODUCTO, CREATEPRODUCTO, DELETEPRODUCTO, GETPRODUCTO, UPDATEPRODUCTO } from "../../controller/models-controller/producto-controller/producto-controller.js";
 import { createpuntaje, deletepuntaje, getpuntaje, updatepuntaje } from "../../controller/models-controller/puntaje-controller/puntaje-controller.js";
 import {getfuncionario,getfuncionarioid,createfuncionario,updatefuncionario,deletefuncionario} from   "../../controller/models-controller/funcionario-controller/funcionario-controller.js";
 import { CREATE_FUNCIONARIO_PRODUCTO, DELETE_FUNCIONARIO_PRODUCTO, GET_FUNCIONARIO_PRODUCTO, GET_FUNCIONARIO_PRODUCTO_ID, UPDATE_FUNCIONARIO_PRODUCTO } from "../../controller/models-controller/funcionario-producto-controller/funcionario-producto-controller.js";
@@ -19,6 +19,7 @@ router.get('/producto',GETPRODUCTO)
 router.post('/producto',CREATEPRODUCTO)
 router.delete('/producto/:PRODUCTO_ID',DELETEPRODUCTO)
 router.put('/producto/:PRODUCTO_ID',UPDATEPRODUCTO)
+router.get('/buscar',BUSCADOR_PRODUCTO)
 
 //ROUTER THE FUNCIONARIO
 

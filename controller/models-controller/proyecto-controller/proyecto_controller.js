@@ -1,5 +1,5 @@
   
-import { proyecto } from "../../../models/proyecto-models/proyecto-models"
+import { proyecto } from "../../../models/proyecto-models/proyecto-models.js"
 
 export const GET_PROYECTO = async (req,res)=>{
 
