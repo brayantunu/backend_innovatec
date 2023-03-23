@@ -74,26 +74,39 @@ export const DELETEPRODUCTO = async (req, res) => {
 
 export const BUSCADOR_PRODUCTO = async (req, res) => {
 
-    const { q, filtro } = req.query;
-  let query = `
-    SELECT * FROM productos
-    WHERE producto_titulo ILIKE $1
-  `;
-  let parametros = [`%${q}%`];
-  if (filtro) {
-    query = `
-      SELECT * FROM productos
-      WHERE ${filtro} ILIKE $1
-    `;
-    parametros = [`%${q}%`];
+//     const { q, filtro } = req.query;
+//   let query = `
+//     SELECT * FROM productos
+//     WHERE producto_titulo ILIKE $1
+//   `;
+//   let parametros = [`%${q}%`];
+//   if (filtro) {
+//     query = `
+//       SELECT * FROM productos
+//       WHERE ${filtro} ILIKE $1
+//     `;
+//     parametros = [`%${q}%`];
+//   }
+//   sequelize.query(query, parametros, (error, resultado) => {
+//     if (error) {
+//       console.error(error);
+//       res.status(500).json({ error: 'Error interno del servidor' });
+//     } else {
+//       res.json(resultado.rows);
+//     }
+//   });
+
+const searchTerm = req.query.search;
+  const query = {
+    text: 'SELECT * FROM productos WHERE name ILIKE $1',
+    values: [`%${searchTerm}%`],
+  };
+  try {
+    const result = await pool.query(query);
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal server error');
   }
-  sequelize.query(query, parametros, (error, resultado) => {
-    if (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error interno del servidor' });
-    } else {
-      res.json(resultado.rows);
-    }
-  });
 
 }

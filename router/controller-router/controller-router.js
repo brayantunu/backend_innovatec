@@ -19,7 +19,7 @@ router.get('/producto',GETPRODUCTO)
 router.post('/producto',CREATEPRODUCTO)
 router.delete('/producto/:PRODUCTO_ID',DELETEPRODUCTO)
 router.put('/producto/:PRODUCTO_ID',UPDATEPRODUCTO)
-router.get('/buscar',BUSCADOR_PRODUCTO)
+router.get('/buscar/:query',BUSCADOR_PRODUCTO)
 
 //ROUTER THE FUNCIONARIO
 
