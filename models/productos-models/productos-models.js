@@ -16,7 +16,7 @@ export const producto = sequelize.define('producto',{
         
     },
     productos_titulo:{
-        type:DataTypes.STRING(200)
+        type:DataTypes.STRING
     },
     productos_ano:{
         type:DataTypes.DATE
