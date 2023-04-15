@@ -116,3 +116,20 @@ export const searchProducts = async (req, res, next) => {
     }
     
 };
+
+// app.get('/api/autores/:nombre',
+
+export const filtroAutor = async (req, res) => {
+    const nombreAutor = req.params.nombre;
+    const query = `
+      SELECT *
+      FROM autores
+      WHERE nombre LIKE ?
+    `;
+    const filtroAutor = `%${nombreAutor}%`;
+  
+    connection.query(query, [filtroAutor], (error, results) => {
+      if (error) throw error;
+      res.send(results);
+    });
+  };
