@@ -1,5 +1,7 @@
 import { producto } from "../../../models/productos-models/productos-models.js";
+const Op = Sequelize.Op;
 import { Sequelize } from "sequelize";
+import { sequelize } from "../../../db/db.js";
 
 export const getproducto = async (req, res) => {
     try {
@@ -13,7 +15,7 @@ export const getproducto = async (req, res) => {
 
 export const create_producto = async (req, res) => {
 
-    const { productos_titulo, productos_ano, productos_url, productos_tipo, productos_subtipo, productos_detalle, productos_idioma, productos_linea } = req.body
+    const { productos_titulo, productos_ano, productos_url, productos_tipo, productos_subtipo, productos_detalle, productos_idioma, productos_linea,productos_imagen,productos_autor } = req.body
     try {
         const new_producto = await producto.create({
             productos_titulo,
@@ -23,7 +25,9 @@ export const create_producto = async (req, res) => {
             productos_tipo,
             productos_subtipo,
             productos_idioma,
-            productos_linea
+            productos_linea,
+            productos_imagen,
+            productos_autor
         })
         res.status(200).json({ message: 'se creo el puntaje', new_producto })
     } catch (error) {
@@ -37,7 +41,7 @@ export const create_producto = async (req, res) => {
 export const update_producto = async (req, res) => {
     try {
         const { producto_id } = req.params;
-        const { productos_ano, productos_detalle, productos_idioma, productos_linea, productos_subtipo, productos_titulo, productos_url, productos_tipo } = req.body
+        const { productos_ano, productos_detalle, productos_idioma, productos_linea, productos_subtipo, productos_titulo, productos_url, productos_tipo,producto_imagen } = req.body
 
         const PRODUCTO = await producto.findByPk(producto_id);
         PRODUCTO.productos_titulo = productos_titulo
@@ -48,6 +52,7 @@ export const update_producto = async (req, res) => {
         PRODUCTO.productos_subtipo = productos_subtipo
         PRODUCTO.productos_idioma = productos_idioma
         PRODUCTO.productos_linea = productos_linea
+        PRODUCTO.producto_imagen = producto_imagen
         await producto.save();
         res.status(201).json({
             message: 'se ha actualizado el proyecto'
@@ -94,7 +99,7 @@ export const get_producto_id = async (req, res) => {
 
 export const searchProducts = async (req, res, next) => {
     try {
-        const Op = Sequelize.Op;
+       
     const titulo = req.query.q;
     const productos = await producto.findAll({
         where: {
@@ -116,3 +121,26 @@ export const searchProducts = async (req, res, next) => {
     }
     
 };
+
+export const filtroProducto = async (req,res)=>{
+    const nombreAutor = req.params.productos_autor;
+  const filtroAutor = `%${nombreAutor}%`;
+
+  try {
+    const autores = await producto.findAll({
+      where: {
+        productos_autor: {
+          [Op.like]: filtroAutor
+        }
+      }
+    });
+    res.send(autores);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al obtener los autores');
+  }
+}
+
+
+
+
