@@ -54,13 +54,10 @@ funcionario.belongsToMany(producto, {
     through: funcionario_producto,
  
 });
-
 producto.belongsToMany(funcionario, {
     through: funcionario_producto,
   
 });
-
-
 //relacion entre funcionario y proyecto
 funcionario.belongsToMany(proyecto, {
     through: funcionario_proyecto,
@@ -71,16 +68,10 @@ proyecto.belongsToMany(funcionario, {
 
 });
 
-
-
-
 //relacion entre funcionario y semilleros
 funcionario.belongsToMany(semilleros, {
     through: funcionario_semillero
-   
-
 })
 semilleros.belongsToMany(funcionario, {
-    through: funcionario_semillero
-  
+    through: funcionario_semillero 
 })

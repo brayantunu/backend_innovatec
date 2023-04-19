@@ -1,5 +1,7 @@
 import { producto } from "../../../models/productos-models/productos-models.js";
+const Op = Sequelize.Op;
 import { Sequelize } from "sequelize";
+// import { sequelize } from "../../../db/db.js";
 
 export const getproducto = async (req, res) => {
     try {
@@ -13,7 +15,7 @@ export const getproducto = async (req, res) => {
 
 export const create_producto = async (req, res) => {
 
-    const { productos_titulo, productos_ano, productos_url, productos_tipo, productos_subtipo, productos_detalle, productos_idioma, productos_linea } = req.body
+    const { productos_titulo, productos_ano, productos_url, productos_tipo, productos_subtipo, productos_detalle, productos_idioma, productos_linea,productos_imagen,productos_autor } = req.body
     try {
         const new_producto = await producto.create({
             productos_titulo,
@@ -23,9 +25,11 @@ export const create_producto = async (req, res) => {
             productos_tipo,
             productos_subtipo,
             productos_idioma,
-            productos_linea
+            productos_linea,
+            productos_imagen,
+            productos_autor
         })
-        res.status(200).json({ message: 'se creo el puntaje', new_producto })
+        res.status(200).json({ message: 'se creo el producto correctamente', new_producto })
     } catch (error) {
         return res.status(400).json({ message: error.message })
     }
@@ -37,7 +41,7 @@ export const create_producto = async (req, res) => {
 export const update_producto = async (req, res) => {
     try {
         const { producto_id } = req.params;
-        const { productos_ano, productos_detalle, productos_idioma, productos_linea, productos_subtipo, productos_titulo, productos_url, productos_tipo } = req.body
+        const { productos_ano, productos_detalle, productos_idioma, productos_linea, productos_subtipo, productos_titulo, productos_url, productos_tipo,producto_imagen } = req.body
 
         const PRODUCTO = await producto.findByPk(producto_id);
         PRODUCTO.productos_titulo = productos_titulo
@@ -48,6 +52,7 @@ export const update_producto = async (req, res) => {
         PRODUCTO.productos_subtipo = productos_subtipo
         PRODUCTO.productos_idioma = productos_idioma
         PRODUCTO.productos_linea = productos_linea
+        PRODUCTO.producto_imagen = producto_imagen
         await producto.save();
         res.status(201).json({
             message: 'se ha actualizado el proyecto'
@@ -82,7 +87,7 @@ export const delete_producto = async (req, res) => {
 export const get_producto_id = async (req, res) => {
     const { producto_id } = req.params
     try {
-        const new_producto = await producto_proyecto.findOne({
+        const new_producto = await producto.findOne({
             where: { producto_id },
         })
         res.status(200).json({ message: "item obtenido por id", new_producto })
@@ -94,7 +99,7 @@ export const get_producto_id = async (req, res) => {
 
 export const searchProducts = async (req, res, next) => {
     try {
-        const Op = Sequelize.Op;
+       
     const titulo = req.query.q;
     const productos = await producto.findAll({
         where: {
@@ -108,28 +113,41 @@ export const searchProducts = async (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-    res.status(200).json({ message: "item obtenido por id", productos })
+    res.status(200).json({ message: "item obtenido por productos_titulo", productos })
     } catch (error) {
         // return res.status(500).json({ message: error.message })
         next(error);
-
     }
-    
-};
-
-// app.get('/api/autores/:nombre',
-
-export const filtroAutor = async (req, res) => {
-    const nombreAutor = req.params.nombre;
-    const query = `
-      SELECT *
-      FROM autores
-      WHERE nombre LIKE ?
-    `;
-    const filtroAutor = `%${nombreAutor}%`;
+}
+export const filtroProducto = async (req, res) => {
+    const productosAutor = req.params.productos_autor;
+    const filtroAutor = `%${productosAutor}%`;
   
-    connection.query(query, [filtroAutor], (error, results) => {
-      if (error) throw error;
-      res.send(results);
-    });
+    try {
+      const count = await producto.findAll({
+        where: Sequelize.where(
+          Sequelize.fn('LOWER', Sequelize.col('productos_autor')),
+          'LIKE',
+          Sequelize.fn('LOWER', filtroAutor)
+        )
+      });
+      if (count === 0) {
+        res.status(404).send('No se encontraron autores');
+      } else {
+        const autores = await producto.findAll({
+          where: Sequelize.where(
+            Sequelize.fn('LOWER', Sequelize.col('productos_autor')),
+            'LIKE',
+            Sequelize.fn('LOWER', filtroAutor)
+          )
+        });
+        res.send(autores);
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error al obtener los autores');
+    }
   };
+  
+
+

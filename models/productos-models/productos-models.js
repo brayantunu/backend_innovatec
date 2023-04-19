@@ -38,6 +38,12 @@ export const producto = sequelize.define('producto',{
     },
     productos_linea:{
         type:DataTypes.STRING
+    },
+    productos_imagen:{
+        type:DataTypes.BLOB('long')
+    },
+    productos_autor:{
+        type:DataTypes.STRING
     }
 },
 {
