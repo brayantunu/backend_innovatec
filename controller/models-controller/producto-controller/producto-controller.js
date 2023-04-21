@@ -1,6 +1,7 @@
 import { producto } from "../../../models/productos-models/productos-models.js";
 const Op = Sequelize.Op;
 import { Sequelize } from "sequelize";
+import readXlsxFile from "read-excel-file";
 // import { sequelize } from "../../../db/db.js";
 
 export const getproducto = async (req, res) => {
@@ -149,5 +150,24 @@ export const filtroProducto = async (req, res) => {
     }
   };
   
+  export const filesexcel = async (req, res) => {
+    try {
+      const rows = await readXlsxFile(req.files.file.data);
+      rows.forEach((row) => {
+        Data.create({
+          productos_titulo: row[0],
+          productos_idioma: row[1],
+          productos_linea: row[2]
+        });
+      });
+      res.send('Datos insertados correctamente en la base de datos');
+    } catch (error) {
+      console.log(error);
+      res.send('Error al insertar los datos en la base de datos');
+    }
+  };
+    
+      
+    
 
 
