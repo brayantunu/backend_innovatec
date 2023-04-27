@@ -1,8 +1,8 @@
 import { producto } from "../../../models/productos-models/productos-models.js";
 const Op = Sequelize.Op;
 import { Sequelize } from "sequelize";
-import readXlsxFile from "read-excel-file";
-// import { sequelize } from "../../../db/db.js";
+import readXlsxFile from "read-excel-file/node";
+import fs from "fs"
 
 export const getproducto = async (req, res) => {
     try {
@@ -16,12 +16,11 @@ export const getproducto = async (req, res) => {
 
 export const create_producto = async (req, res) => {
 
-    const { productos_titulo, productos_ano, productos_url, productos_tipo, productos_subtipo, productos_detalle, productos_idioma, productos_linea,productos_imagen,productos_autor } = req.body
+    const { productos_titulo, productos_ano,productos_tipo, productos_subtipo, productos_detalle, productos_idioma, productos_linea,productos_imagen,productos_autor } = req.body
     try {
         const new_producto = await producto.create({
             productos_titulo,
             productos_ano,
-            productos_url,
             productos_detalle,
             productos_tipo,
             productos_subtipo,
@@ -42,12 +41,11 @@ export const create_producto = async (req, res) => {
 export const update_producto = async (req, res) => {
     try {
         const { producto_id } = req.params;
-        const { productos_ano, productos_detalle, productos_idioma, productos_linea, productos_subtipo, productos_titulo, productos_url, productos_tipo,producto_imagen } = req.body
+        const { productos_ano, productos_detalle, productos_idioma, productos_linea, productos_subtipo, productos_titulo, productos_tipo,producto_imagen } = req.body
 
         const PRODUCTO = await producto.findByPk(producto_id);
         PRODUCTO.productos_titulo = productos_titulo
         PRODUCTO.productos_ano = productos_ano
-        PRODUCTO.productos_url = productos_url
         PRODUCTO.productos_detalle = productos_detalle
         PRODUCTO.productos_tipo = productos_tipo
         PRODUCTO.productos_subtipo = productos_subtipo
@@ -150,21 +148,13 @@ export const filtroProducto = async (req, res) => {
     }
   };
   
-  export const filesexcel = async (req, res) => {
-    try {
-      const rows = await readXlsxFile(req.files.file.data);
-      rows.forEach((row) => {
-        Data.create({
-          productos_titulo: row[0],
-          productos_idioma: row[1],
-          productos_linea: row[2]
-        });
-      });
-      res.send('Datos insertados correctamente en la base de datos');
-    } catch (error) {
-      console.log(error);
-      res.send('Error al insertar los datos en la base de datos');
-    }
+  export const upload = async (req, res) => {
+    readXlsxFile(fs.createReadStream('./excel/input.xls')).then((rows) => {
+      console.log(rows);
+
+
+    })
+   
   };
     
       
