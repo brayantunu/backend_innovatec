@@ -21,9 +21,6 @@ export const producto = sequelize.define('producto',{
     productos_ano:{
         type:DataTypes.DATE
     },
-    productos_url:{
-        type:DataTypes.STRING(100)
-    },
     productos_tipo:{
         type:DataTypes.STRING
     },

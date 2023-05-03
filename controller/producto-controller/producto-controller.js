@@ -1,12 +1,21 @@
-import { producto } from "../../../models/productos-models/productos-models.js";
+import { producto } from "../../models/productos-models/productos-models.js";
 const Op = Sequelize.Op;
 import { Sequelize } from "sequelize";
 import readXlsxFile from "read-excel-file/node";
 import fs from "fs"
+// import { producto_proyecto } from "../../models/producto-proyecto-models/producto-proyecto-models.js";
+import { puntaje } from "../../models/puntaje-models/puntaje-models.js";
 
 export const getproducto = async (req, res) => {
     try {
-        const new_producto = await producto.findAll()
+        const new_producto = await producto.findAll({
+            include:[
+                {
+                    model:puntaje,
+                    attributes:['id','puntaje_puntuacion']
+                }
+            ]
+        })
         res.status(200).json({ succes: true, message: 'listado', new_producto })
     } catch (error) {
         return res.status(400).json({ message: error.message })
@@ -16,7 +25,8 @@ export const getproducto = async (req, res) => {
 
 export const create_producto = async (req, res) => {
 
-    const { productos_titulo, productos_ano,productos_tipo, productos_subtipo, productos_detalle, productos_idioma, productos_linea,productos_imagen,productos_autor } = req.body
+    const {  productos_imagen,productos_titulo, productos_ano,productos_tipo, productos_subtipo, productos_detalle, productos_idioma, productos_linea,productos_autor } = req.body
+    // const productos_imagen = req.file.filename;
     try {
         const new_producto = await producto.create({
             productos_titulo,

@@ -1,4 +1,4 @@
-import {producto_proyecto} from "../../../models/producto-proyecto-models/producto-proyecto-models.js"
+import {producto_proyecto} from "../../models/producto-proyecto-models/producto-proyecto-models.js"
 
 export const get_producto_proyecto = async (req,res)=>{
     try {

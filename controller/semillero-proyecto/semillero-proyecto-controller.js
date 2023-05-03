@@ -1,4 +1,4 @@
-import {semillero_proyecto} from "../../../models/semillero-proyecto-model/semillero-proyecto-models.js"
+import {semillero_proyecto} from "../../models/semillero-proyecto-model/semillero-proyecto-models.js"
 export const get_semillero_proyecto =async (req,res)=>{
     try {
         const new_semillero_proyecto = await semillero_proyecto.findAll()

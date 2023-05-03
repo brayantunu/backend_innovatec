@@ -1,4 +1,4 @@
-import {funcionario_producto} from "../../../models/funcionario-producto-models/funcionario-producto.-models.js"
+import {funcionario_producto} from "../../models/funcionario-producto-models/funcionario-producto.-models.js"
 
 
 export const get_funcionario_producto = async (req,res)=>{

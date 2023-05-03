@@ -1,5 +1,5 @@
 import  {Router} from "express";
-import { get_producto_proyecto,create_producto_proyecto,update_producto_proyecto, delete_producto_proyecto,  get_producto_proyecto_id,  } from "../../controller/models-controller/producto_proyecto_controller/producto-proyecto-controller.js";
+import { get_producto_proyecto,create_producto_proyecto,update_producto_proyecto, delete_producto_proyecto,  get_producto_proyecto_id,  } from "../../controller/producto_proyecto_controller/producto-proyecto-controller.js";
 const router = Router()
 router.get('/producto_proyecto',get_producto_proyecto)
 router.post('/producto_proyecto',create_producto_proyecto)

@@ -1,4 +1,4 @@
-import { semilleros } from "../../../models/semilleros-models/semilleros-models.js";
+import { semilleros } from "../../models/semilleros-models/semilleros-models.js";
 
 export const get_semillero = async (req,res)=>{
     try {

@@ -1,5 +1,5 @@
 import  {Router} from "express";
-import {get_funcionario_semillero,create_funcionario_semillero,update_funcionario_semillero,delete_funcionario_semillero,get_funcionario_semillero_id} from "../../controller/models-controller/funcionario-semillero/funcionario-semillero.js"
+import {get_funcionario_semillero,create_funcionario_semillero,update_funcionario_semillero,delete_funcionario_semillero,get_funcionario_semillero_id} from "../../controller/funcionario-semillero/funcionario-semillero.js"
 const router = Router()
 router.get('/funcionario_semilleros',get_funcionario_semillero)
 router.post('/funcionario_semilleros',create_funcionario_semillero)

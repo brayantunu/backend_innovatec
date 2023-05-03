@@ -1,4 +1,4 @@
-import { puntaje } from "../../../models/puntaje-models/puntaje-models.js";
+import { puntaje } from "../../models/puntaje-models/puntaje-models.js";
 
 export const get_puntaje = async (req,res)=>{
     try {
