@@ -1,9 +1,8 @@
 import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
-import { semilleros } from "../semilleros-models/semilleros-models.js";
-import { semillero_proyecto } from "../semillero-proyecto-model/semillero-proyecto-models.js";
+
 export const proyecto= sequelize.define('proyecto',{
-    id: {
+    proyecto_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -22,17 +21,10 @@ export const proyecto= sequelize.define('proyecto',{
     proyecto_presupuesto: {
         type: DataTypes.INTEGER (11)
     },
-})
+    
+},
+{ sequelize, modelName: 'proyectos' }
+)
 
 
 
-
-proyecto.belongsToMany(semilleros,{
-    through:semillero_proyecto
- 
-})
-
-semilleros.belongsToMany(proyecto,{
-    through:semillero_proyecto
-  
-})

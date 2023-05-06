@@ -1,15 +1,15 @@
 import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
-import {funcionario} from "../funcionario-models/funcionario-models.js"
+import {producto} from "../productos-models/productos-models.js"
 import {proyecto} from "../proyecto-models/proyecto-models.js"
-
-export const funcionario_proyecto= sequelize.define('funcionario_proyecto',{
-   id: {
+export const producto_proyecto= sequelize.define('producto_proyecto',{
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
+
     },
-    id_funcionario:{
+    id_producto:{
         type:DataTypes.INTEGER,
         foreignKey:true
     },
@@ -20,15 +20,15 @@ export const funcionario_proyecto= sequelize.define('funcionario_proyecto',{
 },
 {
     timestamps: false 
-}) 
+})
 
-funcionario.belongsToMany(proyecto, {
-    through: 'funcionario_proyecto',
-    foreignKey: 'id_funcionario',
+producto.belongsToMany(proyecto, {
+    through: 'producto_proyecto',
+    foreignKey: 'id_producto',
   });
-  
-  proyecto.belongsToMany(funcionario, {
-    through: 'funcionario_proyecto',
+
+  proyecto.belongsToMany(producto, {
+    through: 'producto_proyecto',
     foreignKey: 'id_proyecto',
   });
   

@@ -1,4 +1,4 @@
-import {semillero_producto} from "../../../models/semillero-producto-models/semillero-product-models.js"
+import {semillero_producto} from "../../models/semillero-producto-models/semillero-product-models.js"
  
 export const get_semillero_producto =async (req,res)=>{
     try {

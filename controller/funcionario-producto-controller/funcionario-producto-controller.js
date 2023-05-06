@@ -1,5 +1,4 @@
-import {funcionario_producto} from "../../../models/funcionario-producto-models/funcionario-producto.-models.js"
-
+import {funcionario_producto} from "../../models/funcionario-producto-models/funcionario-producto.-models.js"
 
 export const get_funcionario_producto = async (req,res)=>{
 
@@ -13,10 +12,10 @@ export const get_funcionario_producto = async (req,res)=>{
 
 export const create_funcionario_producto = async (req,res)=>{
     try {
-        const {funcionarioFuncionarioId,PRODUCTOPRODUCTOID} = req.body;
+        const {id_producto,id_funcionario} = req.body;
         const new_funcionario_producto = await funcionario_producto.create({
-            funcionarioFuncionarioId,
-            PRODUCTOPRODUCTOID
+            id_producto,
+            id_funcionario
         })
         res.status(200).json({message: "recurso creado",new_funcionario_producto})
         

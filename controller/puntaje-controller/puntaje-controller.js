@@ -1,4 +1,4 @@
-import { puntaje } from "../../../models/puntaje-models/puntaje-models.js";
+import { puntaje } from "../../models/puntaje-models/puntaje-models.js";
 
 export const get_puntaje = async (req,res)=>{
     try {
@@ -11,11 +11,12 @@ export const get_puntaje = async (req,res)=>{
 
 export const create_puntaje = async (req,res)=>{
 
-    const {puntaje_puntuacion,PRODUCTOPRODUCTOID} = req.body
+    const {puntaje_puntuacion,producto_id} = req.body
     try {
         const newpuntaje_puntuacion = await puntaje.create({
             puntaje_puntuacion,
-            PRODUCTOPRODUCTOID
+            producto_id
+            
             
         })
         res.status(200).json({message:'se creo el puntaje',newpuntaje_puntuacion})

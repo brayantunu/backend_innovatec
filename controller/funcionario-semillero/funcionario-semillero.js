@@ -1,4 +1,4 @@
-import{funcionario_semillero} from "../../../models/funcionario-semilleros-models/funcionario-semillero-models.js"
+import{funcionario_semillero} from "../../models/funcionario-semilleros-models/funcionario-semillero-models.js"
 
 export const get_funcionario_semillero= async (req,res)=>{
     try {

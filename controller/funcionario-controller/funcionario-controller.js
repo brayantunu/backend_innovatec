@@ -1,4 +1,4 @@
-import{funcionario} from "../../../models/funcionario-models/funcionario-models.js"
+import{funcionario} from "../../models/funcionario-models/funcionario-models.js"
 
 export const get_funcionario= async (req,res)=>{
     try {

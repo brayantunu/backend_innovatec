@@ -3,7 +3,7 @@ import { DataTypes } from "sequelize";
 
 
 export const semilleros=sequelize.define('semilleros',{
-    id: {
+    semillero_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -11,7 +11,7 @@ export const semilleros=sequelize.define('semilleros',{
     },
     semillero_nombre: {
         type: DataTypes.STRING,
-
-
     },
-})
+},
+{ sequelize, modelName: 'semilleros' },
+)

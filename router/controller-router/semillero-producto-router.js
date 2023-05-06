@@ -1,5 +1,5 @@
 import  {Router} from "express";
-import {get_semillero_producto,create_semillero_producto,update_semillero_producto,delete_semillero_producto,get_semillero_producto_id} from "../../controller/models-controller/semillero-producto/semillero-producto.js"
+import {get_semillero_producto,create_semillero_producto,update_semillero_producto,delete_semillero_producto,get_semillero_producto_id} from "../../controller/semillero-producto/semillero-producto.js"
 
 const router = Router()
 

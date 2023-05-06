@@ -1,5 +1,5 @@
 import  {Router} from "express";
-import { create_puntaje, delete_puntaje, get_puntaje, update_puntaje } from "../../controller/models-controller/puntaje-controller/puntaje-controller.js";
+import { create_puntaje, delete_puntaje, get_puntaje, update_puntaje } from "../../controller/puntaje-controller/puntaje-controller.js";
 
 const router = Router()
 

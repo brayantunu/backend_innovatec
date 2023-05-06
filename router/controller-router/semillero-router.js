@@ -1,5 +1,5 @@
 import  {Router} from "express";
-import { create_semillero, delete_semillero, get_semillero, get_semillero_id, update_semillero } from "../../controller/models-controller/semillero-controller/semillero-controller.js";
+import { create_semillero, delete_semillero, get_semillero, get_semillero_id, update_semillero } from "../../controller/semillero-controller/semillero-controller.js";
 const router = Router()
 
 router.get('/semilleros',get_semillero)

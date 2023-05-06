@@ -10,9 +10,12 @@ import producto_proyecto from "./router/controller-router/producto-proyecto-rout
 import semillero from "./router/controller-router/semillero-router.js"
 import semillero_producto from "./router/controller-router/semillero-producto-router.js"
 import semillero_proyecto from "./router/controller-router/semillero-proyecto-router.js"
+// import nivel from "./router/controller-router/calculadora-router.js"
+import funcionarioproyecto from "./router/controller-router/funcionario-proyecto-router.js"
+
 const app = Express()
 app.use(Express.json())
-app.use(funcionario,funcionario_producto,funcionario_semillero,producto,proyecto,puntaje,semillero,producto_proyecto,semillero_producto,semillero_proyecto)
+app.use(funcionario,funcionario_producto,funcionario_semillero,producto,proyecto,puntaje,semillero,producto_proyecto,semillero_producto,semillero_proyecto,funcionarioproyecto)
 
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json());

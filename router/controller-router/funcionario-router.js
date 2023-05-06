@@ -1,5 +1,5 @@
 import  {Router} from "express";
-import {get_funcionario,get_funcionario_id,create_funcionario,update_funcionario_id,delete_funcionario_id} from   "../../controller/models-controller/funcionario-controller/funcionario-controller.js"
+import {get_funcionario,get_funcionario_id,create_funcionario,update_funcionario_id,delete_funcionario_id} from   "../../controller/funcionario-controller/funcionario-controller.js"
 
 const router = Router()
 
