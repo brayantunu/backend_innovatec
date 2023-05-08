@@ -11,7 +11,8 @@ router.get ('/producto/:producto_id',cors(),get_producto_id)
 router.post('/producto',cors(),create_producto)
 router.delete('/producto/:producto_id',delete_producto)
 router.patch('/producto/:producto_id',update_producto)
-router.get('/producto/:productos_autor', cors(),filtroProducto)
+router.get('/filtroProducto', cors(),filtroProducto) 
+//  http://localhost:3000/filtroProducto?productos_autores=erreca
 router.get('/excel', cors(),upload)
 
 

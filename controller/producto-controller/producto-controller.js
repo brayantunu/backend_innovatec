@@ -4,11 +4,14 @@ const Op = Sequelize.Op;
 import { Sequelize } from "sequelize";
 import readXlsxFile from "read-excel-file/node";
 import fs from "fs";  
+import { QueryTypes } from "sequelize";
+
+
 export const getproducto = async (req, res) => {
   try {
-    const new_producto =
-      await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
-FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
+    const new_producto = await producto.findAll()
+//       await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
+// FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
 
     res.status(200).json({ succes: true, message: "listado", new_producto });
   } catch (error) {
@@ -138,34 +141,67 @@ export const searchProducts = async (req, res, next) => {
   }
 };
 export const filtroProducto = async (req, res) => {
-  const productosAutor = req.params.productos_autor;
-  const filtroAutor = `%${productosAutor}%`;
+  const productosAutores = req.query.productos_autores;
+  
+  if (!Array.isArray(productosAutores)) {
+    return res.status(400).send("Los autores deben ser proporcionados como un array");
+  }
+  
+  const filtrosAutores = productosAutores.map(autor => `%${autor}%`);
 
   try {
-    const count = await producto.findAll({
-      where: Sequelize.where(
-        Sequelize.fn("LOWER", Sequelize.col("productos_autor")),
-        "LIKE",
-        Sequelize.fn("LOWER", filtroAutor)
-      ),
-    });
-    if (count === 0) {
-      res.status(404).send("No se encontraron autores");
-    } else {
-      const autores = await producto.findAll({
-        where: Sequelize.where(
-          Sequelize.fn("LOWER", Sequelize.col("productos_autor")),
-          "LIKE",
-          Sequelize.fn("LOWER", filtroAutor)
-        ),
-      });
-      res.send(autores);
+    const autores = await sequelize.query(
+      'SELECT * FROM productos WHERE productos_autor LIKE ANY(ARRAY[:filtrosAutores])',
+      {
+        replacements: { filtrosAutores },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    if (autores.length === 0) {
+      return res.status(404).send("No se encontraron autores");
     }
+
+    res.send(autores);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error al obtener los autores");
   }
 };
+
+
+
+// export const filtroProducto = async (req, res) => {
+//   try {
+//     const productosAutores = req.query.productos_autores;
+//     console.log(productosAutores);
+
+//     if (!productosAutores || !Array.isArray(productosAutores)) {
+//       throw new Error("Los parámetros de autores son inválidos");
+//     }
+
+//     const filtrosAutores = productosAutores.map(autor => `%${autor}%`);
+//     console.log(filtrosAutores);
+
+//     const autores = await producto.findAll({
+//       where: {
+//         productos_autor: {
+//           [Sequelize.Op.or]: filtrosAutores,
+//         },
+//       },
+//     });
+
+//     if (autores.length === 0) {
+//       return res.status(404).send("No se encontraron autores");
+//     }
+
+//     res.send(autores);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Error al obtener los autores");
+//   }
+// };
+
 
 export const upload = async (req, res) => {
   readXlsxFile(fs.createReadStream("./excel/input.xls")).then((rows) => {
@@ -179,11 +215,15 @@ export const searchProducts1 = async (req, res, next) => {
     console.log(query);
     const productos = await sequelize.query(
       `SELECT *
-        FROM productos
-        INNER JOIN funcionario_productos
-        on funcionario_productos.id_producto = productos.producto_id
-        INNER JOIN funcionarios
-        on funcionarios.funcionario_id = funcionario_productos.id_funcionario
+      FROM productos
+      INNER JOIN funcionario_productos
+      on funcionario_productos.id_producto = productos.producto_id
+      INNER JOIN funcionarios
+      on funcionarios.funcionario_id = funcionario_productos.id_funcionario
+  INNER JOIN producto_proyectos
+  on producto_proyectos.id_producto = productos.producto_id
+  INNER JOIN proyectos
+  on proyectos.proyecto_id = producto_proyectos.id_producto
         WHERE productos.productos_titulo ILIKE :query`,
       {
         replacements: { query: `%${query}%` },
