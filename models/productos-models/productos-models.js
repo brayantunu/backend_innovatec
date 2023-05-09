@@ -33,7 +33,7 @@ export const producto = sequelize.define(
       type: DataTypes.STRING,
     },
     productos_imagen: {
-      type: DataTypes.BLOB("long"),
+      type: DataTypes.BLOB('long'),
     },
     productos_autor: {
       type: DataTypes.STRING,

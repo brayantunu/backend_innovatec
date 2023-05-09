@@ -3,15 +3,14 @@ import { sequelize } from "../../db/db.js";
 const Op = Sequelize.Op;
 import { Sequelize } from "sequelize";
 import readXlsxFile from "read-excel-file/node";
-import fs from "fs";  
+import fs from "fs";
 import { QueryTypes } from "sequelize";
-
 
 export const getproducto = async (req, res) => {
   try {
-    const new_producto = await producto.findAll()
-//       await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
-// FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
+    const new_producto = await producto.findAll();
+    //       await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
+    // FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
 
     res.status(200).json({ succes: true, message: "listado", new_producto });
   } catch (error) {
@@ -142,16 +141,18 @@ export const searchProducts = async (req, res, next) => {
 };
 export const filtroProducto = async (req, res) => {
   const productosAutores = req.query.productos_autores;
-  
+
   if (!Array.isArray(productosAutores)) {
-    return res.status(400).send("Los autores deben ser proporcionados como un array");
+    return res
+      .status(400)
+      .send("Los autores deben ser proporcionados como un array");
   }
-  
-  const filtrosAutores = productosAutores.map(autor => `%${autor}%`);
+
+  const filtrosAutores = productosAutores.map((autor) => `%${autor}%`);
 
   try {
     const autores = await sequelize.query(
-      'SELECT * FROM productos WHERE productos_autor LIKE ANY(ARRAY[:filtrosAutores])',
+      "SELECT * FROM productos WHERE productos_autor LIKE ANY(ARRAY[:filtrosAutores])",
       {
         replacements: { filtrosAutores },
         type: sequelize.QueryTypes.SELECT,
@@ -168,6 +169,9 @@ export const filtroProducto = async (req, res) => {
     res.status(500).send("Error al obtener los autores");
   }
 };
+
+
+// filtroProducto?productos_autores=bra&productos_autores=er
 
 
 
@@ -201,7 +205,6 @@ export const filtroProducto = async (req, res) => {
 //     res.status(500).send("Error al obtener los autores");
 //   }
 // };
-
 
 export const upload = async (req, res) => {
   readXlsxFile(fs.createReadStream("./excel/input.xls")).then((rows) => {
