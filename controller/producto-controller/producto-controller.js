@@ -18,6 +18,8 @@ export const getproducto = async (req, res) => {
   }
 };
 
+
+
 export const create_producto = async (req, res) => {
   const {
     productos_imagen,
@@ -30,7 +32,6 @@ export const create_producto = async (req, res) => {
     productos_linea,
     productos_autor,
   } = req.body;
-  // const productos_imagen = req.file.filename;
   try {
     const new_producto = await producto.create({
       productos_titulo,
@@ -50,6 +51,8 @@ export const create_producto = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 };
+
+
 
 export const update_producto = async (req, res) => {
   try {
@@ -83,6 +86,8 @@ export const update_producto = async (req, res) => {
   }
 };
 
+
+
 export const delete_producto = async (req, res) => {
   try {
     const { producto_id } = req.params;
@@ -102,6 +107,8 @@ export const delete_producto = async (req, res) => {
   }
 };
 
+
+
 export const get_producto_id = async (req, res) => {
   const { producto_id } = req.params;
   try {
@@ -113,6 +120,8 @@ export const get_producto_id = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+
 
 export const searchProducts = async (req, res, next) => {
   try {
@@ -139,6 +148,9 @@ export const searchProducts = async (req, res, next) => {
     next(error);
   }
 };
+
+
+
 export const filtroProducto = async (req, res) => {
   const productosAutores = req.query.productos_autores;
 
@@ -223,11 +235,11 @@ export const searchProducts1 = async (req, res, next) => {
       on funcionario_productos.id_producto = productos.producto_id
       INNER JOIN funcionarios
       on funcionarios.funcionario_id = funcionario_productos.id_funcionario
-  INNER JOIN producto_proyectos
-  on producto_proyectos.id_producto = productos.producto_id
-  INNER JOIN proyectos
-  on proyectos.proyecto_id = producto_proyectos.id_producto
-        WHERE productos.productos_titulo ILIKE :query`,
+      INNER JOIN producto_proyectos
+      on producto_proyectos.id_producto = productos.producto_id
+      INNER JOIN proyectos
+      on proyectos.proyecto_id = producto_proyectos.id_producto
+      WHERE productos.productos_titulo ILIKE :query`,
       {
         replacements: { query: `%${query}%` },
         type: sequelize.QueryTypes.SELECT,
