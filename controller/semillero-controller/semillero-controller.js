@@ -26,6 +26,7 @@ export const get_semillero_id = async (req,res) =>{
 
 export const create_semillero = async (req,res)=>{
     const {semillero_nombre} = req.body
+    console.log()
     try {
         const new_semillero = await semilleros.create({
             semillero_nombre

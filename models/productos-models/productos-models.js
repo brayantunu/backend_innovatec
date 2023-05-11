@@ -23,9 +23,6 @@ export const producto = sequelize.define(
     productos_subtipo: {
       type: DataTypes.STRING,
     },
-    productos_detalle: {
-      type: DataTypes.STRING(400),
-    },
     productos_idioma: {
       type: DataTypes.STRING,
     },
