@@ -13,6 +13,7 @@ import semillero_proyecto from "./router/controller-router/semillero-proyecto-ro
 // import nivel from "./router/controller-router/calculadora-router.js"
 import funcionarioproyecto from "./router/controller-router/funcionario-proyecto-router.js"
 
+
 const app = Express()
 app.use(Express.json())
 app.use(funcionario,funcionario_producto,funcionario_semillero,producto,proyecto,puntaje,semillero,producto_proyecto,semillero_producto,semillero_proyecto,funcionarioproyecto)
