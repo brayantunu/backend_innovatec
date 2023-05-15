@@ -27,7 +27,6 @@ export const create_producto = async (req, res) => {
     productos_ano,
     productos_tipo,
     productos_subtipo,
-    productos_detalle,
     productos_idioma,
     productos_linea,
     productos_autor,
@@ -37,7 +36,6 @@ export const create_producto = async (req, res) => {
     const new_producto = await producto.create({
       productos_titulo,
       productos_ano,
-      productos_detalle,
       productos_tipo,
       productos_subtipo,
       productos_idioma,
@@ -60,7 +58,6 @@ export const update_producto = async (req, res) => {
     const { producto_id } = req.params;
     const {
       productos_ano,
-      productos_detalle,
       productos_idioma,
       productos_linea,
       productos_subtipo,
@@ -72,7 +69,6 @@ export const update_producto = async (req, res) => {
     const PRODUCTO = await producto.findByPk(producto_id);
     PRODUCTO.productos_titulo = productos_titulo;
     PRODUCTO.productos_ano = productos_ano;
-    PRODUCTO.productos_detalle = productos_detalle;
     PRODUCTO.productos_tipo = productos_tipo;
     PRODUCTO.productos_subtipo = productos_subtipo;
     PRODUCTO.productos_idioma = productos_idioma;
@@ -152,36 +148,83 @@ export const searchProducts = async (req, res, next) => {
 
 
 
-export const filtroProducto = async (req, res) => {
-  const productosAutores = req.query.productos_autores;
+export const filtrosemilleros = async (req, res) => {
+  const semilleroNombre = req.query.semillero_nombre;
 
-  if (!Array.isArray(productosAutores)) {
+
+  if (!Array.isArray(semilleroNombre)) {
     return res
       .status(400)
       .send("Los autores deben ser proporcionados como un array");
   }
 
-  const filtrosAutores = productosAutores.map((autor) => `%${autor}%`);
+  const filtrosSemillero = semilleroNombre.map((autor) => `%${autor}%`);
 
   try {
-    const autores = await sequelize.query(
-      "SELECT * FROM productos WHERE productos_autor LIKE ANY(ARRAY[:filtrosAutores])",
+    const semillero = await sequelize.query(
+      `SELECT *
+      FROM productos
+      INNER JOIN semillero_productos
+      on semillero_productos.id_producto = productos.producto_id
+	  INNER JOIN semilleros
+	  on semilleros.semillero_id = semillero_productos.id_semillero
+	   WHERE semilleros.semillero_nombre LIKE ANY(ARRAY[:filtrosSemillero])`,
       {
-        replacements: { filtrosAutores },
+        replacements: { filtrosSemillero },
         type: sequelize.QueryTypes.SELECT,
       }
     );
 
-    if (autores.length === 0) {
+    if (semillero.length === 0) {
       return res.status(404).send("No se encontraron autores");
     }
 
-    res.send(autores);
+    res.send(semillero);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error al obtener los autores");
   }
 };
+
+
+export const tipoproducto = async (req, res) => {
+  const productostipos = req.query.productos_tipo;
+
+
+  if (!Array.isArray(productostipos)) {
+    return res
+      .status(400)
+      .send("Los autores deben ser proporcionados como un array");
+  }
+
+  const filtrosproducto = productostipos.map((autor) => `%${autor}%`);
+
+  try {
+    const producto = await sequelize.query(
+      `SELECT *
+      FROM productos
+      INNER JOIN semillero_productos
+      on semillero_productos.id_producto = productos.producto_id
+	  INNER JOIN semilleros
+	  on semilleros.semillero_id = semillero_productos.id_semillero
+	   WHERE productos.productos_tipo LIKE ANY(ARRAY[:filtrosproducto])`,
+      {
+        replacements: { filtrosproducto },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    if (producto.length === 0) {
+      return res.status(404).send("No se encontraron autores");
+    }
+
+    res.send(producto);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al obtener los autores");
+  }
+};
+
 
 
 // filtroProducto?productos_autores=bra&productos_autores=er
