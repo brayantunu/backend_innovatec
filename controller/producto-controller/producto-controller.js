@@ -8,9 +8,8 @@ import { QueryTypes } from "sequelize";
 
 export const getproducto = async (req, res) => {
   try {
-    const new_producto = await producto.findAll();
-    //       await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
-    // FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
+    const new_producto = await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
+   FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
 
     res.status(200).json({ succes: true, message: "listado", new_producto });
   } catch (error) {
@@ -224,6 +223,45 @@ export const tipoproducto = async (req, res) => {
   }
 };
 
+
+
+export const filtroaño = async (req, res) => {
+  const buscaraño = req.query.productos_ano;
+
+
+  if (!Array.isArray(buscaraño)) {
+    return res
+      .status(400)
+      .send("Los autores deben ser proporcionados como un array");
+  }
+
+  const filtroaños = buscaraño.map((año) => `%${año}%`);
+
+  try {
+    const producto = await sequelize.query(
+      `SELECT *
+      FROM productos
+      INNER JOIN semillero_productos
+      on semillero_productos.id_producto = productos.producto_id
+	  INNER JOIN semilleros
+	  on semilleros.semillero_id = semillero_productos.id_semillero
+	   WHERE productos.productos_ano LIKE ANY(ARRAY[:filtroaños])`,
+      {
+        replacements: { filtroaños },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    if (producto.length === 0) {
+      return res.status(404).send("No se encontraron autores");
+    }
+
+    res.send(producto);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al obtener los autores");
+  }
+};
 
 
 // filtroProducto?productos_autores=bra&productos_autores=er
