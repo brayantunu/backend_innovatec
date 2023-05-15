@@ -32,6 +32,7 @@ export const create_producto = async (req, res) => {
     productos_linea,
     productos_autor,
   } = req.body;
+  console.log(productos_titulo)
   try {
     const new_producto = await producto.create({
       productos_titulo,
