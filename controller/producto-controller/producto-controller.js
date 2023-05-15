@@ -5,10 +5,11 @@ import { Sequelize } from "sequelize";
 import readXlsxFile from "read-excel-file/node";
 import fs from "fs";
 import { QueryTypes } from "sequelize";
+import { Console } from "console";
 
 export const getproducto = async (req, res) => {
   try {
-    const new_producto = await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
+    const new_producto = await sequelize.query(`SELECT productos.*,puntajes.*
    FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
 
     res.status(200).json({ succes: true, message: "listado", new_producto });
@@ -227,16 +228,18 @@ export const tipoproducto = async (req, res) => {
 
 
 export const filtroaño = async (req, res) => {
+  // http://localhost:3000/producto?productos_ano[]=3021
+// este es la ruta del controlador de años
   const buscaraño = req.query.productos_ano;
 
-
+console.log(buscaraño)
   if (!Array.isArray(buscaraño)) {
     return res
       .status(400)
       .send("Los autores deben ser proporcionados como un array");
   }
 
-  const filtroaños = buscaraño.map((año) => `%${año}%`);
+  const filtroaños = buscaraño.map((ano) => `%${ano}%`);
 
   try {
     const producto = await sequelize.query(
@@ -263,6 +266,7 @@ export const filtroaño = async (req, res) => {
     res.status(500).send("Error al obtener los autores");
   }
 };
+
 
 
 // filtroProducto?productos_autores=bra&productos_autores=er
