@@ -1,7 +1,6 @@
 import  Sequelize  from "sequelize";
 // import { Pool } from "pg";
-
-export const sequelize = new Sequelize( 'tusena1','postgres','0000',{
+export const sequelize = new Sequelize( 'tusena','postgres','yuliana',{
 host:'localhost',
 dialect:'postgres'
 })

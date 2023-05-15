@@ -11,10 +11,10 @@ export const get_semillero_producto =async (req,res)=>{
 
 export const create_semillero_producto =async(req,res)=>{
     try {
-        const {PRODUCTOPRODUCTOID,semilleroId} = req.body;
+        const {id_producto,id_semillero} = req.body;
         const new_semillero_producto = await semillero_producto.create({
-            PRODUCTOPRODUCTOID,
-            semilleroId
+            id_semillero,
+            id_producto
         })
         res.status(200).json({message: "recurso creado",new_semillero_producto})
         
