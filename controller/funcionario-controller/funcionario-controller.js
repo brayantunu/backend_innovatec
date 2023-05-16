@@ -108,11 +108,7 @@ export const login = async(req,res)=>{
             where: {funcionario_iden:funcionario_iden}})
             console.log(usuario);
   
-        const contraseñacorrecta=
-        usuario===null 
-        ?
-        false
-        :await bcryptjs.compare(funcionario_contraseña,usuario.funcionario_contraseña)
+        const contraseñacorrecta=usuario===null? false:await bcryptjs.compare(funcionario_contraseña,usuario.funcionario_contraseña)
      if (!(funcionario_iden && contraseñacorrecta)){
       // console.log("entro al if");
   
@@ -129,7 +125,7 @@ export const login = async(req,res)=>{
         }
         console.log({usuariotoken});
         const token =jsontoken.sing(usuariotoken)
-        res.send({
+        res.status(200).json({
             usuariotoken:usuariotoken,
             token:token
         })

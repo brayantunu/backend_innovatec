@@ -4,7 +4,9 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 class Token{
     sing=(object)=>{
-    const token=jwt.sign(object,process.env.PASSWORDTOKEN)
+    const token=jwt.sign(object,process.env.PASSWORDTOKEN,
+        {expiresIn: "1h"}
+        )
     return token
     }
     jsonlogin =()=>{
