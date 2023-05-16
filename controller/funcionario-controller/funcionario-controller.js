@@ -1,4 +1,7 @@
 import{funcionario} from "../../models/funcionario-models/funcionario-models.js"
+import bcryptjs from "bcryptjs"
+import jwt from "./token.js"
+//import nodemailer from "nodemailer"
 
 export const get_funcionario= async (req,res)=>{
     try {
@@ -27,24 +30,21 @@ export const get_funcionario_id = async (req, res) => {
 }
 
 export const create_funcionario = async (req,res)=>{
-
-    const { funcionario_iden,funcionario_nombre,funcionario_apellido,funcionario_correo,funcionario_telefono, funcionario_administrador,funcionario_contraseña} = req.body
+    
     try {
-        const new_funcionario = await funcionario.create({
-            funcionario_iden,
-            funcionario_nombre,
-            funcionario_apellido,
-            funcionario_correo,
-            funcionario_contraseña,
-            funcionario_telefono,
-            funcionario_administrador
-        
-        })
-        res.status(200).json({message:'funcionario creado',new_funcionario})
+     const { funcionario_iden,funcionario_nombre,funcionario_apellido,funcionario_correo,funcionario_telefono, funcionario_administrador,funcionario_contraseña } = req.body;
+
+
+    const hashedPassword = await bcryptjs.hash(funcionario_contraseña, 10);
+  
+      const new_funcionario = await funcionario.create({ funcionario_iden,funcionario_nombre,funcionario_apellido,funcionario_correo,funcionario_administrador,funcionario_telefono, funcionario_contraseña: hashedPassword})
+  
+      res.json(new_funcionario);
     } catch (error) {
-        return res.status(500).json({message:error.message})
+    
+      res.status(500).json({ error: 'No se pudo crear el usuario' });
     }
-}
+  };
 
 
 export const update_funcionario_id = async (req,res) => {
@@ -100,4 +100,47 @@ export const update_funcionario_id = async (req,res) => {
         return res.status(500).json({ message: error.message })
     }
 }
+
+export const login = async(req,res)=>{
+    try {
+        const {funcionario_iden,funcionario_contraseña}=req.body
+        const usuario= await funcionario.findOne({
+            where: {funcionario_iden:funcionario_iden}})
+            console.log(usuario);
+  
+        const contraseñacorrecta=usuario===null? false:await bcryptjs.compare(funcionario_contraseña,usuario.funcionario_contraseña)
+     if (!(funcionario_iden && contraseñacorrecta)){
+      // console.log("entro al if");
+  
+        res.status(401).json({
+            error :'invalidad la identificacion o la contraseña'
+        })
+     }else{
+      // console.log("entro al else");
+        const jsontoken = new jwt()
+        const usuariotoken={
+            id: usuario.funcionario_id,
+            identificacion:usuario.funcionario_iden,
+            hashedPassword: usuario.funcionario_contraseña
+        }
+        console.log({usuariotoken});
+        const token =jsontoken.sing(usuariotoken)
+        res.status(200).json({
+            usuariotoken:usuariotoken,
+            token:token
+        })
+        
+     }
+  
+  
+    } catch (error) {
+      //   res.status(500).json(error);
+      console.log(error);
+        
+    }
+  
+  }
+
+
+  
 
