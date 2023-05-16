@@ -5,7 +5,11 @@ import { Sequelize } from "sequelize";
 import readXlsxFile from "read-excel-file/node";
 import fs from "fs";
 import { QueryTypes } from "sequelize";
-import { Console } from "console";
+import multer from "multer";
+import path from "path";
+
+
+
 
 export const getproducto = async (req, res) => {
   try {
@@ -51,6 +55,16 @@ export const create_producto = async (req, res) => {
   }
 };
 
+
+// const storage = multer.diskStorage({
+//   destination:path.join(dirname, "../../images"),
+//   filename:(req,file,cb) =>{
+//     cb(null, `${Date.now()}-${file.originalname}`);
+//   }
+// })
+
+// controlador de cargar imagen en el crud de crear
+// https://www.youtube.com/watch?v=Bj3Gcpohbu4
 
 
 export const update_producto = async (req, res) => {
@@ -120,31 +134,31 @@ export const get_producto_id = async (req, res) => {
 
 
 
-export const searchProducts = async (req, res, next) => {
-  try {
-    const titulo = req.query.q;
-    const productos = await producto.findAll({
-      where: {
-        productos_titulo: {
-          [Op.iLike]: "%" + titulo + "%",
-        },
-      },
-    });
-    if (productos.length === 0) {
-      const error = new Error(
-        `No se encontraron productos que coincidan con '${titulo}'`
-      );
-      error.statusCode = 404;
-      throw error;
-    }
-    res
-      .status(200)
-      .json({ message: "item obtenido por productos_titulo", productos });
-  } catch (error) {
-    // return res.status(500).json({ message: error.message })
-    next(error);
-  }
-};
+// export const searchProducts = async (req, res, next) => {
+//   try {
+//     const titulo = req.query.q;
+//     const productos = await producto.findAll({
+//       where: {
+//         productos_titulo: {
+//           [Op.iLike]: "%" + titulo + "%",
+//         },
+//       },
+//     });
+//     if (productos.length === 0) {
+//       const error = new Error(
+//         `No se encontraron productos que coincidan con '${titulo}'`
+//       );
+//       error.statusCode = 404;
+//       throw error;
+//     }
+//     res
+//       .status(200)
+//       .json({ message: "item obtenido por productos_titulo", productos });
+//   } catch (error) {
+//     // return res.status(500).json({ message: error.message })
+//     next(error);
+//   }
+// };
 
 
 
