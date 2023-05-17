@@ -13,7 +13,7 @@ class Token{
         const usertoken={
      id:funcionario.funcionario_id,
      usuario:funcionario.funcionario_iden,
-     contraseña: funcionario.funcionario_contraseña
+     contrasena: funcionario.funcionario_contrasena
         }
        return usertoken
        

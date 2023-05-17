@@ -3,8 +3,8 @@ import {funcionario_producto} from "../../models/funcionario-producto-models/fun
 export const get_funcionario_producto = async (req,res)=>{
 
     try {
-        const new_funcionario_producto = await funcionario_producto.findAll()
-        res.status(200).json({message: "datos obtenidos",new_funcionario_producto})
+        const nuevo_funcionario_producto = await funcionario_producto.findAll()
+        res.status(200).json({message: "datos obtenidos",nuevo_funcionario_producto})
     } catch (error) {
         return res.status(500).json({message:error.message})
     }
@@ -13,11 +13,11 @@ export const get_funcionario_producto = async (req,res)=>{
 export const create_funcionario_producto = async (req,res)=>{
     try {
         const {id_producto,id_funcionario} = req.body;
-        const new_funcionario_producto = await funcionario_producto.create({
+        const nuevo_funcionario_producto = await funcionario_producto.create({
             id_producto,
             id_funcionario
         })
-        res.status(200).json({message: "recurso creado",new_funcionario_producto})
+        res.status(200).json({message: "recurso creado",nuevo_funcionario_producto})
         
     } catch (error) {
         return res.status(500).json({message:error.message})
@@ -29,12 +29,12 @@ export const update_funcionario_producto = async (req,res)=>{
     try {
         const {id} = req.params
         const {funcionarioFuncionarioId,PRODUCTOPRODUCTOID} = req.body
-        const new_funcionario_producto = await funcionario_producto.findByPk(id)
-        new_funcionario_producto.funcionarioFuncionarioId=funcionarioFuncionarioId,
-        new_funcionario_producto.PRODUCTOPRODUCTOID = PRODUCTOPRODUCTOID
+        const nuevo_funcionario_producto = await funcionario_producto.findByPk(id)
+        nuevo_funcionario_producto.funcionarioFuncionarioId=funcionarioFuncionarioId,
+        nuevo_funcionario_producto.PRODUCTOPRODUCTOID = PRODUCTOPRODUCTOID
 
-        await new_funcionario_producto.save()
-        return res.status(200).json({message: "se ha actualizado el item",new_funcionario_producto})
+        await nuevo_funcionario_producto.save()
+        return res.status(200).json({message: "se ha actualizado el item",nuevo_funcionario_producto})
 
         
     } catch (error) {
@@ -51,7 +51,7 @@ export const delete_funcionario_producto = async (req,res)=>{
                 id
             }
         })
-        res.status(200).json({message:"Item eliminado correctamente"})
+        res.status(200).json({message:"Se ha  eliminado correctamente"})
     } catch (error) {
         return res.status(500).json({ message: error.message })
         
@@ -61,10 +61,10 @@ export const delete_funcionario_producto = async (req,res)=>{
 export const get_funcionario_producto_id = async (req, res) => {
     const { id } = req.params
     try {
-        const new_funcionario_producto = await funcionario_producto.findOne({
+        const nuevo_funcionario_producto = await funcionario_producto.findOne({
             where: { id },      
         })
-        res.status(200).json({message:"item obtenido por id",new_funcionario_producto})
+        res.status(200).json({message:"item obtenido por id",nuevo_funcionario_producto})
 
     } catch (error) {
         return res.status(500).json({ message: error.message })

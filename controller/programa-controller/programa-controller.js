@@ -2,7 +2,7 @@ import { programas } from "../../models/programa-models/programa-models.js";
 
 export const programa = async (req,res)=>{
     try {
-        const new_programa = await programas. finAll()
+        const nuevo_programa = await programas. finAll()
     } catch (error) {
         return res.status(400).json({message:error.message})
         
@@ -16,12 +16,12 @@ export const create_programa = async (req, res) => {
     } = req.body;
   
     try {
-      const new_programa = await programas.create({
+      const nuevo_programa = await programas.create({
         nombre_programa
       });
       res
         .status(200)
-        .json({ message: "se creo el programa correctamente", new_programa });
+        .json({ message: "se creo el programa correctamente", nuevo_programa });
     } catch (error) {
       return res.status(400).json({ message: error.message });
     }
@@ -74,10 +74,10 @@ export const delete_programa = async (req, res) => {
 export const get_programa_id = async (req, res) => {
     const { programa_id } = req.params;
     try {
-      const new_programa = await programas.findOne({
+      const nuevo_programa = await programas.findOne({
         where: { programa_id },
       });
-      res.status(200).json({ message: "item obtenido por id", new_programa });
+      res.status(200).json({ message: "item obtenido por id", nuevo_programa });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }

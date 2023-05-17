@@ -1,5 +1,6 @@
 import Express from "express";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser"
 import funcionario from  "./router/controller-router/funcionario-router.js"
 import funcionario_producto from "./router/controller-router/funcionario-producto-router.js"
 import funcionario_semillero from "./router/controller-router/funcionario-semillero-router.js"
@@ -22,6 +23,8 @@ app.use(programas,funcionario,funcionario_producto,funcionario_semillero,product
 
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json());
+app.use (cookieParser())
+
 
 
 export default app;

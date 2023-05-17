@@ -11,6 +11,8 @@ export const semilleros=sequelize.define('semilleros',{
     },
     semillero_nombre: {
         type: DataTypes.STRING,
+        allowNull: false
+
     },
     id_programa:{
         type: DataTypes.INTEGER,

@@ -2,8 +2,8 @@ import{funcionario_semillero} from "../../models/funcionario-semilleros-models/f
 
 export const get_funcionario_semillero= async (req,res)=>{
     try {
-        const new_funcionario_semillero = await funcionario_semillero.findAll()
-        res.status(200).json({message: "datos obtenidos",new_funcionario_semillero})
+        const nuevo_funcionario_semillero = await funcionario_semillero.findAll()
+        res.status(200).json({message: "datos obtenidos",nuevo_funcionario_semillero})
     } catch (error) {
         return res.status(500).json({message:error.message})
     }
@@ -12,10 +12,10 @@ export const get_funcionario_semillero= async (req,res)=>{
 export const get_funcionario_semillero_id =async(req,res)=>{
     const { id } = req.params
     try {
-        const  new_funcionario_semillero = await funcionario_semillero.findOne({
+        const  nuevo_funcionario_semillero = await funcionario_semillero.findOne({
             where: { id },      
         })
-        res.status(200).json({message:"item obtenido por id", new_funcionario_semillero})
+        res.status(200).json({message:"item obtenido por id", nuevo_funcionario_semillero})
 
     } catch (error) {
         return res.status(500).json({ message: error.message })
@@ -26,11 +26,11 @@ export const get_funcionario_semillero_id =async(req,res)=>{
 export const create_funcionario_semillero= async(req,res)=>{
     try {
         const {funcionarioFuncionarioId,semilleroId} = req.body;
-        const new_funcionario_semillero = await funcionario_semillero.create({
+        const nuevo_funcionario_semillero = await funcionario_semillero.create({
             funcionarioFuncionarioId,
             semilleroId
         })
-        res.status(200).json({message: "recurso creado",new_funcionario_semillero})
+        res.status(200).json({message: "recurso creado",nuevo_funcionario_semillero})
         
     } catch (error) {
         return res.status(500).json({message:error.message})
