@@ -5,12 +5,22 @@ import { Sequelize } from "sequelize";
 import readXlsxFile from "read-excel-file/node";
 import fs from "fs";
 import { QueryTypes } from "sequelize";
+import multer from "multer";
+import path from "path";
+
+
+
 
 export const getproducto = async (req, res) => {
   try {
+
     const nuevo_producto = await producto.findAll();
     //       await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
     // FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
+
+    const new_producto = await sequelize.query(`SELECT productos.*,puntajes.*
+   FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
+
 
     res.status(200).json({ succes: true, message: "listado", nuevo_producto });
   } catch (error) {
@@ -51,6 +61,16 @@ export const create_producto = async (req, res) => {
   }
 };
 
+
+// const storage = multer.diskStorage({
+//   destination:path.join(dirname, "../../images"),
+//   filename:(req,file,cb) =>{
+//     cb(null, `${Date.now()}-${file.originalname}`);
+//   }
+// })
+
+// controlador de cargar imagen en el crud de crear
+// https://www.youtube.com/watch?v=Bj3Gcpohbu4
 
 
 export const update_producto = async (req, res) => {
@@ -120,31 +140,31 @@ export const get_producto_id = async (req, res) => {
 
 
 
-export const searchProducts = async (req, res, next) => {
-  try {
-    const titulo = req.query.q;
-    const productos = await producto.findAll({
-      where: {
-        productos_titulo: {
-          [Op.iLike]: "%" + titulo + "%",
-        },
-      },
-    });
-    if (productos.length === 0) {
-      const error = new Error(
-        `No se encontraron productos que coincidan con '${titulo}'`
-      );
-      error.statusCode = 404;
-      throw error;
-    }
-    res
-      .status(200)
-      .json({ message: "item obtenido por productos_titulo", productos });
-  } catch (error) {
-    // return res.status(500).json({ message: error.message })
-    next(error);
-  }
-};
+// export const searchProducts = async (req, res, next) => {
+//   try {
+//     const titulo = req.query.q;
+//     const productos = await producto.findAll({
+//       where: {
+//         productos_titulo: {
+//           [Op.iLike]: "%" + titulo + "%",
+//         },
+//       },
+//     });
+//     if (productos.length === 0) {
+//       const error = new Error(
+//         `No se encontraron productos que coincidan con '${titulo}'`
+//       );
+//       error.statusCode = 404;
+//       throw error;
+//     }
+//     res
+//       .status(200)
+//       .json({ message: "item obtenido por productos_titulo", productos });
+//   } catch (error) {
+//     // return res.status(500).json({ message: error.message })
+//     next(error);
+//   }
+// };
 
 
 
@@ -210,6 +230,48 @@ export const tipoproducto = async (req, res) => {
 	   WHERE productos.productos_tipo LIKE ANY(ARRAY[:filtrosproducto])`,
       {
         replacements: { filtrosproducto },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    if (producto.length === 0) {
+      return res.status(404).send("No se encontraron autores");
+    }
+
+    res.send(producto);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al obtener los autores");
+  }
+};
+
+
+
+export const filtroaño = async (req, res) => {
+  // http://localhost:3000/producto?productos_ano[]=3021
+// este es la ruta del controlador de años
+  const buscaraño = req.query.productos_ano;
+
+console.log(buscaraño)
+  if (!Array.isArray(buscaraño)) {
+    return res
+      .status(400)
+      .send("Los autores deben ser proporcionados como un array");
+  }
+
+  const filtroaños = buscaraño.map((ano) => `%${ano}%`);
+
+  try {
+    const producto = await sequelize.query(
+      `SELECT *
+      FROM productos
+      INNER JOIN semillero_productos
+      on semillero_productos.id_producto = productos.producto_id
+	  INNER JOIN semilleros
+	  on semilleros.semillero_id = semillero_productos.id_semillero
+	   WHERE productos.productos_ano LIKE ANY(ARRAY[:filtroaños])`,
+      {
+        replacements: { filtroaños },
         type: sequelize.QueryTypes.SELECT,
       }
     );

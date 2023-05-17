@@ -4,7 +4,7 @@ async function main(){
     try {
         await sequelize.sync({force:false})
         app.listen(3000)
-        console.log("el proyecto y la base de datos estan conectados :)",3000);
+        console.log("All models were synchronized successfully.");
 
     } catch (error) {
         console.log('no hay conecxion con la base de datos',error);
