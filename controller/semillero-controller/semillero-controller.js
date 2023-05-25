@@ -11,17 +11,17 @@ export const get_semillero = async (req,res)=>{
 }
 
 export const get_semillero_id = async (req,res) =>{
+    const { semillero_id } = req.params
     try {
-        const {id} = req.params;
-        const nuevo_semillero = await semilleros.findOne({
-            where:{
-                id
-            }
+        const nuevo_semiilero = await semilleros.findOne({
+            where: { semillero_id },      
         })
-        res.status(200).json({message:"Semillero creado", nuevo_semillero})
+        res.status(200).json({message:"Semillero obtenido por id",nuevo_semiilero})
+
     } catch (error) {
-        
+        return res.status(500).json({ message: error.message })
     }
+
 }
 
 export const create_semillero = async (req,res)=>{
@@ -40,9 +40,9 @@ export const create_semillero = async (req,res)=>{
 
 export const update_semillero = async (req,res)=>{
     try {
-        const {id} = req.params;
+        const {semillero_id} = req.params;
         const {semillero_nombre} = req.body
-        const nuevo_semillero = await semilleros.findByPk(id)
+        const nuevo_semillero = await semilleros.findByPk(semillero_id)
         nuevo_semillero.semillero_nombre=semillero_nombre
         await nuevo_semillero.save()
         return res.status(200).json({message: "se ha actualizado el Semillero", nuevo_semillero})
@@ -55,10 +55,10 @@ export const update_semillero = async (req,res)=>{
 
 export const delete_semillero = async (req,res) =>{
     try {
-        const {id} = req.params;
+        const {semillero_id} = req.params;
         const nuevo_semillero = await semilleros.destroy({
             where:{
-                id
+                semillero_id
             }
         })
         res.status(200).json({message:'Semillero eliminado satisfactoriamente',nuevo_semillero})

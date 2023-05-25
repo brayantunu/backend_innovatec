@@ -4,7 +4,7 @@ const router = Router()
 
 router.get('/semilleros',get_semillero)
 router.post('/semilleros',create_semillero)
-router.patch('/semilleros/:id',update_semillero)
-router.delete('/semilleros/:id',delete_semillero)
-router.get('/semilleros/:id',get_semillero_id)
+router.patch('/semilleros/semillero_id',update_semillero)
+router.delete('/semilleros/:semillero_id',delete_semillero)
+router.get('/semilleros/:semillero_id',get_semillero_id)
 export default router

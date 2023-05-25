@@ -1,6 +1,8 @@
 import{funcionario} from "../../models/funcionario-models/funcionario-models.js"
 import bcryptjs from "bcryptjs"
 import jwt from "./token.js"
+import nodemailer from "nodemailer"
+
 //import nodemailer from "nodemailer"
 
 export const get_funcionario= async (req,res)=>{
@@ -115,6 +117,9 @@ export const login = async(req,res)=>{
         res.status(401).json({
             error :'Identificacion o Contraseña Incorrecta'
         })
+        //if (!funcionario_iden || !contrasena_correcta) {
+          //return res.status(400).json({ error: 'Debes completar todos los campos' });
+        //}
      }else{
       // console.log("entro al else");
         const jsontoken = new jwt()
@@ -140,6 +145,59 @@ export const login = async(req,res)=>{
     }
   
   }
+
+
+
+//function generarcodigo() {
+  //let codigo = "";
+  //const caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  //const caracteresLength = caracteres.length;
+  //const longitud = 10; // Longitud deseada para el código generado
+  
+  //for (let i = 0; i < longitud; i++) {
+    //codigo += caracteres.charAt(Math.floor(Math.random() * caracteresLength));
+    //console.log(codigo);
+
+  //}
+  
+//return codigo
+//}
+
+//export const recuperar = async(req,res)=>{
+
+  
+    //const codigo_aleatorio= generarcodigo(10);
+    //const puerto_smtp = 587; // Ejemplo de valor de puerto SMTP
+
+
+    //const transporter=nodemailer.createTransport({
+      //service:"gmail",
+      //auth: {
+        //funcionario_iden: 'carlosnogueradev@gmail.com',
+       // funcionario_contrasena: '1059355806'
+      //},
+      //authMethod:"PLAIN"
+     //connectionTimeout: 5000, // 5 segundos
+      //socketTimeout: 30000, // 30 segundos
+    //})
+
+   // const mensaje = {
+        //from: 'krlosnoguera21@gmail.com',
+        //to: req.body.funcionario_correo, // Email del destinatario obtenido desde la solicitud
+       // subject: 'Código de recuperación de contraseña',
+        //text: `Tu código de recuperación de contraseña es: ${codigo_aleatorio}`,
+       // html: `<p>Tu código de recuperación de contraseña es: <strong>${codigo_aleatorio}</strong></p>`
+      //};
+ //transporter.sendMail(mensaje, (error, info) => {
+   // if (error) {
+      //console.log('Error al enviar el correo:', error);
+     // res.status(500).json({ error: 'Ocurrió un error al enviar el correo electrónico' });
+   // } else {
+      //console.log('Correo enviado correctamente:', info.response);
+      //res.status(200).json({ message: 'Correo de recuperación enviado exitosamente' });
+    //}
+  //});
+//};
 
 
   

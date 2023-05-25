@@ -37,7 +37,6 @@ export const create_producto = async (req, res) => {
     productos_ano,
     productos_tipo,
     productos_subtipo,
-    productos_idioma,
     productos_linea,
     productos_autor,
   } = req.body;
@@ -48,7 +47,6 @@ export const create_producto = async (req, res) => {
       productos_ano,
       productos_tipo,
       productos_subtipo,
-      productos_idioma,
       productos_linea,
       productos_imagen,
       productos_autor,
@@ -78,7 +76,6 @@ export const update_producto = async (req, res) => {
     const { producto_id } = req.params;
     const {
       productos_ano,
-      productos_idioma,
       productos_linea,
       productos_subtipo,
       productos_titulo,
@@ -91,7 +88,6 @@ export const update_producto = async (req, res) => {
     productos.productos_ano = productos_ano;
     productos.productos_tipo = productos_tipo;
     productos.productos_subtipo = productos_subtipo;
-    productos.productos_idioma = productos_idioma;
     productos.productos_linea = productos_linea;
     productos.producto_imagen = producto_imagen;
     await productos.save();

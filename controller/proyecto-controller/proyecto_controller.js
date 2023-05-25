@@ -30,9 +30,9 @@ export const create_proyecto = async (req,res)=>{
 
 export const update_proyecto = async (req,res)=>{
     try {
-        const {id} = req.params
+        const {proyecto_id} = req.params
         const { proyecto_codigo,proyecto_linea,proyecto_nombre,proyecto_presupuesto} = req.body
-        const nuevo_proyecto = await proyecto.findByPk(id)
+        const nuevo_proyecto = await proyecto.findByPk(proyecto_id)
         nuevo_proyecto.proyecto_codigo= proyecto_codigo,
         nuevo_proyecto.proyecto_linea=proyecto_linea,
         nuevo_proyecto.proyecto_nombre=proyecto_nombre,
@@ -51,10 +51,10 @@ export const update_proyecto = async (req,res)=>{
 
 export const delete_proyecto = async (req,res)=>{
     try {
-        const {id} = req.params
+        const {proyecto_id} = req.params
         await proyecto.destroy({
             where:{
-                id
+                proyecto_id
             }
         })
         res.status(200).json({message:"Proyecto eliminado correctamente"})
@@ -66,10 +66,10 @@ export const delete_proyecto = async (req,res)=>{
 
 
 export const get_proyecto_id= async (req, res) => {
-    const { id } = req.params
+    const { proyecto_id } = req.params
     try {
         const nuevo_proyecto = await proyecto.findOne({
-            where: { id },      
+            where: { proyecto_id },      
         })
         res.status(200).json({message:"Proyecto obtenido por id",nuevo_proyecto})
 
