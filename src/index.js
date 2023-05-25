@@ -1,3 +1,4 @@
+
 import { sequelize } from "./db/db.js";
 import { PORT } from "../config.js";
 // importamos el archivo de la base de datos que hace la conecxion
