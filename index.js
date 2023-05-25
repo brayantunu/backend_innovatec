@@ -7,7 +7,7 @@ async function main(){
         console.log("All models were synchronized successfully.");
 
     } catch (error) {
-        console.log('no hay conecxion con la base de datos',error);
+        console.log('no hay conexion con la base de datos',error);
     }
 }
 main()
