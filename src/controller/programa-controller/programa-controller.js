@@ -1,9 +1,14 @@
 import { programas } from "../../models/programa-models/programa-models.js";
+// importamos el modelo de programas oara su correcto funcionamiento de su servicios 
 
 export const programa = async (req,res)=>{
+  // creamos una constante la cual se exportara para que las rutas sean utilizadas en lo visual
     try {
+      // es una promesa lo que hace si los parametros de la busqueda se encuentra le mandamos una respuesta al cliente mostrando los programas buscados
         const new_programa = await programas. finAll()
+        res.status(200).json({message: "se obtener los programas exitosamente "})
     } catch (error) {
+      // si falla la promesa se le enviara una respuesta al cliente de que fallo el controlador de la busqueda
         return res.status(400).json({message:error.message})
         
     }
@@ -67,9 +72,6 @@ export const delete_programa = async (req, res) => {
       return res.status(500).json({ message: error.message });
     }
   };
-  
-
-
   
 export const get_programa_id = async (req, res) => {
     const { programa_id } = req.params;

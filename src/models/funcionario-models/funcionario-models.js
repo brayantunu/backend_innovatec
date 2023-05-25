@@ -1,10 +1,12 @@
 import { sequelize } from "../../db/db.js";
+// se importa la base de datos la cual la funcion es que se guarde los modelos que creamos en la base de datos
+
 import { DataTypes } from "sequelize";
-import { producto } from "../productos-models/productos-models.js";
-
-
+// importamos los tipos de datos de la libreria de sequelize
 
 export const funcionario = sequelize.define('funcionario', {
+// creamos una constate que se llame producto y la exportamos con export definimos el nombre de sequelize que es la conexion de la base de datos 
+
     funcionario_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -34,18 +36,14 @@ export const funcionario = sequelize.define('funcionario', {
     funcionario_telefono: {
         type: DataTypes.BIGINT
     },
+    // estos datos son los atributos que se diagramo en el modelo uml
 
-    funcionario_administrador: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-    },
-    token: {
-        type: DataTypes.STRING,
-    }
 },
     { sequelize,
         tableName:'funcionarios',
         modelName: 'funcionario' },
+// se define sequelize con modelname poniendole el nombre de la tabla 
+
     {
         timestamps: false
     }

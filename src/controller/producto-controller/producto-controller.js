@@ -1,24 +1,29 @@
 import { producto } from "../../models/productos-models/productos-models.js";
+// se importa los modelos de productos a los controladores para ser creados
 import { sequelize } from "../../db/db.js";
-const Op = Sequelize.Op;
+// se hace la conexion con la base de datos esto sirve para hacer las consultas de los crud de obtener para realizar la consulta por query
+const Op = Sequelize.Op; 
+// 
 import { Sequelize } from "sequelize";
+// permite manipular varios modelos o tablas de sql
 import readXlsxFile from "read-excel-file/node";
 import fs from "fs";
 import { QueryTypes } from "sequelize";
 import multer from "multer";
 import path from "path";
 
-
-
-
 export const getproducto = async (req, res) => {
+
+  // creamos una constante y export la const getproducto para ser utilizado por el frontend o servicios
   try {
     const new_producto = await sequelize.query(`SELECT productos.*,puntajes.*
    FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
-
+// hacemos la consulta en una promesa try catch lo que permite mediante en una variable guarda los objetos 
     res.status(200).json({ succes: true, message: "listado", new_producto });
+    // este permite ver el estado de la peticion del servicio en este caso en 200 significa 200 mostrando un mensaje listado con obtencion de los datos solcitados por el cliente 
   } catch (error) {
     return res.status(400).json({ message: error.message });
+    // este permite si la solicitud del cliente es erronea el servicio no sea mostrado al cliente mostrando un mensaje que no ha sido listado
   }
 };
 
@@ -324,7 +329,7 @@ export const upload = async (req, res) => {
   });
 };
 
-export const searchProducts1 = async (req, res, next) => {
+export const searchProducts = async (req, res, next) => {
   try {
     const { query } = req.query;
     console.log(query);

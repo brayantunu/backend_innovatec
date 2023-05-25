@@ -1,4 +1,5 @@
 import  {Router} from "express";
+
 import {get_funcionario_producto, create_funcionario_producto,update_funcionario_producto, delete_funcionario_producto, get_funcionario_producto_id} from "../../controller/funcionario-producto-controller/funcionario-producto-controller.js";
 
 const router = Router()
