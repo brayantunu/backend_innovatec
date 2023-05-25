@@ -2,8 +2,8 @@ import {semillero_producto} from "../../models/semillero-producto-models/semille
  
 export const get_semillero_producto =async (req,res)=>{
     try {
-        const new_semillero_producto = await semillero_producto.findAll()
-        res.status(200).json({message: "datos obtenidos",new_semillero_producto})
+        const nuevo_semillero_producto = await semillero_producto.findAll()
+        res.status(200).json({message: "datos obtenidos",nuevo_semillero_producto})
     } catch (error) {
         return res.status(500).json({message:error.message})
     }
@@ -12,11 +12,11 @@ export const get_semillero_producto =async (req,res)=>{
 export const create_semillero_producto =async(req,res)=>{
     try {
         const {id_producto,id_semillero} = req.body;
-        const new_semillero_producto = await semillero_producto.create({
+        const nuevo_semillero_producto = await semillero_producto.create({
             id_semillero,
             id_producto
         })
-        res.status(200).json({message: "recurso creado",new_semillero_producto})
+        res.status(200).json({message: "recurso creado",nuevo_semillero_producto})
         
     } catch (error) {
         return res.status(500).json({message:error.message})
@@ -28,12 +28,12 @@ export const update_semillero_producto =async(req,res)=>{
     try {
         const {id} = req.params
         const {  PRODUCTOPRODUCTOID,semilleroId} = req.body
-        const  new_semillero_producto = await semillero_producto.findByPk(id)
-        new_semillero_producto.PRODUCTOPRODUCTOID=PRODUCTOPRODUCTOID,
-        new_semillero_producto.semilleroId = semilleroId,
+        const  nuevo_semillero_producto = await semillero_producto.findByPk(id)
+        nuevo_semillero_producto.PRODUCTOPRODUCTOID=PRODUCTOPRODUCTOID,
+        nuevo_semillero_producto.semilleroId = semilleroId,
 
-        await new_semillero_producto.save()
-        return res.status(200).json({message: "se ha actualizado el item",new_semillero_producto})
+        await nuevo_semillero_producto.save()
+        return res.status(200).json({message: "se ha actualizado el item",nuevo_semillero_producto})
 
         
     } catch (error) {
@@ -62,10 +62,10 @@ export const delete_semillero_producto =async(req,res)=>{
 export const get_semillero_producto_id =async(req,res)=>{
     const { id } = req.params
     try {
-        const  new_semillero_producto = await semillero_producto.findOne({
+        const  nuevo_semillero_producto = await semillero_producto.findOne({
             where: { id },      
         })
-        res.status(200).json({message:"item obtenido por id", new_semillero_producto})
+        res.status(200).json({message:"item obtenido por id", nuevo_semillero_producto})
 
     } catch (error) {
         return res.status(500).json({ message: error.message })

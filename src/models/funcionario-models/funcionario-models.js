@@ -14,29 +14,38 @@ export const funcionario = sequelize.define('funcionario', {
 
     },
     funcionario_iden: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        unique: true
     },
 
     funcionario_nombre: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
 
     funcionario_apellido: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
 
     funcionario_correo: {
-        type: DataTypes.STRING
-    },
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+        },
 
-    funcionario_contraseña: {
-        type: DataTypes.STRING
+    funcionario_contrasena: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
 
     funcionario_telefono: {
-        type: DataTypes.BIGINT
+        type: DataTypes.BIGINT,
+        allowNull: false
     },
-    // estos datos son los atributos que se diagramo en el modelo uml
+
+
 
 },
     { sequelize,

@@ -16,11 +16,19 @@ export const getproducto = async (req, res) => {
 
   // creamos una constante y export la const getproducto para ser utilizado por el frontend o servicios
   try {
+
+    const nuevo_producto = await producto.findAll();
+    //       await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
+    // FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
+
     const new_producto = await sequelize.query(`SELECT productos.*,puntajes.*
    FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
 // hacemos la consulta en una promesa try catch lo que permite mediante en una variable guarda los objetos 
     res.status(200).json({ succes: true, message: "listado", new_producto });
     // este permite ver el estado de la peticion del servicio en este caso en 200 significa 200 mostrando un mensaje listado con obtencion de los datos solcitados por el cliente 
+
+
+    res.status(200).json({ succes: true, message: "listado", nuevo_producto });
   } catch (error) {
     return res.status(400).json({ message: error.message });
     // este permite si la solicitud del cliente es erronea el servicio no sea mostrado al cliente mostrando un mensaje que no ha sido listado
@@ -36,25 +44,23 @@ export const create_producto = async (req, res) => {
     productos_ano,
     productos_tipo,
     productos_subtipo,
-    productos_idioma,
     productos_linea,
     productos_autor,
   } = req.body;
   console.log(productos_titulo)
   try {
-    const new_producto = await producto.create({
+    const nuevo_producto = await producto.create({
       productos_titulo,
       productos_ano,
       productos_tipo,
       productos_subtipo,
-      productos_idioma,
       productos_linea,
       productos_imagen,
       productos_autor,
     });
     res
       .status(200)
-      .json({ message: "se creo el producto correctamente", new_producto });
+      .json({ message: "se creo el producto correctamente", nuevo_producto });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
@@ -77,7 +83,6 @@ export const update_producto = async (req, res) => {
     const { producto_id } = req.params;
     const {
       productos_ano,
-      productos_idioma,
       productos_linea,
       productos_subtipo,
       productos_titulo,
@@ -85,17 +90,16 @@ export const update_producto = async (req, res) => {
       producto_imagen,
     } = req.body;
 
-    const PRODUCTO = await producto.findByPk(producto_id);
-    PRODUCTO.productos_titulo = productos_titulo;
-    PRODUCTO.productos_ano = productos_ano;
-    PRODUCTO.productos_tipo = productos_tipo;
-    PRODUCTO.productos_subtipo = productos_subtipo;
-    PRODUCTO.productos_idioma = productos_idioma;
-    PRODUCTO.productos_linea = productos_linea;
-    PRODUCTO.producto_imagen = producto_imagen;
-    await producto.save();
+    const productos = await producto.findByPk(producto_id);
+    productos.productos_titulo = productos_titulo;
+    productos.productos_ano = productos_ano;
+    productos.productos_tipo = productos_tipo;
+    productos.productos_subtipo = productos_subtipo;
+    productos.productos_linea = productos_linea;
+    productos.producto_imagen = producto_imagen;
+    await productos.save();
     res.status(201).json({
-      message: "se ha actualizado el proyecto",
+      message: "se ha actualizado el producto",
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -117,7 +121,7 @@ export const delete_producto = async (req, res) => {
     // res.json("eliminado")
     res
       .status(200)
-      .json({ message: "projecto eliminado correctamente", producto_id });
+      .json({ message: "producto eliminado correctamente", producto_id });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -128,10 +132,10 @@ export const delete_producto = async (req, res) => {
 export const get_producto_id = async (req, res) => {
   const { producto_id } = req.params;
   try {
-    const new_producto = await producto.findOne({
+    const nuevo_producto = await producto.findOne({
       where: { producto_id },
     });
-    res.status(200).json({ message: "item obtenido por id", new_producto });
+    res.status(200).json({ message: "item obtenido por id", nuevo_producto });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

@@ -13,7 +13,7 @@ async function main(){
         // app.listen( es el puerto de escucha con el proycto que se conectara para poder iniciar el servicio del backend se puede cambiar el numero de puerto por defecto es 3000)
         console.log("Connection has been established successfully." + PORT);
     } catch (error) {
-        console.log('no hay conecxion con la base de datos',error);
+        console.log('no hay conexion con la base de datos',error);
     }
 }
 // este codigo de la funcion de main es la conecxion de la base de datos que importamos que el inicializa todo los modelos de dicha estructura en la base de datos postgress

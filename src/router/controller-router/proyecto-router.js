@@ -4,9 +4,9 @@ const router = Router()
 
 router.get('/proyecto',get_proyecto)
 router.post('/proyecto',create_proyecto)
-router.patch('/proyecto/:id',update_proyecto)
-router.delete('/proyecto/:id',delete_proyecto)
-router.get('/proyecto/:id',get_proyecto_id)
+router.patch('/proyecto/:proyecto_id',update_proyecto)
+router.delete('/proyecto/:proyecto_id',delete_proyecto)
+router.get('/proyecto/:proyecto_id',get_proyecto_id)
 
 export default router
 
