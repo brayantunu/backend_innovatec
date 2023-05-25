@@ -34,12 +34,12 @@ export const get_funcionario_id = async (req, res) => {
 export const create_funcionario = async (req,res)=>{
     
     try {
-     const { funcionario_iden,funcionario_nombre,funcionario_apellido,funcionario_correo,funcionario_telefono, funcionario_administrador,funcionario_contrasena } = req.body;
+     const { funcionario_iden,funcionario_nombre,funcionario_apellido,funcionario_correo,funcionario_telefono,funcionario_contrasena } = req.body;
 
 
     const hashedPassword = await bcryptjs.hash(funcionario_contrasena, 10);
   
-      const nuevo_funcionario = await funcionario.create({ funcionario_iden,funcionario_nombre,funcionario_apellido,funcionario_correo,funcionario_administrador,funcionario_telefono, funcionario_contrasena: hashedPassword})
+      const nuevo_funcionario = await funcionario.create({ funcionario_iden,funcionario_nombre,funcionario_apellido,funcionario_correo,funcionario_telefono, funcionario_contrasena: hashedPassword})
   
       res.json(nuevo_funcionario);
     } catch (error) {
@@ -53,14 +53,13 @@ export const update_funcionario_id = async (req,res) => {
 
     try {
         const { funcionario_id } = req.params;
-        const {funcionario_iden,funcionario_nombre,funcionario_apellido,funcionario_correo,funcionario_telefono, funcionario_administrador,funcionario_contrasena} = req.body
+        const {funcionario_iden,funcionario_nombre,funcionario_apellido,funcionario_correo,funcionario_telefono, funcionario_contrasena} = req.body
         const funcionarios = await funcionario.findByPk(funcionario_id)
         funcionarios.funcionario_nombre=funcionario_nombre,
         funcionarios.funcionario_apellido=funcionario_apellido,
         funcionarios.funcionario_correo=funcionario_correo,
         funcionarios.funcionario_telefono=funcionario_telefono,
         funcionarios.funcionario_iden=funcionario_iden,
-        funcionarios.funcionario_administrador=funcionario_administrador
         funcionarios. funcionario_contrasena=funcionario_contrasena
 
         await funcionarios.save();

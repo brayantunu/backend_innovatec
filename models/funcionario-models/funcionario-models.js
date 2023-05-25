@@ -43,10 +43,7 @@ export const funcionario = sequelize.define('funcionario', {
         allowNull: false
     },
 
-    funcionario_administrador: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-    },
+
 
 },
     { sequelize,
