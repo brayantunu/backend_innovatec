@@ -22,4 +22,4 @@ export const DB_PASSWORD = process.env.DB_PASSWORD || '1007524913'
 export const DB_DATABASE = process.env.DB_DATABASE || 'final'
 export const DB_HOST = process.env.DB_HOST
 
-console.log(DB_HOST)
+// console.log(DB_HOST)
