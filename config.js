@@ -15,7 +15,7 @@ import {config} from 'dotenv'
 
 config()
 
-export const PORT = process.env.PORT || 3000
+export const PORT = process.env.PORT
 export const DB_PORT = process.env.DB_PORT
 export const DB_USER = process.env.DB_USER || 'postgres'
 export const DB_PASSWORD = process.env.DB_PASSWORD || '1007524913'

@@ -13,14 +13,15 @@ function getSequelizeInstance() {
       DB_USER,
       DB_PASSWORD,
       {
-        host:DB_HOST || 'localhost',
-        dialect: 'postgres' ,
+        host:'localhost',
+        dialect: 'postgres',
         port: DB_PORT,
         pool: {
           max: 5,
           min: 0,
           require: 30000,
           idle: 10000
+        
         },
       }
     );
@@ -31,8 +32,8 @@ function getSequelizeInstance() {
       DB_USER,
       DB_PASSWORD,
       {
-        host:DB_HOST || 'localhost',
-        dialect: 'postgres',
+        host:DB_HOST ,
+        dialect: 'postgres' ,
         port: DB_PORT,
         pool: {
           max: 5,
