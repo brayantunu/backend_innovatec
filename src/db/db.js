@@ -1,10 +1,10 @@
 
 import { Sequelize } from 'sequelize';
-import { DB_DATABASE,DB_USER,DB_PASSWORD,DB_HOST,DB_PORT } from '../../config.js';
+import { DB_DATABASE,DB_USER,DB_PASSWORD,DB_PORT } from '../../config.js';
 function getSequelizeInstance() {
 
 
-  const isProduction = DB_HOST ;
+  const isProduction = process.env.DB_HOST;
 
   if (isProduction) {
     // Configuración para entorno de producción (nube)
@@ -13,15 +13,14 @@ function getSequelizeInstance() {
       DB_USER,
       DB_PASSWORD,
       {
-        host:'localhost',
-        dialect: 'postgres',
+        host:process.env.DB_HOST,
+        dialect: 'postgres' ,
         port: DB_PORT,
         pool: {
           max: 5,
           min: 0,
           require: 30000,
           idle: 10000
-        
         },
       }
     );
@@ -32,8 +31,8 @@ function getSequelizeInstance() {
       DB_USER,
       DB_PASSWORD,
       {
-        host:DB_HOST ,
-        dialect: 'postgres' ,
+        host:DB_HOST || 'localhost',
+        dialect: 'postgres',
         port: DB_PORT,
         pool: {
           max: 5,
