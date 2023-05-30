@@ -5,10 +5,10 @@ import jwt from "./token.js";
 
 export const get_funcionario = async (req, res) => {
   try {
-    const new_funcionario = await funcionario.findAll();
+    const nuevo_funcionario = await funcionario.findAll();
     res
       .status(200)
-      .json({ succes: true, message: "lista de los ", new_funcionario });
+      .json({ succes: true, message: "lista de los ", nuevo_funcionario });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
@@ -17,44 +17,33 @@ export const get_funcionario = async (req, res) => {
 export const get_funcionario_id = async (req, res) => {
   const { funcionario_id } = req.params;
   try {
-    const new_funcionario = await funcionario.findOne({
+    const nuevo_funcionario = await funcionario.findOne({
       where: { funcionario_id },
     });
-    res.status(200).json({ message: "item obtenido por id", new_funcionario });
+    res.status(200).json({ message: "item obtenido por id", nuevo_funcionario });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-export const create_funcionario = async (req, res) => {
+
+export const create_funcionario = async (req,res)=>{
+    
   try {
-    const {
-      funcionario_iden,
-      funcionario_nombre,
-      funcionario_apellido,
-      funcionario_correo,
-      funcionario_telefono,
-      funcionario_administrador,
-      funcionario_contraseña,
-    } = req.body;
+   const { funcionario_iden,funcionario_nombre,funcionario_apellido,funcionario_correo,funcionario_telefono,funcionario_contrasena } = req.body;
 
-    const hashedPassword = await bcryptjs.hash(funcionario_contraseña, 10);
 
-    const new_funcionario = await funcionario.create({
-      funcionario_iden,
-      funcionario_nombre,
-      funcionario_apellido,
-      funcionario_correo,
-      funcionario_administrador,
-      funcionario_telefono,
-      funcionario_contraseña: hashedPassword,
-    });
+  const hashedPassword = await bcryptjs.hash(funcionario_contrasena, 10);
 
-    res.json(new_funcionario);
+    const nuevo_funcionario = await funcionario.create({ funcionario_iden,funcionario_nombre,funcionario_apellido,funcionario_correo,funcionario_telefono, funcionario_contrasena: hashedPassword})
+
+    res.json(nuevo_funcionario);
   } catch (error) {
-    res.status(500).json({ error: "No se pudo crear el usuario" });
+  
+    res.status(500).json({ error: 'No se puede registrar el Funcionario' });
   }
 };
+
 
 export const update_funcionario_id = async (req, res) => {
   try {
@@ -101,57 +90,69 @@ export const update_funcionario_id = async (req, res) => {
 //}
 
 export const delete_funcionario_id = async (req, res) => {
+
   try {
-    const { funcionario_id } = req.params;
-    const result = await funcionario.destroy({
-      where: { funcionario_id },
-    });
-    res
-      .status(200)
-      .json({ message: "funcionario eliminado satisfactoriamente", result });
+      const { funcionario_id } = req.params
+      const resultado = await funcionario.destroy({
+          where: { funcionario_id }
+      })
+      res.status(200).json({message:'Funcionario eliminado satisfactoriamente',resultado})
+
+
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+      return res.status(500).json({ message: error.message })
   }
-};
+}
 
-export const login = async (req, res) => {
+
+
+export const login = async(req,res)=>{
   try {
-    const { funcionario_iden, funcionario_contraseña } = req.body;
-    const usuario = await funcionario.findOne({
-      where: { funcionario_iden: funcionario_iden },
-    });
-    console.log(usuario);
+      const {funcionario_iden,funcionario_contrasena}=req.body
+      const usuario= await funcionario.findOne({
+          where: {funcionario_iden:funcionario_iden}})
+          //console.log(usuario);
+     //un ternario
 
-    const contraseñacorrecta =
-      usuario === null
-        ? false
-        : await bcryptjs.compare(
-            funcionario_contraseña,
-            usuario.funcionario_contraseña
-          );
-    if (!(funcionario_iden && contraseñacorrecta)) {
-      // console.log("entro al if");
+      const contrasena_correcta=usuario===null? false:await bcryptjs.compare(funcionario_contrasena,usuario.funcionario_contrasena)
+      //comparamos la contraseña incriptada
+      
+   if (!(funcionario_iden && contrasena_correcta)){
+    // un ciclo para poder validar si los campos que ingresa el usuario son validos y se encuentran 
+    //en la base de daros
+    // console.log("entro al if");
 
       res.status(401).json({
-        error: "invalidad la identificacion o la contraseña",
-      });
-    } else {
-      // console.log("entro al else");
-      const jsontoken = new jwt();
-      const usuariotoken = {
-        id: usuario.funcionario_id,
-        identificacion: usuario.funcionario_iden,
-        hashedPassword: usuario.funcionario_contraseña,
-      };
-      console.log({ usuariotoken });
-      const token = jsontoken.sing(usuariotoken);
+          error :'Identificacion o Contraseña Incorrecta'
+      })
+      //if (!funcionario_iden || !contrasena_correcta) {
+        //return res.status(400).json({ error: 'Debes completar todos los campos' });
+      //}
+   }else{
+    //si estan en la base datos y son validos entra el else el cual el uusario 
+    //logiado se  le creara un token como validacion
+    // console.log("entro al else");
+      const jsontoken = new jwt()
+      const usuariotoken={
+          id: usuario.funcionario_id,
+          identificacion:usuario.funcionario_iden,
+          hashedPassword: usuario.funcionario_contrasena
+      }
+      console.log({usuariotoken});
+      const token =jsontoken.sing(usuariotoken)
       res.status(200).json({
-        usuariotoken: usuariotoken,
-        token: token,
-      });
-    }
+        // ya esto se guarada en un json el cual da los datos del usuario y el token creado
+          usuariotoken:usuariotoken,
+          token:token
+      })
+      
+   }
+
+
   } catch (error) {
     //   res.status(500).json(error);
     console.log(error);
+      
   }
-};
+
+}
