@@ -5,7 +5,7 @@ export const get_proyecto = async (req,res)=>{
 
     try {
         const nuevo_proyecto = await proyecto.findAll()
-        res.status(200).json({message: "datos obtenidos",nuevo_proyecto})
+        res.status(200).json({message: "Listado de los proyectos",nuevo_proyecto})
     } catch (error) {
         return res.status(500).json({message:error.message})
     }

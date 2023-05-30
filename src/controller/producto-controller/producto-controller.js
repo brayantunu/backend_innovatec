@@ -28,7 +28,7 @@ export const getproducto = async (req, res) => {
     // este permite ver el estado de la peticion del servicio en este caso en 200 significa 200 mostrando un mensaje listado con obtencion de los datos solcitados por el cliente 
 
 
-    res.status(200).json({ succes: true, message: "listado", nuevo_producto });
+    res.status(200).json({ succes: true, message: "Listado de los productos", nuevo_producto });
   } catch (error) {
     return res.status(400).json({ message: error.message });
     // este permite si la solicitud del cliente es erronea el servicio no sea mostrado al cliente mostrando un mensaje que no ha sido listado
@@ -46,8 +46,8 @@ export const create_producto = async (req, res) => {
     productos_subtipo,
     productos_linea,
     productos_autor,
+    productos_url
   } = req.body;
-  console.log(productos_titulo)
   try {
     const nuevo_producto = await producto.create({
       productos_titulo,
@@ -57,6 +57,7 @@ export const create_producto = async (req, res) => {
       productos_linea,
       productos_imagen,
       productos_autor,
+      productos_url
     });
     res
       .status(200)
@@ -83,11 +84,12 @@ export const update_producto = async (req, res) => {
     const { producto_id } = req.params;
     const {
       productos_ano,
-      productos_linea,
+      productos_autor,
       productos_subtipo,
       productos_titulo,
       productos_tipo,
       producto_imagen,
+      productos_url
     } = req.body;
 
     const productos = await producto.findByPk(producto_id);
@@ -95,8 +97,10 @@ export const update_producto = async (req, res) => {
     productos.productos_ano = productos_ano;
     productos.productos_tipo = productos_tipo;
     productos.productos_subtipo = productos_subtipo;
-    productos.productos_linea = productos_linea;
-    productos.producto_imagen = producto_imagen;
+    productos.productos_autor =  productos_autor,
+    productos.productos_imagen = producto_imagen;
+    productos.productos_url = productos_url;
+
     await productos.save();
     res.status(201).json({
       message: "se ha actualizado el producto",
@@ -250,19 +254,19 @@ export const tipoproducto = async (req, res) => {
 
 
 
-export const filtroaño = async (req, res) => {
+export const filtroano = async (req, res) => {
   // http://localhost:3000/producto?productos_ano[]=3021
 // este es la ruta del controlador de años
-  const buscaraño = req.query.productos_ano;
+  const buscarano = req.query.productos_ano;
 
-console.log(buscaraño)
-  if (!Array.isArray(buscaraño)) {
+console.log(buscarano)
+  if (!Array.isArray(buscarano)) {
     return res
       .status(400)
       .send("Los autores deben ser proporcionados como un array");
   }
 
-  const filtroaños = buscaraño.map((ano) => `%${ano}%`);
+  const filtroanos = buscarano.map((ano) => `%${ano}%`);
 
   try {
     const producto = await sequelize.query(
@@ -272,9 +276,9 @@ console.log(buscaraño)
       on semillero_productos.id_producto = productos.producto_id
 	  INNER JOIN semilleros
 	  on semilleros.semillero_id = semillero_productos.id_semillero
-	   WHERE productos.productos_ano LIKE ANY(ARRAY[:filtroaños])`,
+	   WHERE productos.productos_ano LIKE ANY(ARRAY[:filtroanos])`,
       {
-        replacements: { filtroaños },
+        replacements: { filtroanos },
         type: sequelize.QueryTypes.SELECT,
       }
     );
