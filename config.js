@@ -1,15 +1,7 @@
 
-// // export default{
-// //     SECRET: 'funcionario',
-// //     development: {
-// //         username: 'postgres',
-// //         password: '1007524913',
-// //         database: 'final',
-// //         host: 'localhost',
-// //         dialect: 'postgres'
-// //       },
-
-// // }
+export default{
+    SECRET: 'funcionario',
+}
 
 import {config} from 'dotenv'
 

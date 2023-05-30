@@ -15,8 +15,8 @@ export const funcionario = sequelize.define('funcionario', {
     },
     funcionario_iden: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        unique: true
+        allowNull: false
+        // unique: true
     },
 
     funcionario_nombre: {
