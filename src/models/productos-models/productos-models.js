@@ -19,7 +19,7 @@ export const producto = sequelize.define(
 
     },
     productos_ano: {
-      type: DataTypes.DATE,
+      type: DataTypes.INTEGER,
       allowNull: false
 
     },
@@ -33,18 +33,17 @@ export const producto = sequelize.define(
       allowNull: false
 
     },
-    productos_idioma: {
+    productos_imagen: {
+      type: DataTypes.BLOB('long'),
+      //allowNull: false
+
+    },
+    productos_autor: {
       type: DataTypes.STRING,
       allowNull: false
 
     },
-
-    productos_imagen: {
-      type: DataTypes.BLOB('long'),
-      allowNull: false
-
-    },
-    productos_autor: {
+    productos_url: {
       type: DataTypes.STRING,
       allowNull: false
 
