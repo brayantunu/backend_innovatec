@@ -34,20 +34,18 @@ export const create_funcionario = async (req, res) => {
       funcionario_apellido,
       funcionario_correo,
       funcionario_telefono,
-      funcionario_administrador,
-      funcionario_contraseña,
+      funcionario_contrasena,
     } = req.body;
 
-    const hashedPassword = await bcryptjs.hash(funcionario_contraseña, 10);
+    const hashedPassword = await bcryptjs.hash(funcionario_contrasena, 10);
 
     const new_funcionario = await funcionario.create({
       funcionario_iden,
       funcionario_nombre,
       funcionario_apellido,
       funcionario_correo,
-      funcionario_administrador,
       funcionario_telefono,
-      funcionario_contraseña: hashedPassword,
+      funcionario_contrasena: hashedPassword,
     });
 
     res.json(new_funcionario);
@@ -116,7 +114,7 @@ export const delete_funcionario_id = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { funcionario_iden, funcionario_contraseña } = req.body;
+    const { funcionario_iden, funcionario_contrasena } = req.body;
     const usuario = await funcionario.findOne({
       where: { funcionario_iden: funcionario_iden },
     });
@@ -126,8 +124,8 @@ export const login = async (req, res) => {
       usuario === null
         ? false
         : await bcryptjs.compare(
-            funcionario_contraseña,
-            usuario.funcionario_contraseña
+            funcionario_contrasena,
+            usuario.funcionario_contrasena
           );
     if (!(funcionario_iden && contraseñacorrecta)) {
       // console.log("entro al if");
@@ -141,7 +139,7 @@ export const login = async (req, res) => {
       const usuariotoken = {
         id: usuario.funcionario_id,
         identificacion: usuario.funcionario_iden,
-        hashedPassword: usuario.funcionario_contraseña,
+        hashedPassword: usuario.funcionario_contrasena,
       };
       console.log({ usuariotoken });
       const token = jsontoken.sing(usuariotoken);
