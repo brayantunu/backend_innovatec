@@ -42,7 +42,7 @@ export const create_funcionario = async (req,res)=>{
 
     const hashedPassword = await bcryptjs.hash(funcionario_contraseña, 10);
 
-    const new_funcionario = await funcionario.create({
+    const nuevo_funcionario = await funcionario.create({
       funcionario_iden,
       funcionario_nombre,
       funcionario_apellido,
