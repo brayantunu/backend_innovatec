@@ -15,8 +15,6 @@ export const producto = sequelize.define(
     productos_titulo: {
       type: DataTypes.STRING,
       allowNull: false
-
-
     },
     productos_ano: {
       type: DataTypes.INTEGER,

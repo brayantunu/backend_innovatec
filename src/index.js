@@ -1,6 +1,7 @@
-
 import { sequelize } from "./db/db.js";
 import {PORT} from "../config.js"
+import listEndpoints from "express-list-endpoints";
+
 // importamos el archivo de la base de datos que hace la conecxion
 import app from "./app.js";
 // importamos la estructura de la conecxion de la base de datos y las router de todos los controladores del proyecto
@@ -13,6 +14,13 @@ async function main(){
         app.listen(PORT)
         // app.listen( es el puerto de escucha con el proycto que se conectara para poder iniciar el servicio del backend se puede cambiar el numero de puerto por defecto es 3000)
         console.log("Connection has been established successfully "+ PORT);
+       const routes = listEndpoints(app);
+       routes.forEach((route)=>{
+        console.log(`${route.methods.join(',')} - ${route.path}`)
+       })
+       app.get('/', (req, res) => {
+        res.send(routes);
+      });
         
         
     } catch (error) {

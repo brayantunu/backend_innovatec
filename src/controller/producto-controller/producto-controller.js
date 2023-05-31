@@ -28,7 +28,7 @@ export const getproducto = async (req, res) => {
     // este permite ver el estado de la peticion del servicio en este caso en 200 significa 200 mostrando un mensaje listado con obtencion de los datos solcitados por el cliente 
 
 
-    res.status(200).json({ succes: true, message: "Listado de los productos", nuevo_producto });
+    // res.status(200).json({ succes: true, message: "Listado de los productos", nuevo_producto });
   } catch (error) {
     return res.status(400).json({ message: error.message });
     // este permite si la solicitud del cliente es erronea el servicio no sea mostrado al cliente mostrando un mensaje que no ha sido listado
