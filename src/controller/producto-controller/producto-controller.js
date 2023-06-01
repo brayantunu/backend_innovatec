@@ -2,8 +2,9 @@ import { producto } from "../../models/productos-models/productos-models.js";
 // se importa los modelos de productos a los controladores para ser creados
 import { sequelize } from "../../db/db.js";
 // se hace la conexion con la base de datos esto sirve para hacer las consultas de los crud de obtener para realizar la consulta por query
-const Op = Sequelize.Op; 
+// const Op = Sequelize.Op; 
 // 
+
 import { Sequelize } from "sequelize";
 // permite manipular varios modelos o tablas de sql
 import readXlsxFile from "read-excel-file/node";
@@ -21,9 +22,9 @@ export const getproducto = async (req, res) => {
     //       await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
     // FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
 
-  //   const new_producto = await sequelize.query(`SELECT productos.*,puntajes.*
-  //  FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
-// hacemos la consulta en una promesa try catch lo que permite mediante en una variable guarda los objetos 
+    //   const new_producto = await sequelize.query(`SELECT productos.*,puntajes.*
+    //  FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
+    // hacemos la consulta en una promesa try catch lo que permite mediante en una variable guarda los objetos 
     res.status(200).json({ succes: true, message: "listado", nuevo_producto });
     // este permite ver el estado de la peticion del servicio en este caso en 200 significa 200 mostrando un mensaje listado con obtencion de los datos solcitados por el cliente 
 
@@ -35,34 +36,24 @@ export const getproducto = async (req, res) => {
   }
 };
 
-
-
 export const create_producto = async (req, res) => {
-  const {
-    productos_imagen,
-    productos_titulo,
-    productos_ano,
-    productos_tipo,
-    productos_subtipo,
-    productos_linea,
-    productos_autor,
-    productos_url
-  } = req.body;
+  
   try {
+
+    const { productos_ano, productos_tipo, productos_subtipo, productos_autor, productos_url, productos_titulo, productos_imagen } = req.body;
+    console.log(req.body)
     const nuevo_producto = await producto.create({
       productos_titulo,
       productos_ano,
       productos_tipo,
       productos_subtipo,
-      productos_linea,
-      productos_imagen,
       productos_autor,
-      productos_url
-    });
-    res
-      .status(200)
-      .json({ message: "se creo el producto correctamente", nuevo_producto });
+      productos_url,
+      productos_imagen
+    })
+    res.status(200).json({ message: "se creo el producto correctamente", nuevo_producto });
   } catch (error) {
+    console.log(error);
     return res.status(400).json({ message: error.message });
   }
 };
@@ -97,8 +88,8 @@ export const update_producto = async (req, res) => {
     productos.productos_ano = productos_ano;
     productos.productos_tipo = productos_tipo;
     productos.productos_subtipo = productos_subtipo;
-    productos.productos_autor =  productos_autor,
-    productos.productos_imagen = producto_imagen;
+    productos.productos_autor = productos_autor,
+      productos.productos_imagen = producto_imagen;
     productos.productos_url = productos_url;
 
     await productos.save();
@@ -256,10 +247,10 @@ export const tipoproducto = async (req, res) => {
 
 export const filtroano = async (req, res) => {
   // http://localhost:3000/producto?productos_ano[]=3021
-// este es la ruta del controlador de años
+  // este es la ruta del controlador de años
   const buscarano = req.query.productos_ano;
 
-console.log(buscarano)
+  console.log(buscarano)
   if (!Array.isArray(buscarano)) {
     return res
       .status(400)

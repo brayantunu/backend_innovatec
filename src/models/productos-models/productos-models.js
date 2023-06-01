@@ -14,21 +14,21 @@ export const producto = sequelize.define(
     },
     productos_titulo: {
       type: DataTypes.STRING,
-      allowNull: false
+      // allowNull: false
     },
     productos_ano: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      // allowNull: false
 
     },
     productos_tipo: {
       type: DataTypes.STRING,
-      allowNull: false
+      // allowNull: false
 
     },
     productos_subtipo: {
       type: DataTypes.STRING,
-      allowNull: false
+      // allowNull: false
 
     },
     productos_imagen: {
@@ -38,12 +38,12 @@ export const producto = sequelize.define(
     },
     productos_autor: {
       type: DataTypes.STRING,
-      allowNull: false
+      // allowNull: false
 
     },
     productos_url: {
       type: DataTypes.STRING,
-      allowNull: false
+      // allowNull: false
 
     }
 

@@ -15,16 +15,14 @@ import semillero_proyecto from "./router/controller-router/semillero-proyecto-ro
 import funcionarioproyecto from "./router/controller-router/funcionario-proyecto-router.js"
 import programas from "./router/controller-router/programa-router.js"
 import cookieParser from "cookie-parser"
-
-
 const app = Express()
-
-app.use(programas,funcionario,funcionario_producto,funcionario_semillero,producto,proyecto,puntaje,semillero,producto_proyecto,semillero_producto,semillero_proyecto,funcionarioproyecto)
 
 
 //el app.use une todos los servicios para poder ser inicializados en servicios clientes
 
 app.use(Express.json())
+app.use(programas,funcionario,funcionario_producto,funcionario_semillero,producto,proyecto,puntaje,semillero,producto_proyecto,semillero_producto,semillero_proyecto,funcionarioproyecto)
+
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json());
 app.use (cookieParser())
