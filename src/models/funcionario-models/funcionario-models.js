@@ -24,6 +24,8 @@ export const funcionario = sequelize.define('funcionario', {
         allowNull: false
     },
 
+    
+
     funcionario_apellido: {
         type: DataTypes.STRING,
         allowNull: false
