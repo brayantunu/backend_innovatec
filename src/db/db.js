@@ -1,4 +1,5 @@
 
+import { timeStamp } from "console";
 import {Sequelize} from "sequelize";
 export const sequelize = new Sequelize(
    process.env.DB_DATABASE || 'final',//nombre de la base de datos
@@ -7,6 +8,9 @@ export const sequelize = new Sequelize(
     {
         host:process.env.DB_HOST || 'localhost',      
         dialect: 'postgres',
+        define:{
+          timestamps: false,
+      },
         port:process.env.DB_PORT || 5432,
         pool: {
             max: 5,
@@ -14,6 +18,7 @@ export const sequelize = new Sequelize(
             require: 30000,
             idle: 10000
         },
+  timeStamp:false,
 
     })
 

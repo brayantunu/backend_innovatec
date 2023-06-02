@@ -1,4 +1,6 @@
 import { producto } from "../../models/productos-models/productos-models.js";
+import {semilleros} from "../../models/semilleros-models/semilleros-models.js"
+import {proyecto} from "../../models/proyecto-models/proyecto-models.js"
 // se importa los modelos de productos a los controladores para ser creados
 import { sequelize } from "../../db/db.js";
 // se hace la conexion con la base de datos esto sirve para hacer las consultas de los crud de obtener para realizar la consulta por query
@@ -34,8 +36,14 @@ export const create_producto = async (req, res) => {
     productos_subtipo,
     productos_linea,
     productos_autor,
+    semillero_nombre,
+    proyecto_codigo,
+    proyecto_linea,
+    proyecto_nombre,
+    proyecto_presupuesto,
+    proyecto_fk,
+    semillero_fk
   } = req.body;
-  console.log(productos_titulo);
   try {
     const nuevo_producto = await producto.create({
       productos_titulo,
@@ -46,9 +54,18 @@ export const create_producto = async (req, res) => {
       productos_imagen,
       productos_autor,
     });
+    const nuevo_semillero = await semilleros.create({
+      semillero_nombre
+    })
+    const nuevo_proyecto = await proyecto.create({
+      proyecto_codigo,
+      proyecto_linea,
+      proyecto_nombre,
+      proyecto_presupuesto
+    })
     res
       .status(200)
-      .json({ message: "se creo el producto correctamente", nuevo_producto });
+      .json({ message: "se creo el producto correctamente ",nuevo_producto,nuevo_semillero,nuevo_proyecto});
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
