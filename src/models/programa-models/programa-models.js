@@ -11,8 +11,6 @@ export const programas = sequelize.define('programas', {
         type: DataTypes.STRING ,
         unique:true,
         allowNull: false
-
-       
     }  
 },
     { sequelize,

@@ -16,13 +16,10 @@ export const proyecto= sequelize.define('proyecto',{
     proyecto_linea: {
         type: DataTypes.STRING,
         allowNull: false
-
     },
-
     proyecto_nombre: {
         type: DataTypes.STRING,
         allowNull: false
-
     },
     proyecto_presupuesto: {
         type: DataTypes.INTEGER (11)
