@@ -260,10 +260,10 @@ export const recuperar_contrasena = async (req, res) => {
 
 export const actualizar_contrasena = async (req, res) => {
 
-  const { funcionario_id } = req.params;
+  const { funcionario_correo } = req.params;
 
   const usuario = await funcionario.findOne({
-    where: { funcionario_id: funcionario_id }
+    where: { funcionario_correo:funcionario_correo }
   })
   const id = usuario.funcionario_id
 

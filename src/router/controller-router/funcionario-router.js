@@ -9,7 +9,7 @@ router.post('/funcionario',create_funcionario)
 router.post('/login',login)
 router.post('/recuperar',recuperar_contrasena)
 router.patch('/funcionario/:funcionario_id',update_funcionario_id)
-router.patch('/funcionario/cambiar/:funcionario_id',actualizar_contrasena)
+router.patch('/funcionario/cambiar/:funcionario_correo',actualizar_contrasena)
 router.delete('/funcionario/:funcionario_id',delete_funcionario_id)
 
 export default router
