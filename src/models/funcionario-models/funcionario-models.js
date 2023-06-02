@@ -45,8 +45,6 @@ export const funcionario = sequelize.define('funcionario', {
         allowNull: false
     },
 
-
-
 },
     { sequelize,
         tableName:'funcionarios',

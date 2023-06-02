@@ -12,13 +12,13 @@ export const puntaje = sequelize.define('puntaje',{
     puntaje_puntuacion:{
         type:DataTypes.DOUBLE
     },
-    producto_id:{
-        type:DataTypes.INTEGER,
-        references:{
-            model:'productos',
-            key:'producto_id'
-        }
-    }
+    // producto_id:{
+    //     type:DataTypes.INTEGER,
+    //     references:{
+    //         model:'productos',
+    //         key:'producto_id'
+    //     }
+    // }
 },
 {
     timestamps:false

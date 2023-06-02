@@ -42,11 +42,17 @@ export const producto = sequelize.define(
     },
     proyecto_FK:{
       type:DataTypes.INTEGER,
-      foreignKey:true
+      references:{
+        model:'proyectos',
+        key:'proyecto_id'
     },
+  },
     semillero_FK:{
       type:DataTypes.INTEGER,
-      foreignKey:true 
+      references:{
+        model:'semilleros',
+        key:'semillero_id'
+    }
     }
     
     // estos datos son los atributos que se diagramo en el modelo uml
