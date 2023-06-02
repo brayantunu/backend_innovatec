@@ -40,14 +40,14 @@ export const producto = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false
     },
-    proyecto_FK:{
+    proyecto_fk:{
       type:DataTypes.INTEGER,
       references:{
         model:'proyectos',
         key:'proyecto_id'
     },
   },
-    semillero_FK:{
+    semillero_fk:{
       type:DataTypes.INTEGER,
       references:{
         model:'semilleros',

@@ -1,5 +1,7 @@
 import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
+import {funcionario} from "../funcionario-models/funcionario-models.js"
+import {producto} from "../productos-models/productos-models.js"
 
 
 export const funcionario_producto = sequelize.define('funcionario_producto',{
@@ -10,10 +12,10 @@ export const funcionario_producto = sequelize.define('funcionario_producto',{
         
     },
     id_producto:{
-        type:DataTypes.DOUBLE
+        type:DataTypes.INTEGER
     },
     id_funcionario:{
-        type:DataTypes.DOUBLE
+        type:DataTypes.INTEGER
     }
 
 },
@@ -22,3 +24,15 @@ export const funcionario_producto = sequelize.define('funcionario_producto',{
 }
 ,
 { sequelize, modelName: 'funcionario_producto' })
+
+
+funcionario.belongsToMany(producto, {
+    through: 'funcionario_producto',
+    foreignKey: 'id_funcionario',
+  });
+  
+  producto.belongsToMany(funcionario, {
+    through: 'funcionario_producto',
+    foreignKey: 'id_producto',
+  });
+  

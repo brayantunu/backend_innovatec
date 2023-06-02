@@ -9,6 +9,8 @@ import puntaje from "./router/controller-router/puntaje-router.js"
 import semillero from "./router/controller-router/semillero-router.js"
 import programas from "./router/controller-router/programa-router.js"
 import cookieParser from "cookie-parser"
+import fucionario_productos from "./router/controller-router/funcionario-producto-router.js"
+import producto_programa from "./router/controller-router/producto_programa-router.js"
 // import funcionario from  "./router/controller-router/funcionario-router.js"
 // import funcionario_producto from "./router/controller-router/funcionario-producto-router.js"
 // import funcionario_semillero from "./router/controller-router/funcionario-semillero-router.js"
@@ -28,7 +30,7 @@ const app = Express()
 
 
 app.use(Express.json())
-app.use(programas,funcionario,producto,proyecto,puntaje,semillero)
+app.use(programas,funcionario,producto,proyecto,puntaje,semillero,fucionario_productos,producto_programa)
 
 //el app.use une todos los servicios para poder ser inicializados en servicios clientes
 
