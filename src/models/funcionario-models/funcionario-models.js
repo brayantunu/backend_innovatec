@@ -36,24 +36,19 @@ export const funcionario = sequelize.define('funcionario', {
         allowNull: false,
         unique: true
         },
-
+        
     funcionario_contrasena: {
         type: DataTypes.STRING,
         allowNull: false
     },
-
     funcionario_telefono: {
         type: DataTypes.BIGINT,
         allowNull: false
     },
-    funcionario_admin: {
+    funcionario_admin:{
         type: DataTypes.BOOLEAN,
-        allowNull: false
-    },
-
-
-
-
+        allowNull:false
+    }
 
 },
     { sequelize,

@@ -38,7 +38,9 @@ export const create_funcionario = async (req,res)=>{
       funcionario_telefono,
       funcionario_admin,
       funcionario_contrasena,
+      
     } = req.body;
+    console.log(req.body)
 
     const hashedPassword = await bcryptjs.hash(funcionario_contrasena, 10);
 
@@ -53,7 +55,7 @@ export const create_funcionario = async (req,res)=>{
 
     res.json(nuevo_funcionario);
   } catch (error) {
-    res.status(500).json({ error: "No se pudo crear el usuario" });
+    res.status(400).json({ message: error.message });
   }
 };
 

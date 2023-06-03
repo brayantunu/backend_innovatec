@@ -14,13 +14,7 @@ export const semilleros=sequelize.define('semilleros',{
         allowNull: false
 
     },
-    id_programa:{
-        type: DataTypes.INTEGER,
-        references:{
-            model:'programas',
-            key:'programa_id'
-        }
-    }
+   
 },
 { sequelize, modelName: 'semilleros' },
 )

@@ -1,14 +1,11 @@
 import  {Router} from "express";
 
-import {get_funcionario_producto, create_funcionario_producto,update_funcionario_producto, delete_funcionario_producto, get_funcionario_producto_id} from "../../controller/funcionario-producto-controller/funcionario-producto-controller.js";
+import {funcionario_productos} from "../../controller/funcionario_producto-controller/funcionario_producto-controller.js";
 
 const router = Router()
 
-router.get('/funcionario_producto',get_funcionario_producto)
-router.post('/funcionario_producto',create_funcionario_producto)
-router.patch('/funcionario_producto/:id',update_funcionario_producto)
-router.delete('/funcionario_producto/:id',delete_funcionario_producto)
-router.get('/funcionario_producto/:id',get_funcionario_producto_id)
+router.get('/funcionario_producto',funcionario_productos)
+
 
 
 export default router
