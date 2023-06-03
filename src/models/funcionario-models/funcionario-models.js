@@ -45,16 +45,7 @@ export const funcionario = sequelize.define('funcionario', {
         type: DataTypes.BIGINT,
         allowNull: false
     },
-<<<<<<< HEAD
     funcionario_admin:{
-=======
-    funcionario_recuperar: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-
-    funcionario_admin: {
->>>>>>> 0bed2c15a0c54e0e1e571ba3d3803a4af28d960e
         type: DataTypes.BOOLEAN,
         allowNull:false
     }
