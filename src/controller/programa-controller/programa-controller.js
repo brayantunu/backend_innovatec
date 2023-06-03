@@ -3,6 +3,9 @@ import { programas } from "../../models/programa-models/programa-models.js";
 export const programa = async (req,res)=>{
     try {
         const nuevo_programa = await programas.findAll();
+         res
+        .status(200)
+        .json({ message: "se creo el obtuvo correctamente", nuevo_programa });
     } catch (error) {
         return res.status(400).json({message:error.message})
         
@@ -14,7 +17,7 @@ export const create_programa = async (req, res) => {
     const {
       programa_nombre,
     } = req.body;
-  
+  console.log(programa_nombre)
     try {
       const nuevo_programa = await programas.create({
         programa_nombre
