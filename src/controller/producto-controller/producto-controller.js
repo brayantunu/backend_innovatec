@@ -1,6 +1,6 @@
 import { producto } from "../../models/productos-models/productos-models.js";
 import { funcionario_producto } from "../../models/funcionario_producto-models/funcionario_producto-models.js";
-import { producto_programa } from "../../models/producto_programa/producto_programa_models.js"
+import { producto_programa } from "../../models/producto_programa/producto_programa_models.js";
 // se importa los modelos de productos a los controladores para ser creados
 import { sequelize } from "../../db/db.js";
 // se hace la conexion con la base de datos esto sirve para hacer las consultas de los crud de obtener para realizar la consulta por query
@@ -48,7 +48,6 @@ export const create_producto = async (req, res) => {
     semillero_fk,
     id_funcionario,
     fk_programa,
-
   } = req.body;
   try {
     const nuevo_producto = await producto.create({
@@ -61,7 +60,7 @@ export const create_producto = async (req, res) => {
       productos_autor,
       proyecto_fk,
       semillero_fk,
-      fk_programa
+      fk_programa,
     });
     const nuevo_funcionario_producto = await funcionario_producto.create({
       id_funcionario,
@@ -69,11 +68,14 @@ export const create_producto = async (req, res) => {
     });
     const nuevo_producto_programa = await producto_programa.create({
       fk_productos: nuevo_producto.producto_id,
-      fk_programa
-    })
-    res
-      .status(200)
-      .json({ message: "se creo el producto correctamente ", nuevo_producto, nuevo_funcionario_producto, nuevo_producto_programa });
+      fk_programa,
+    });
+    res.status(200).json({
+      message: "se creo el producto correctamente ",
+      nuevo_producto,
+      nuevo_funcionario_producto,
+      nuevo_producto_programa,
+    });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: error.message });
@@ -100,22 +102,48 @@ export const update_producto = async (req, res) => {
       productos_titulo,
       productos_tipo,
       producto_imagen,
-      productos_url
+      productos_url,
+      id_funcionario,
+      fk_programa,
     } = req.body;
+
     const productos = await producto.findByPk(producto_id);
+
+    if (!productos) {
+      return res.status(404).json({ message: "El producto no existe." });
+    }
+
     productos.productos_titulo = productos_titulo;
     productos.productos_ano = productos_ano;
     productos.productos_tipo = productos_tipo;
     productos.productos_subtipo = productos_subtipo;
-    productos.productos_autor = productos_autor,
-      productos.productos_imagen = producto_imagen;
+    productos.productos_autor = productos_autor;
+    productos.producto_imagen = producto_imagen;
     productos.productos_url = productos_url;
 
     await productos.save();
-    res.status(201).json({
-      message: "se ha actualizado el producto",
+
+    const funcionarioProducto = await funcionario_producto.findOne({
+      where: { id_producto: producto_id },
     });
+    if (funcionarioProducto) {
+      funcionarioProducto.id_funcionario = id_funcionario;
+      await funcionarioProducto.save();
+    }
+
+    const productoPrograma = await producto_programa.findOne({
+      where: { fk_productos: producto_id },
+    });
+    if (productoPrograma) {
+      productoPrograma.fk_programa = fk_programa;
+      await productoPrograma.save();
+    }
+
+    res
+      .status(200)
+      .json({ message: "Se ha actualizado el producto correctamente." });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: error.message });
   }
 };
@@ -123,15 +151,32 @@ export const update_producto = async (req, res) => {
 export const delete_producto = async (req, res) => {
   try {
     const { producto_id } = req.params;
+
+    // Verificar si el producto existe
+    const productoExistente = await producto.findByPk(producto_id);
+    if (!productoExistente) {
+      return res.status(404).json({ message: "El producto no existe." });
+    }
+
+    // Eliminar el producto
     await producto.destroy({
-      where: {
-        producto_id,
-      },
+      where: { producto_id },
     });
+
+    // Eliminar las relaciones en funcionario_producto y producto_programa
+    await funcionario_producto.destroy({
+      where: { id_producto: producto_id },
+    });
+
+    await producto_programa.destroy({
+      where: { fk_productos: producto_id },
+    });
+
     res
       .status(200)
-      .json({ message: "producto eliminado correctamente", producto_id });
+      .json({ message: "Se ha eliminado el producto correctamente." });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: error.message });
   }
 };
