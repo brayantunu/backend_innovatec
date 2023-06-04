@@ -39,10 +39,11 @@ export const producto = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+
     proyecto_fk: {
       type: DataTypes.INTEGER,
       references: {
-        model: "proyectos",
+        model: "proyecto",
         key: "proyecto_id",
       },
     },
