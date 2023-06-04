@@ -2,7 +2,7 @@ import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
 import {producto} from "../productos-models/productos-models.js"
 import{programas} from "../programa-models/programa-models.js"
-import { timeStamp } from "console";
+
 
 export const producto_programa = sequelize.define('producto_programa', {
     producto_programa_id: {
@@ -10,11 +10,11 @@ export const producto_programa = sequelize.define('producto_programa', {
         primaryKey: true,
         autoIncrement: true
     },
-    fk_programa: {
+    programa_fk: {
         type:DataTypes.INTEGER,
         foreignKey:true
     },
-    fk_productos: {
+    productos_fk: {
         type:DataTypes.INTEGER,
         foreignKey:true
     } ,
@@ -25,10 +25,10 @@ export const producto_programa = sequelize.define('producto_programa', {
 )
 programas.belongsToMany(producto, {
     through: 'producto_programa',
-    foreignKey: 'fk_programa',
+    foreignKey: 'programa_fk',
   });
   
   producto.belongsToMany(programas, {
     through: 'producto_programa',
-    foreignKey: 'fk_productos',
+    foreignKey: 'productos_fk',
   });

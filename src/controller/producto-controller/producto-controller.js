@@ -54,9 +54,6 @@ export const getproducto = async (req, res) => {
   }
 };
 
-
-
-
 export const create_producto = async (req, res) => {
   const {
     productos_imagen,
@@ -65,13 +62,10 @@ export const create_producto = async (req, res) => {
     productos_tipo,
     productos_subtipo,
     productos_url,
-
-
     proyecto_fk,
     semillero_fk,
     id_funcionario,
-    fk_programa,
-
+    programa_fk,
   } = req.body;
   try {
     const nuevo_producto = await producto.create({
@@ -81,10 +75,9 @@ export const create_producto = async (req, res) => {
       productos_tipo,
       productos_subtipo,
       productos_url,
-
       proyecto_fk,
       semillero_fk,
-      fk_programa,
+      programa_fk,
 
     });
     const nuevo_funcionario_producto = await funcionario_producto.create({
@@ -93,8 +86,8 @@ export const create_producto = async (req, res) => {
     });
 
     const nuevo_producto_programa = await producto_programa.create({
-      fk_productos: nuevo_producto.producto_id,
-      fk_programa,
+      productos_fk: nuevo_producto.producto_id,
+      programa_fk,
     });
     res.status(200).json({
       message: "se creo el producto correctamente ",
