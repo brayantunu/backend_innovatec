@@ -35,10 +35,12 @@ export const producto = sequelize.define(
       type: DataTypes.BLOB("long"),
       allowNull: false,
     },
-    productos_autor: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    // productos_autor: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
+
+    // No va por la relacion muchos a muchos entre productos e investigadores////
 
     proyecto_fk: {
       type: DataTypes.INTEGER,
