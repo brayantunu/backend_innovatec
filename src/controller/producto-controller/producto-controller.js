@@ -57,8 +57,6 @@ export const getproducto = async (req, res) => {
 
 
 
-
-
 export const create_producto = async (req, res) => {
   const {
     productos_imagen,
@@ -66,10 +64,14 @@ export const create_producto = async (req, res) => {
     productos_ano,
     productos_tipo,
     productos_subtipo,
+    productos_url,
+
+
     proyecto_fk,
     semillero_fk,
     id_funcionario,
     fk_programa,
+
   } = req.body;
   try {
     const nuevo_producto = await producto.create({
@@ -78,14 +80,18 @@ export const create_producto = async (req, res) => {
       productos_ano,
       productos_tipo,
       productos_subtipo,
+      productos_url,
+
       proyecto_fk,
       semillero_fk,
       fk_programa,
+
     });
     const nuevo_funcionario_producto = await funcionario_producto.create({
       id_funcionario,
       id_producto: nuevo_producto.producto_id,
     });
+
     const nuevo_producto_programa = await producto_programa.create({
       fk_productos: nuevo_producto.producto_id,
       fk_programa,
@@ -122,8 +128,10 @@ export const update_producto = async (req, res) => {
       productos_tipo,
       producto_imagen,
       productos_url,
+
       id_funcionario,
       fk_programa,
+
     } = req.body;
 
     const productos = await producto.findByPk(producto_id);
