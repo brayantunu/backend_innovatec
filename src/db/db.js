@@ -9,9 +9,9 @@ export const sequelize = new Sequelize(
     {
         host:process.env.DB_HOST || 'localhost',      
         dialect: 'postgres',
-        define:{
-          timestamps: false,
-      },
+      //   define:{
+      //     timestamps: false,
+      // },
         port:process.env.DB_PORT || 5432,
         pool: {
             max: 5,
