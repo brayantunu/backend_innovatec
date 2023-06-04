@@ -59,12 +59,12 @@ export const getproducto = async (req, res) => {
 
 export const create_producto = async (req, res) => {
   const {
-    productos_imagen,
-    productos_titulo,
-    productos_ano,
-    productos_tipo,
-    productos_subtipo,
-    productos_url,
+    producto_imagen,
+    producto_titulo,
+    producto_ano,
+    producto_tipo,
+    producto_subtipo,
+    producto_url,
 
 
     proyecto_fk,
@@ -75,19 +75,19 @@ export const create_producto = async (req, res) => {
   } = req.body;
   try {
     const nuevo_producto = await producto.create({
-      productos_imagen,
-      productos_titulo,
-      productos_ano,
-      productos_tipo,
-      productos_subtipo,
-      productos_url,
+      producto_imagen,
+      producto_titulo,
+      producto_ano,
+      producto_tipo,
+      producto_subtipo,
+      producto_url,
 
       proyecto_fk,
       semillero_fk,
       fk_programa,
 
     });
-    
+
     const nuevo_funcionario_producto = await funcionario_producto.create({
       id_funcionario,
       id_producto: nuevo_producto.producto_id,
@@ -127,12 +127,12 @@ export const update_producto = async (req, res) => {
   try {
     const { producto_id } = req.params;
     const {
-      productos_ano,
-      productos_subtipo,
-      productos_titulo,
-      productos_tipo,
+      producto_ano,
+      producto_subtipo,
+      producto_titulo,
+      producto_tipo,
       producto_imagen,
-      productos_url,
+      producto_url,
 
       id_funcionario,
       fk_programa,
@@ -145,12 +145,12 @@ export const update_producto = async (req, res) => {
       return res.status(404).json({ message: "El producto no existe." });
     }
 
-    productos.productos_titulo = productos_titulo;
-    productos.productos_ano = productos_ano;
-    productos.productos_tipo = productos_tipo;
-    productos.productos_subtipo = productos_subtipo;
+    productos.producto_titulo = producto_titulo;
+    productos.producto_ano = producto_ano;
+    productos.producto_tipo = producto_tipo;
+    productos.producto_subtipo = producto_subtipo;
     productos.producto_imagen = producto_imagen;
-    productos.productos_url = productos_url;
+    productos.producto_url = producto_url;
 
     await productos.save();
 
@@ -247,7 +247,7 @@ export const filtrosemilleros = async (req, res) => {
       ON semilleros.semillero_id = productos.semillero_fk
       JOIN  proyectos
       ON proyectos.proyecto_id = productos.proyecto_fk
-  JOIN producto_programa
+  JOIN prod ucto_programa
   ON producto_programa.fk_productos = productos.producto_id
   JOIN programas
   ON programas.programa_id = producto_programa.fk_programa      
