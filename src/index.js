@@ -21,7 +21,7 @@ async function main(){
     //    app.get('/', (req, res) => {
     //     res.send(routes);
     //   });
-        
+    
         
     } catch (error) {
         console.log('no hay conexion con la base de datos',error);

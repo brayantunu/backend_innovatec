@@ -193,6 +193,8 @@ function generarcodigo() {
 
 export const recuperar_contrasena = async (req, res) => {
 
+  const { funcionario_correo } = req.body
+
 
   const codigo_aleatorio = generarcodigo(6);
   //const puerto_smtp = 587; // Ejemplo de valor de puerto SMTP
@@ -208,10 +210,16 @@ export const recuperar_contrasena = async (req, res) => {
     //connectionTimeout: 5000, // 5 segundos
     //socketTimeout: 30000, // 30 segundos
   })
+  const correoVerificar = req.body.funcionario_correo
+  const verificacion = await funcionario.findOne({
+    where: { funcionario_correo: correoVerificar }
+  })
+
+
 
   const mensaje = {
     from: 'tusenactpi@gmail.com',
-    to: req.body.funcionario_correo, // Email del destinatario obtenido desde la solicitud
+    to: funcionario_correo, // Email del destinatario obtenido desde la solicitud
     subject: 'Restablecer Contraseña',
     text: ``,
     html: `
@@ -219,21 +227,20 @@ export const recuperar_contrasena = async (req, res) => {
         <title>Recuperación de Contraseña</title>
     </head>
     <body>
-    <img src="https://pixabay.com/es/illustrations/comercio-electronico-3082813/" alt="Imagen adjunta">
+
+    <center>
+    <img src="https://irp-cdn.multiscreensite.com/4b8552c4/dms3rep/multi/desktop/SENA_Logo-2179x2114.png" style="center" width="150px" alt="Imagen adjunta"> 
         <h2>Recuperación de contraseña</h2>
-        <p>Hola,</p>
+        <p>Hola <strong> ${verificacion.funcionario_nombre}</strong> ,</p>
         <p>Hemos recibido una solicitud para restablecer tu contraseña. Copia el siguiente codigo que te ayudara en el proceso:</p>
-         <h1><strong>${codigo_aleatorio}</strong></h1>
-         <p>Si no solicitaste restablecer tu contraseña, puedes ignorar este correo.</p>
+         <h1><strong>${codigo_aleatorio}</strong></h1></center>
+         <i><p> Si no solicitaste restablecer tu contraseña, puedes ignorar este correo.</p>
         <p>Gracias,</p>
-        <p>Equipo TuSena CTPI</p>
+        <p>Equipo TuSena CTPI</p></i> 
     </body>`
   };
 
-  const correoVerificar = req.body.funcionario_correo
-  const verificacion = await funcionario.findOne({
-    where: { funcionario_correo: correoVerificar }
-  })
+
 
   console.log(verificacion);
 
@@ -260,12 +267,29 @@ export const recuperar_contrasena = async (req, res) => {
 };
 
 
+// export const get_funcionario_correo = async (req, res) => {
+//   const { funcionario_id } = req.params;
+//   try {
+//     const nuevo_funcionario = await funcionario.findOne({
+//       where: { funcionario_id },
+//     });
+//     res.status(200).json({ message: "Funcionario obtenido por id", nuevo_funcionario });
+//   } catch (error) {
+//     return res.status(500).json({ message: error.message });
+//   }
+// };
+
+
+
+
+
+
 export const actualizar_contrasena = async (req, res) => {
 
   const { funcionario_correo } = req.params;
 
   const usuario = await funcionario.findOne({
-    where: { funcionario_correo:funcionario_correo }
+    where: { funcionario_correo: funcionario_correo }
   })
   const id = usuario.funcionario_id
 
@@ -280,15 +304,15 @@ export const actualizar_contrasena = async (req, res) => {
       const funcionarios = await funcionario.findByPk(id)
 
       funcionarios.funcionario_recuperar = funcionario_recuperar,
-      funcionarios.funcionario_contrasena = hashedPassword
+        funcionarios.funcionario_contrasena = hashedPassword
 
       await funcionarios.save();
       res.status(200).json({ message: "se ha actualizado la información del Funcionario", funcionarios })
 
-    } finally{
+    } finally {
     }
-  }else{
-    return res.status(500).json({ message:"ERROR" })
+  } else {
+    return res.status(500).json({ message: "ERROR" })
 
 
   }
