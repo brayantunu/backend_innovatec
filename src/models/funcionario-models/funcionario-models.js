@@ -49,7 +49,7 @@ export const funcionario = sequelize.define('funcionario', {
 
     {
         sequelize,
-        tableName: 'funcionarios',
+        tableName: 'funcionario',
         modelName: 'funcionario'
     },
     // se define sequelize con modelname poniendole el nombre de la tabla 

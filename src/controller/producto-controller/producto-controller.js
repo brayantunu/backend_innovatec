@@ -87,6 +87,7 @@ export const create_producto = async (req, res) => {
       fk_programa,
 
     });
+    
     const nuevo_funcionario_producto = await funcionario_producto.create({
       id_funcionario,
       id_producto: nuevo_producto.producto_id,
@@ -96,6 +97,10 @@ export const create_producto = async (req, res) => {
       fk_productos: nuevo_producto.producto_id,
       fk_programa,
     });
+
+
+
+
     res.status(200).json({
       message: "se creo el producto correctamente ",
       nuevo_producto,
