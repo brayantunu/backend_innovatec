@@ -38,7 +38,7 @@ export const getproducto = async (req, res) => {
       return res.status(400).json({ message: error.message });
     }
   };
-  
+
 export const create_producto = async (req, res) => {
   const {
     producto_imagen,
@@ -47,7 +47,6 @@ export const create_producto = async (req, res) => {
     producto_tipo,
     producto_subtipo,
     producto_url,
-
     proyecto_fk,
     semillero_fk,
     funcionario_fk,
