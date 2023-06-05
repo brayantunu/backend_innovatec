@@ -12,26 +12,26 @@ export const producto = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    productos_titulo: {
+    producto_titulo: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    productos_ano: {
+    producto_ano: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    productos_tipo: {
+    producto_tipo: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    productos_subtipo: {
+    producto_subtipo: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     producto_url: {
       type: DataTypes.STRING,
     },
-    productos_imagen: {
+    producto_imagen: {
       type: DataTypes.BLOB("long"),
       allowNull: false,
     },
@@ -45,7 +45,7 @@ export const producto = sequelize.define(
     proyecto_fk: {
       type: DataTypes.INTEGER,
       references: {
-        model: "proyectos",
+        model: "proyecto",
         key: "proyecto_id",
       },
     },
@@ -61,6 +61,7 @@ export const producto = sequelize.define(
   {
     timestamps: false,
   },
-  { sequelize, modelName: "producto", tableName: "producto" }
+  { sequelize, modelName: "producto", 
+  tableName: "producto" }
   // se define sequelize con modelname poniendole el nombre de la tabla
 );

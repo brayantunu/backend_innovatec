@@ -14,7 +14,7 @@ export const programas = sequelize.define('programas', {
     }  
 },
     { sequelize,
-        tableName:'programas',
+        tableName:'programa',
         modelName: 'programa' },
     {
         timestamps: false
