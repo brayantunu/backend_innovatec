@@ -21,9 +21,9 @@ export const getproducto = async (req, res) => {
         await sequelize.query(`SELECT productos.*, funcionarios.*,proyectos.*,semilleros.*,programas.*
             FROM productos
             JOIN funcionario_productos 
-            ON productos.producto_id = funcionario_productos.id_producto
+            ON productos.producto_id = funcionario_productos.producto_fk
             JOIN funcionarios
-            ON funcionarios.funcionario_id = funcionario_productos.id_funcionario
+            ON funcionarios.funcionario_id = funcionario_productos.funcionario_fk
             JOIN  semilleros
             ON semilleros.semillero_id = productos.semillero_fk
             JOIN  proyectos
