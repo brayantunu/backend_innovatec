@@ -18,20 +18,20 @@ export const getproducto = async (req, res) => {
   // creamos una constante y export la const getproducto para ser utilizado por el frontend o servicios
     try {
       const nuevo_producto =
-        await sequelize.query(`SELECT productos.*, funcionarios.*,proyectos.*,semilleros.*,programas.*
+        await sequelize.query(`SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
             FROM productos
             JOIN funcionario_productos 
             ON productos.producto_id = funcionario_productos.producto_fk
-            JOIN funcionarios
-            ON funcionarios.funcionario_id = funcionario_productos.funcionario_fk
+            JOIN funcionario
+            ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
             JOIN  semilleros
             ON semilleros.semillero_id = productos.semillero_fk
-            JOIN  proyectos
-            ON proyectos.proyecto_id = productos.proyecto_fk
+            JOIN  proyecto
+            ON proyecto.proyecto_id = productos.proyecto_fk
   		       JOIN producto_programa
   		      ON producto_programa.productos_fk = productos.producto_id
-  		      JOIN programas
-  		      ON programas.programa_id = producto_programa.programa_fk`);
+  		      JOIN programa
+  		      ON programa.programa_id = producto_programa.programa_fk`);
 
       res.status(200).json({ succes: true, message: "listado", nuevo_producto });
     } catch (error) {
