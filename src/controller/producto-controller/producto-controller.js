@@ -242,17 +242,54 @@ export const delete_producto = async (req, res) => {
 };
 
 
+// export const get_producto_id = async (req, res) => {
+//   const { producto_id } = req.params;
+//   try {
+//     const nuevo_producto = await producto.findOne({
+//       where: { producto_id },
+//     });
+//     res.status(200).json({ message: "item obtenido por id", nuevo_producto });
+//   } catch (error) {
+//     return res.status(500).json({ message: error.message });
+//   }
+// };
+
 export const get_producto_id = async (req, res) => {
-  const { producto_id } = req.params;
+  const productoId = req.params.producto_id;
+
   try {
-    const nuevo_producto = await producto.findOne({
-      where: { producto_id },
-    });
-    res.status(200).json({ message: "item obtenido por id", nuevo_producto });
+    const producto = await sequelize.query(
+      `SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
+      FROM productos
+      JOIN funcionario_productos 
+      ON productos.producto_id = funcionario_productos.producto_fk
+      JOIN funcionario
+      ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
+      JOIN semilleros
+      ON semilleros.semillero_id = productos.semillero_fk
+      JOIN proyecto
+      ON proyecto.proyecto_id = productos.proyecto_fk
+      JOIN producto_programa
+      ON producto_programa.productos_fk = productos.producto_id
+      JOIN programa
+      ON programa.programa_id = producto_programa.programa_fk
+      WHERE productos.producto_id = :productoId`,
+      {
+        replacements: { productoId },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    if (producto.length === 0) {
+      return res.status(404).json({ success: false, message: "No se encontró el producto" });
+    }
+
+    res.status(200).json({ success: true, message: "Producto encontrado", producto });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 };
+
 
 
 export const filtrosemilleros = async (req, res) => {
@@ -350,7 +387,7 @@ export const filtroaño = async (req, res) => {
       .status(400)
       .send("Los autores deben ser proporcionados como un array");
   }
-  const filtroaños = buscaraño.map((ano) => `%${ano}%`);
+  const filtroanos = buscaraño.map((ano) => `%${ano}%`);
 
   try {
     const producto = await sequelize.query(
