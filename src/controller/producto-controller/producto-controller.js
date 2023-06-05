@@ -89,9 +89,6 @@ export const create_producto = async (req, res) => {
       programa_fk,
     });
 
-
-
-
     res.status(200).json({
       message: "se creo el producto correctamente ",
       nuevo_producto,
