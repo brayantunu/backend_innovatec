@@ -31,12 +31,18 @@ export const create_proyecto = async (req, res) => {
 export const update_proyecto = async (req, res) => {
     try {
         const { proyecto_id } = req.params
-        const { proyecto_codigo, proyecto_linea, proyecto_nombre, proyecto_presupuesto } = req.body
+
+        const { proyecto_codigo,
+            proyecto_linea,
+            proyecto_nombre,
+            proyecto_presupuesto } = req.body
+
         const nuevo_proyecto = await proyecto.findByPk(proyecto_id)
+
         nuevo_proyecto.proyecto_codigo = proyecto_codigo,
-            nuevo_proyecto.proyecto_linea = proyecto_linea,
-            nuevo_proyecto.proyecto_nombre = proyecto_nombre,
-            nuevo_proyecto.proyecto_presupuesto = proyecto_presupuesto
+        nuevo_proyecto.proyecto_linea = proyecto_linea,
+        nuevo_proyecto.proyecto_nombre = proyecto_nombre,
+        nuevo_proyecto.proyecto_presupuesto = proyecto_presupuesto
 
         await nuevo_proyecto.save()
         return res.status(200).json({ message: "se ha actualizado el Proyecto", nuevo_proyecto })

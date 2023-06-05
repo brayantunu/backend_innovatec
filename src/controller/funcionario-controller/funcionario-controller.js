@@ -63,10 +63,17 @@ export const create_funcionario = async (req, res) => {
 
 export const update_funcionario_id = async (req, res) => {
 
-
   try {
     const { funcionario_id } = req.params;
-    const { funcionario_iden, funcionario_nombre, funcionario_apellido, funcionario_correo, funcionario_telefono, funcionario_contrasena, funcionario_admin } = req.body
+    const { funcionario_iden,
+      funcionario_nombre,
+      funcionario_apellido,
+      funcionario_correo,
+      funcionario_telefono,
+      funcionario_contrasena,
+      funcionario_admin
+    
+    } = req.body
       const hashedPassword = await bcryptjs.hash(funcionario_contrasena, 10);
 
     
@@ -244,7 +251,7 @@ export const recuperar_contrasena = async (req, res) => {
 
   console.log(verificacion);
 
-  await transporter.sendMail(mensaje, async (error, info) => {
+ transporter.sendMail(mensaje, async (error, info) => {
     if (verificacion) {
       console.log('Correo enviado correctamente:', info.response);
 

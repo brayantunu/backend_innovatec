@@ -22,7 +22,9 @@ export const proyecto = sequelize.define('proyecto', {
         allowNull: false
     },
     proyecto_presupuesto: {
-        type: DataTypes.INTEGER(20)
+        type: DataTypes.INTEGER(20),
+        allowNull: false
+
     },
 
 },
