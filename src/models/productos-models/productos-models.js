@@ -3,10 +3,7 @@ import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
 // importamos los tipos de datos de la libreria de sequelize
 
-export const producto = sequelize.define(
-  // creamos una constate que se llame producto y la exportamos con export definimos el nombre de sequelize que es la conexion de la base de datos
-  "producto",
-  {
+export const producto = sequelize.define('producto',{
     producto_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -44,6 +41,8 @@ export const producto = sequelize.define(
 
     proyecto_fk: {
       type: DataTypes.INTEGER,
+      allowNull: true,
+
       references: {
         model: "proyecto",
         key: "proyecto_id",
@@ -51,6 +50,8 @@ export const producto = sequelize.define(
     },
     semillero_fk: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+
       references: {
         model: "semilleros",
         key: "semillero_id",
@@ -61,7 +62,10 @@ export const producto = sequelize.define(
   {
     timestamps: false,
   },
-  { sequelize, modelName: "producto", 
-  tableName: "producto" }
+  {
+    sequelize,
+    modelName: 'producto',
+    tableName: 'producto'
+  }
   // se define sequelize con modelname poniendole el nombre de la tabla
 );

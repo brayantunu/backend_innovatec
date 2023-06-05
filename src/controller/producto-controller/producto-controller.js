@@ -4,55 +4,61 @@ import { producto_programa } from "../../models/producto_programa/producto_progr
 // se importa los modelos de productos a los controladores para ser creados
 import { sequelize } from "../../db/db.js";
 // se hace la conexion con la base de datos esto sirve para hacer las consultas de los crud de obtener para realizar la consulta por query
-//
+const Op = Sequelize.Op;
+
+
+
 import { Sequelize } from "sequelize";
 // permite manipular varios modelos o tablas de sql
 import readXlsxFile from "read-excel-file/node";
 import fs from "fs";
+
+
 export const getproducto = async (req, res) => {
   // creamos una constante y export la const getproducto para ser utilizado por el frontend o servicios
-  //   try {
-  //     const nuevo_producto =
-  //       await sequelize.query(`SELECT productos.*, funcionarios.*,proyectos.*,semilleros.*,programas.*
-  //           FROM productos
-  //           JOIN funcionario_productos 
-  //           ON productos.producto_id = funcionario_productos.id_producto
-  //           JOIN funcionarios
-  //           ON funcionarios.funcionario_id = funcionario_productos.id_funcionario
-  //           JOIN  semilleros
-  //           ON semilleros.semillero_id = productos.semillero_fk
-  //           JOIN  proyectos
-  //           ON proyectos.proyecto_id = productos.proyecto_fk
-  // 		  JOIN producto_programa
-  // 		  ON producto_programa.fk_productos = productos.producto_id
-  // 		  JOIN programas
-  // 		  ON programas.programa_id = producto_programa.fk_programa `);
+    try {
+      const nuevo_producto = await sequelize.query(
+         `SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
+          FROM productos
+          JOIN funcionario_productos 
+          ON productos.producto_id = funcionario_productos.producto_fk
+          JOIN funcionario
+          ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
+          JOIN  semilleros
+          ON semilleros.semillero_id = productos.semillero_fk
+          JOIN  proyecto
+          ON proyecto.proyecto_id = productos.proyecto_fk
+          JOIN producto_programa
+          ON producto_programa.productos_fk = productos.producto_id
+          JOIN programa
+          ON programa.programa_id = producto_programa.programa_fk` 
+          );
 
-  //     res.status(200).json({ succes: true, message: "listado", nuevo_producto });
-  //   } catch (error) {
-  //     return res.status(400).json({ message: error.message });
-  //   }
-  // };
+      res.status(200).json({ succes: true, message: "listado", nuevo_producto });
+    
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
+    }
+  };
 
-  try {
+//   try {
+//     const nuevo_producto = await producto.findAll();
+//     //       await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
+//     // FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
 
-    const nuevo_producto = await producto.findAll();
-    //       await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
-    // FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
-
-    //   const new_producto = await sequelize.query(`SELECT productos.*,puntajes.*
-    //  FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
-    // hacemos la consulta en una promesa try catch lo que permite mediante en una variable guarda los objetos 
-    res.status(200).json({ succes: true, message: "listado", nuevo_producto });
-    // este permite ver el estado de la peticion del servicio en este caso en 200 significa 200 mostrando un mensaje listado con obtencion de los datos solcitados por el cliente 
+//     //   const new_producto = await sequelize.query(`SELECT productos.*,puntajes.*
+//     //  FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
+//     // hacemos la consulta en una promesa try catch lo que permite mediante en una variable guarda los objetos 
+//     res.status(200).json({ succes: true, message: "listado", nuevo_producto });
+//     // este permite ver el estado de la peticion del servicio en este caso en 200 significa 200 mostrando un mensaje listado con obtencion de los datos solcitados por el cliente 
 
 
-    // res.status(200).json({ succes: true, message: "Listado de los productos", nuevo_producto });
-  } catch (error) {
-    return res.status(400).json({ message: error.message });
-    // este permite si la solicitud del cliente es erronea el servicio no sea mostrado al cliente mostrando un mensaje que no ha sido listado
-  }
-};
+//     // res.status(200).json({ succes: true, message: "Listado de los productos", nuevo_producto });
+//   } catch (error) {
+//     return res.status(400).json({ message: error.message });
+//     // este permite si la solicitud del cliente es erronea el servicio no sea mostrado al cliente mostrando un mensaje que no ha sido listado
+//   }
+// };
 
 export const create_producto = async (req, res) => {
   const {
@@ -62,11 +68,14 @@ export const create_producto = async (req, res) => {
     producto_tipo,
     producto_subtipo,
     producto_url,
+
     proyecto_fk,
     semillero_fk,
     funcionario_fk,
     programa_fk,
+
   } = req.body;
+
   try {
     const nuevo_producto = await producto.create({
       producto_imagen,
@@ -75,6 +84,7 @@ export const create_producto = async (req, res) => {
       producto_tipo,
       producto_subtipo,
       producto_url,
+
       proyecto_fk,
       semillero_fk,
     });
@@ -123,7 +133,7 @@ export const update_producto = async (req, res) => {
     proyecto_fk,
     semillero_fk,
     funcionario_fk,
-    programa_fk,
+    programa_fk
   } = req.body;
 
   try {
@@ -135,9 +145,10 @@ export const update_producto = async (req, res) => {
         producto_tipo,
         producto_subtipo,
         producto_url,
+
         proyecto_fk,
         semillero_fk,
-        funcionario_fk,
+        // funcionario_fk,
       },
       {
         where: {
@@ -228,45 +239,83 @@ export const delete_producto = async (req, res) => {
 };
 
 
+// export const get_producto_id = async (req, res) => {
+//   const { producto_id } = req.params;
+//   try {
+//     const nuevo_producto = await producto.findOne({
+//       where: { producto_id },
+//     });
+//     res.status(200).json({ message: "item obtenido por id", nuevo_producto });
+//   } catch (error) {
+//     return res.status(500).json({ message: error.message });
+//   }
+// };
+
 export const get_producto_id = async (req, res) => {
-  const { producto_id } = req.params;
+  const productoId = req.params.producto_id;
+
   try {
-    const nuevo_producto = await producto.findOne({
-      where: { producto_id },
-    });
-    res.status(200).json({ message: "item obtenido por id", nuevo_producto });
+    const producto = await sequelize.query(
+      `SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
+      FROM productos
+      JOIN funcionario_productos 
+      ON productos.producto_id = funcionario_productos.producto_fk
+      JOIN funcionario
+      ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
+      JOIN semilleros
+      ON semilleros.semillero_id = productos.semillero_fk
+      JOIN proyecto
+      ON proyecto.proyecto_id = productos.proyecto_fk
+      JOIN producto_programa
+      ON producto_programa.productos_fk = productos.producto_id
+      JOIN programa
+      ON programa.programa_id = producto_programa.programa_fk
+      WHERE productos.producto_id = :productoId`,
+      {
+        replacements: { productoId },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    if (producto.length === 0) {
+      return res.status(404).json({ success: false, message: "No se encontró el producto" });
+    }
+
+    res.status(200).json({ success: true, message: "Producto encontrado", producto });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
-export const filtrosemilleros = async (req, res) => {
-  const semilleroNombre = req.query.semillero_nombre;
 
+
+export const filtrosemilleros = async (req, res) => {
+
+  const semilleroNombre = req.query.semillero_nombre
+  console.log(semilleroNombre);
   if (!Array.isArray(semilleroNombre)) {
-    return res
-      .status(400)
-      .send("Los autores deben ser proporcionados como un array");
+    return res.status(400).send("Los autores deben ser proporcionados como un array");
   }
+
 
   const filtrosSemillero = semilleroNombre.map((autor) => `%${autor}%`);
 
   try {
     const semillero = await sequelize.query(
-      `SELECT productos.*, funcionarios.*,proyectos.*,semilleros.*,programas.*
+      `SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
       FROM productos
       JOIN funcionario_productos 
-      ON productos.producto_id = funcionario_productos.id_producto
-      JOIN funcionarios
-      ON funcionarios.funcionario_id = funcionario_productos.id_funcionario
+      ON productos.producto_id = funcionario_productos.producto_fk
+      JOIN funcionario
+      ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
       JOIN  semilleros
       ON semilleros.semillero_id = productos.semillero_fk
-      JOIN  proyectos
-      ON proyectos.proyecto_id = productos.proyecto_fk
-  JOIN prod ucto_programa
-  ON producto_programa.fk_productos = productos.producto_id
-  JOIN programas
-  ON programas.programa_id = producto_programa.fk_programa      
+      JOIN  proyecto
+      ON proyecto.proyecto_id = productos.proyecto_fk
+      JOIN producto_programa
+      ON producto_programa.productos_fk = productos.producto_id
+      JOIN programa
+      ON programa.programa_id = producto_programa.programa_fk      
 	   WHERE semilleros.semillero_nombre LIKE ANY(ARRAY[:filtrosSemillero])`,
       {
         replacements: { filtrosSemillero },
@@ -283,32 +332,32 @@ export const filtrosemilleros = async (req, res) => {
   }
 };
 
-export const tipoproducto = async (req, res) => {
-  const productostipos = req.query.productos_tipo;
+export const subtipoproducto = async (req, res) => {
+  const productossubtipos = req.query.producto_subtipo
 
-  if (!Array.isArray(productostipos)) {
+  if (!Array.isArray(productossubtipos)) {
     return res
       .status(400)
       .send("Los autores deben ser proporcionados como un array");
   }
-  const filtrosproducto = productostipos.map((autor) => `%${autor}%`);
+  const filtrosproducto = productossubtipos.map((autor) => `%${autor}%`);
   try {
     const producto = await sequelize.query(
-      `SELECT productos.*, funcionarios.*,proyectos.*,semilleros.*,programas.*
+      `SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
       FROM productos
       JOIN funcionario_productos 
-      ON productos.producto_id = funcionario_productos.id_producto
-      JOIN funcionarios
-      ON funcionarios.funcionario_id = funcionario_productos.id_funcionario
+      ON productos.producto_id = funcionario_productos.producto_fk
+      JOIN funcionario
+      ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
       JOIN  semilleros
       ON semilleros.semillero_id = productos.semillero_fk
-      JOIN  proyectos
-      ON proyectos.proyecto_id = productos.proyecto_fk
-  JOIN producto_programa
-  ON producto_programa.fk_productos = productos.producto_id
-  JOIN programas
-  ON programas.programa_id = producto_programa.fk_programa     
-	   WHERE productos.productos_tipo LIKE ANY(ARRAY[:filtrosproducto])`,
+      JOIN  proyecto
+      ON proyecto.proyecto_id = productos.proyecto_fk
+      JOIN producto_programa
+      ON producto_programa.productos_fk = productos.producto_id
+      JOIN programa
+      ON programa.programa_id = producto_programa.programa_fk   
+	   WHERE productos.producto_subtipo LIKE ANY(ARRAY[:filtrosproducto])`,
       {
         replacements: { filtrosproducto },
         type: sequelize.QueryTypes.SELECT,
@@ -335,24 +384,24 @@ export const filtroaño = async (req, res) => {
       .status(400)
       .send("Los autores deben ser proporcionados como un array");
   }
-  const filtroaños = buscaraño.map((ano) => `%${ano}%`);
+  const filtroanos = buscaraño.map((ano) => `%${ano}%`);
 
   try {
     const producto = await sequelize.query(
-      `SELECT productos.*, funcionarios.*,proyectos.*,semilleros.*,programas.*
+      `SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
       FROM productos
       JOIN funcionario_productos 
-      ON productos.producto_id = funcionario_productos.id_producto
-      JOIN funcionarios
-      ON funcionarios.funcionario_id = funcionario_productos.id_funcionario
+      ON productos.producto_id = funcionario_productos.producto_fk
+      JOIN funcionario
+      ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
       JOIN  semilleros
       ON semilleros.semillero_id = productos.semillero_fk
-      JOIN  proyectos
-      ON proyectos.proyecto_id = productos.proyecto_fk
-  JOIN producto_programa
-  ON producto_programa.fk_productos = productos.producto_id
-  JOIN programas
-  ON programas.programa_id = producto_programa.fk_programa     
+      JOIN  proyecto
+      ON proyecto.proyecto_id = productos.proyecto_fk
+      JOIN producto_programa
+      ON producto_programa.productos_fk = productos.producto_id
+      JOIN programa
+      ON programa.programa_id = producto_programa.programa_fk   
 	   WHERE productos.productos_ano LIKE ANY(ARRAY[:filtroaños])`,
       {
         replacements: { filtroanos },
@@ -377,34 +426,70 @@ export const upload = async (req, res) => {
   });
 };
 
+
+
+
+
 export const searchProducts = async (req, res, next) => {
   try {
-    const { query } = req.query;
-    console.log(query);
-    const productos = await sequelize.query(
-      `SELECT productos.*, funcionarios.*,proyectos.*,semilleros.*,programas.*
-      FROM productos
-      JOIN funcionario_productos 
-      ON productos.producto_id = funcionario_productos.id_producto
-      JOIN funcionarios
-      ON funcionarios.funcionario_id = funcionario_productos.id_funcionario
-      JOIN  semilleros
-      ON semilleros.semillero_id = productos.semillero_fk
-      JOIN  proyectos
-      ON proyectos.proyecto_id = productos.proyecto_fk
-  JOIN producto_programa
-  ON producto_programa.fk_productos = productos.producto_id
-  JOIN programas
-  ON programas.programa_id = producto_programa.fk_programa
-      WHERE productos.productos_titulo ILIKE :query`,
-      {
-        replacements: { query: `%${query}%` },
-        type: sequelize.QueryTypes.SELECT,
-      }
-    );
-    console.log(productos);
-    res.status(200).json({ productos });
+    const titulo = req.query.titulo;
+    const productos = await producto.findAll({
+      where: {
+        producto_titulo: {
+          [Op.iLike]: "%" + titulo + "%",
+        },
+      },
+    });
+    if (productos.length === 0) {
+      const error = new Error(
+        `No se encontraron productos que coincidan con '${titulo}'`
+      );
+      error.statusCode = 404;
+      throw error;
+    }
+    res
+      .status(200)
+      .json({ message: "item obtenido por productos_titulo", productos });
   } catch (error) {
+    // return res.status(500).json({ message: error.message })
     next(error);
   }
 };
+
+
+
+
+
+
+
+// export const searchProducts = async (req, res, next) => {
+//   try {
+//     const { query } = req.query;
+//     console.log(query);
+//     const productos = await sequelize.query(
+//       `SELECT productos.*, funcionarios.*,proyectos.*,semilleros.*,programas.*
+//       FROM productos
+//       JOIN funcionario_productos
+//       ON productos.producto_id = funcionario_productos.id_producto
+//       JOIN funcionarios
+//       ON funcionarios.funcionario_id = funcionario_productos.id_funcionario
+//       JOIN  semilleros
+//       ON semilleros.semillero_id = productos.semillero_fk
+//       JOIN  proyectos
+//       ON proyectos.proyecto_id = productos.proyecto_fk
+//   JOIN producto_programa
+//   ON producto_programa.fk_productos = productos.producto_id
+//   JOIN programas
+//   ON programas.programa_id = producto_programa.fk_programa
+//       WHERE productos.productos_titulo ILIKE :query`,
+//       {
+//         replacements: { query: `%${query}%` },
+//         type: sequelize.QueryTypes.SELECT,
+//       }
+//     );
+//     console.log(productos);
+//     res.status(200).json({ productos });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
