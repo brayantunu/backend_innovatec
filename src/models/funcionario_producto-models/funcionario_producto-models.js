@@ -11,10 +11,10 @@ export const funcionario_producto = sequelize.define('funcionario_producto',{
         autoIncrement:true
         
     },
-    id_producto:{
+    producto_fk:{
         type:DataTypes.INTEGER
     },
-    id_funcionario:{
+    funcionario_fk:{
         type:DataTypes.INTEGER
     }
 
@@ -28,11 +28,11 @@ export const funcionario_producto = sequelize.define('funcionario_producto',{
 
 funcionario.belongsToMany(producto, {
     through: 'funcionario_producto',
-    foreignKey: 'id_funcionario',
+    foreignKey: 'funcionario_fk',
   });
   
   producto.belongsToMany(funcionario, {
     through: 'funcionario_producto',
-    foreignKey: 'id_producto',
+    foreignKey: 'producto_fk',
   });
   

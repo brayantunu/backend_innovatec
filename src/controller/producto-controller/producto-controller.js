@@ -64,7 +64,7 @@ export const create_producto = async (req, res) => {
     productos_url,
     proyecto_fk,
     semillero_fk,
-    id_funcionario,
+    funcionario_fk,
     programa_fk,
   } = req.body;
   try {
@@ -77,12 +77,10 @@ export const create_producto = async (req, res) => {
       productos_url,
       proyecto_fk,
       semillero_fk,
-      programa_fk,
-
     });
     const nuevo_funcionario_producto = await funcionario_producto.create({
-      id_funcionario,
-      id_producto: nuevo_producto.producto_id,
+      funcionario_fk,
+      producto_fk: nuevo_producto.producto_id,
     });
 
     const nuevo_producto_programa = await producto_programa.create({
@@ -112,93 +110,121 @@ export const create_producto = async (req, res) => {
 // https://www.youtube.com/watch?v=Bj3Gcpohbu4
 
 export const update_producto = async (req, res) => {
+  const {
+    producto_id,
+    productos_imagen,
+    productos_titulo,
+    productos_ano,
+    productos_tipo,
+    productos_subtipo,
+    productos_url,
+    proyecto_fk,
+    semillero_fk,
+    funcionario_fk,
+    programa_fk,
+  } = req.body;
+
   try {
-    const { producto_id } = req.params;
-    const {
-      productos_ano,
-      productos_subtipo,
-      productos_titulo,
-      productos_tipo,
-      producto_imagen,
-      productos_url,
+    await producto.update(
+      {
+        productos_imagen,
+        productos_titulo,
+        productos_ano,
+        productos_tipo,
+        productos_subtipo,
+        productos_url,
+        proyecto_fk,
+        semillero_fk,
+        funcionario_fk,
+      },
+      {
+        where: {
+          producto_id: producto_id,
+        },
+      }
+    );
 
-      id_funcionario,
-      fk_programa,
+    await funcionario_producto.update(
+      {
+        funcionario_fk,
+      },
+      {
+        where: {
+          producto_fk: producto_id,
+        },
+      }
+    );
 
-    } = req.body;
+    await producto_programa.update(
+      {
+        programa_fk,
+      },
+      {
+        where: {
+          productos_fk: producto_id,
+        },
+      }
+    );
 
-    const productos = await producto.findByPk(producto_id);
-
-    if (!productos) {
-      return res.status(404).json({ message: "El producto no existe." });
-    }
-
-    productos.productos_titulo = productos_titulo;
-    productos.productos_ano = productos_ano;
-    productos.productos_tipo = productos_tipo;
-    productos.productos_subtipo = productos_subtipo;
-    productos.producto_imagen = producto_imagen;
-    productos.productos_url = productos_url;
-
-    await productos.save();
-
-    const funcionarioProducto = await funcionario_producto.findOne({
-      where: { id_producto: producto_id },
+    const updatedProducto = await producto.findByPk(producto_id);
+    const updatedFuncionarioProducto = await funcionario_producto.findOne({
+      where: {
+        producto_fk: producto_id,
+      },
     });
-    if (funcionarioProducto) {
-      funcionarioProducto.id_funcionario = id_funcionario;
-      await funcionarioProducto.save();
-    }
-
-    const productoPrograma = await producto_programa.findOne({
-      where: { fk_productos: producto_id },
+    const updatedProductoPrograma = await producto_programa.findOne({
+      where: {
+        productos_fk: producto_id,
+      },
     });
-    if (productoPrograma) {
-      productoPrograma.fk_programa = fk_programa;
-      await productoPrograma.save();
-    }
 
-    res
-      .status(200)
-      .json({ message: "Se ha actualizado el producto correctamente." });
+    res.status(200).json({
+      message: "El producto se actualizó correctamente.",
+      updatedProducto,
+      updatedFuncionarioProducto,
+      updatedProductoPrograma,
+    });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
+
 export const delete_producto = async (req, res) => {
+  const { producto_id } = req.params;
+
   try {
-    const { producto_id } = req.params;
-
-    // Verificar si el producto existe
-    const productoExistente = await producto.findByPk(producto_id);
-    if (!productoExistente) {
-      return res.status(404).json({ message: "El producto no existe." });
-    }
-
     // Eliminar el producto
-    await producto.destroy({
-      where: { producto_id },
+    const deletedProducto = await producto.destroy({
+      where: {
+        producto_id: producto_id,
+      },
     });
 
     // Eliminar las relaciones en funcionario_producto y producto_programa
     await funcionario_producto.destroy({
-      where: { id_producto: producto_id },
+      where: {
+        producto_fk: producto_id,
+      },
     });
 
     await producto_programa.destroy({
-      where: { fk_productos: producto_id },
+      where: {
+        productos_fk: producto_id,
+      },
     });
 
-    res
-      .status(200)
-      .json({ message: "Se ha eliminado el producto correctamente." });
+    res.status(200).json({
+      message: "El producto se eliminó correctamente.",
+      deletedProducto,
+    });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 };
+
 
 export const get_producto_id = async (req, res) => {
   const { producto_id } = req.params;
