@@ -13,10 +13,10 @@ export const get_semillero = async (req,res)=>{
 export const get_semillero_id = async (req,res) =>{
     const { semillero_id } = req.params
     try {
-        const nuevo_semiilero = await semilleros.findOne({
+        const nuevo_semillero = await semilleros.findOne({
             where: { semillero_id },      
         })
-        res.status(200).json({message:"Semillero obtenido por id",nuevo_semiilero})
+        res.status(200).json({message:"Semillero obtenido por id",nuevo_semillero})
 
     } catch (error) {
         return res.status(500).json({ message: error.message })

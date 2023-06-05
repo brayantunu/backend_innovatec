@@ -7,8 +7,8 @@ const router = Router()
 
 router.get("/programa",programa)
 router.post("/programa",create_programa)
-router.patch("/programa",update_programa)
-router.delete("/programa",delete_programa)
+router.patch("/programa/:programa_id",update_programa)
+router.delete("/programa/:programa_id",delete_programa)
 router.get("/programa/:programa_id",get_programa_id)
 
 export default router

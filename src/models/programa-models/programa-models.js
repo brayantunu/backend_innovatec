@@ -7,16 +7,14 @@ export const programas = sequelize.define('programas', {
         primaryKey: true,
         autoIncrement: true
     },
-    nombre_programa: {
+    programa_nombre: {
         type: DataTypes.STRING ,
         unique:true,
         allowNull: false
-
-       
     }  
 },
     { sequelize,
-        tableName:'programas',
+        tableName:'programa',
         modelName: 'programa' },
     {
         timestamps: false

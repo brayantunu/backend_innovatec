@@ -3,60 +3,65 @@ import { sequelize } from "../../db/db.js";
 import { DataTypes } from "sequelize";
 // importamos los tipos de datos de la libreria de sequelize
 
-export const producto = sequelize.define(
-// creamos una constate que se llame producto y la exportamos con export definimos el nombre de sequelize que es la conexion de la base de datos 
-  "producto",
-  {
+export const producto = sequelize.define('producto',{
     producto_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    productos_titulo: {
+    producto_titulo: {
       type: DataTypes.STRING,
-      // allowNull: false
+      allowNull: false,
     },
-    productos_ano: {
+    producto_ano: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    producto_tipo: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    producto_subtipo: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    producto_url: {
+      type: DataTypes.STRING,
+    },
+    producto_imagen: {
+      type: DataTypes.BLOB("long"),
+      allowNull: false,
+    },
+    // productos_autor: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
+
+    // No va por la relacion muchos a muchos entre productos e investigadores////
+
+    proyecto_fk: {
       type: DataTypes.INTEGER,
-      // allowNull: false
-
+      references: {
+        model: "proyecto",
+        key: "proyecto_id",
+      },
     },
-    productos_tipo: {
-      type: DataTypes.STRING,
-      // allowNull: false
-
+    semillero_fk: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "semilleros",
+        key: "semillero_id",
+      },
     },
-    productos_subtipo: {
-      type: DataTypes.STRING,
-      // allowNull: false
-
-    },
-    productos_imagen: {
-      type: DataTypes.BLOB('long'),
-      //allowNull: false
-
-    },
-    productos_autor: {
-      type: DataTypes.STRING,
-      // allowNull: false
-
-    },
-    productos_url: {
-      type: DataTypes.STRING,
-      // allowNull: false
-
-    }
-
     // estos datos son los atributos que se diagramo en el modelo uml
   },
   {
     timestamps: false,
   },
-  { sequelize, modelName: "producto",
-tableName:"producto" }
-
-// se define sequelize con modelname poniendole el nombre de la tabla 
-
-
-)
-
+  {
+    sequelize,
+    modelName: 'producto',
+    tableName: 'producto'
+  }
+  // se define sequelize con modelname poniendole el nombre de la tabla
+);

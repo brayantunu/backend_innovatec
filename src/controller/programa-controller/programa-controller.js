@@ -3,6 +3,9 @@ import { programas } from "../../models/programa-models/programa-models.js";
 export const programa = async (req,res)=>{
     try {
         const nuevo_programa = await programas.findAll();
+         res
+        .status(200)
+        .json({ message: "se creo el obtuvo correctamente", nuevo_programa });
     } catch (error) {
         return res.status(400).json({message:error.message})
         
@@ -12,12 +15,12 @@ export const programa = async (req,res)=>{
 
 export const create_programa = async (req, res) => {
     const {
-        nombre_programa,
+      programa_nombre,
     } = req.body;
-  
+  console.log(programa_nombre)
     try {
       const nuevo_programa = await programas.create({
-        nombre_programa
+        programa_nombre
       });
       res
         .status(200)
@@ -33,13 +36,14 @@ export const update_programa = async (req, res) => {
     try {
       const { programa_id } = req.params;
       const {
-        nombre_programa
+        programa_nombre
       } = req.body;
   
       const programa = await programas.findByPk(programa_id);
-     programa.nombre_programa=nombre_programa
-      await programas.save();
-      res.status(201).json({
+     programa.programa_nombre=programa_nombre
+     await programa.save();
+     
+     res.status(201).json({
         message: "se ha actualizado el programa",
       });
     } catch (error) {
