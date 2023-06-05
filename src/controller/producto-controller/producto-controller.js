@@ -131,7 +131,6 @@ export const update_producto = async (req, res) => {
     producto_tipo,
     producto_subtipo,
     producto_url,
-
     proyecto_fk,
     semillero_fk,
     funcionario_fk,
