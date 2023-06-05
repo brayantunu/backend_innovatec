@@ -12,6 +12,8 @@ import { Sequelize } from "sequelize";
 // permite manipular varios modelos o tablas de sql
 import readXlsxFile from "read-excel-file/node";
 import fs from "fs";
+    
+
 export const getproducto = async (req, res) => {
   // creamos una constante y export la const getproducto para ser utilizado por el frontend o servicios
   //   try {
@@ -26,10 +28,10 @@ export const getproducto = async (req, res) => {
   //           ON semilleros.semillero_id = productos.semillero_fk
   //           JOIN  proyectos
   //           ON proyectos.proyecto_id = productos.proyecto_fk
-  // 		  JOIN producto_programa
-  // 		  ON producto_programa.fk_productos = productos.producto_id
-  // 		  JOIN programas
-  // 		  ON programas.programa_id = producto_programa.fk_programa `);
+  // 		       JOIN producto_programa
+  // 		      ON producto_programa.productos_fk = productos.producto_id
+  // 		      JOIN programas
+  // 		      ON programas.programa_id = producto_programa.programa_fk`);
 
   //     res.status(200).json({ succes: true, message: "listado", nuevo_producto });
   //   } catch (error) {
@@ -38,7 +40,6 @@ export const getproducto = async (req, res) => {
   // };
 
   try {
-
     const nuevo_producto = await producto.findAll();
     //       await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
     // FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
@@ -72,6 +73,7 @@ export const create_producto = async (req, res) => {
     programa_fk,
 
   } = req.body;
+
   try {
     const nuevo_producto = await producto.create({
       producto_imagen,
@@ -133,8 +135,7 @@ export const update_producto = async (req, res) => {
     proyecto_fk,
     semillero_fk,
     funcionario_fk,
-    programa_fk,
-
+    programa_fk
   } = req.body;
 
   try {
@@ -149,7 +150,7 @@ export const update_producto = async (req, res) => {
 
         proyecto_fk,
         semillero_fk,
-        funcionario_fk,
+        // funcionario_fk,
       },
       {
         where: {
