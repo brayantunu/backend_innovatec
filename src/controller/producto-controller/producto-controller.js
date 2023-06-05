@@ -256,30 +256,34 @@ export const get_producto_id = async (req, res) => {
 export const filtrosemilleros = async (req, res) => {
   const semilleroNombre = req.query.semillero_nombre;
 
+console.log(semilleroNombre);
+
   if (!Array.isArray(semilleroNombre)) {
-    return res
-      .status(400)
-      .send("Los autores deben ser proporcionados como un array");
+
+    return res.status(400).send("Los autores deben ser proporcionados como un array");
   }
 
+
+
+  
   const filtrosSemillero = semilleroNombre.map((autor) => `%${autor}%`);
 
   try {
     const semillero = await sequelize.query(
-      `SELECT productos.*, funcionarios.*,proyectos.*,semilleros.*,programas.*
+      `SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
       FROM productos
       JOIN funcionario_productos 
-      ON productos.producto_id = funcionario_productos.id_producto
-      JOIN funcionarios
-      ON funcionarios.funcionario_id = funcionario_productos.id_funcionario
+      ON productos.producto_id = funcionario_productos.producto_fk
+      JOIN funcionario
+      ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
       JOIN  semilleros
       ON semilleros.semillero_id = productos.semillero_fk
-      JOIN  proyectos
-      ON proyectos.proyecto_id = productos.proyecto_fk
-  JOIN prod ucto_programa
-  ON producto_programa.fk_productos = productos.producto_id
-  JOIN programas
-  ON programas.programa_id = producto_programa.fk_programa      
+      JOIN  proyecto
+      ON proyecto.proyecto_id = productos.proyecto_fk
+  JOIN producto_programa
+  ON producto_programa.productos_fk = productos.producto_id
+  JOIN programa
+  ON programa.programa_id = producto_programa.programa_fk      
 	   WHERE semilleros.semillero_nombre LIKE ANY(ARRAY[:filtrosSemillero])`,
       {
         replacements: { filtrosSemillero },
