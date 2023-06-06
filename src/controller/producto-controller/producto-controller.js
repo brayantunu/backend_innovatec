@@ -16,9 +16,9 @@ import fs from "fs";
 
 export const getproducto = async (req, res) => {
   // creamos una constante y export la const getproducto para ser utilizado por el frontend o servicios
-    try {
-      const nuevo_producto = await sequelize.query(
-         `SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
+  try {
+    const nuevo_producto = await sequelize.query(
+      `SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
           FROM productos
           JOIN funcionario_productos 
           ON productos.producto_id = funcionario_productos.producto_fk
@@ -31,15 +31,15 @@ export const getproducto = async (req, res) => {
           JOIN producto_programa
           ON producto_programa.productos_fk = productos.producto_id
           JOIN programa
-          ON programa.programa_id = producto_programa.programa_fk` 
-          );
+          ON programa.programa_id = producto_programa.programa_fk`
+    );
 
-      res.status(200).json({ succes: true, message: "listado", nuevo_producto });
-    
-    } catch (error) {
-      return res.status(400).json({ message: error.message });
-    }
-  };
+    res.status(200).json({ succes: true, message: "listado", nuevo_producto });
+
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
 
 //   try {
 //     const nuevo_producto = await producto.findAll();
@@ -368,26 +368,23 @@ export const subtipoproducto = async (req, res) => {
     );
 
     if (producto.length === 0) {
-      return res.status(404).send("No se encontraron autores");
+      return res.status(404).send("No se encontraron productos");
     }
 
     res.send(producto);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error al obtener los autores");
+    res.status(500).send("Error al obtener los productos");
   }
 };
 
 export const filtroaño = async (req, res) => {
-  const buscaraño = req.query.productos_ano;
-
-  console.log(buscaraño);
-  if (!Array.isArray(buscaraño)) {
-    return res
-      .status(400)
-      .send("Los autores deben ser proporcionados como un array");
+  const buscarano = req.query.productos_ano;
+  console.log(buscarano);
+  if (!Array.isArray(buscarano)) {
+    return res.status(400).send("Los anos deben ser proporcionados como un array");
   }
-  const filtroanos = buscaraño.map((ano) => `%${ano}%`);
+  const filtroanos = buscarano.map((ano) => `%${ano}%`);
 
   try {
     const producto = await sequelize.query(
@@ -405,7 +402,7 @@ export const filtroaño = async (req, res) => {
       ON producto_programa.productos_fk = productos.producto_id
       JOIN programa
       ON programa.programa_id = producto_programa.programa_fk   
-	   WHERE productos.productos_ano LIKE ANY(ARRAY[:filtroaños])`,
+	   WHERE productos.producto_ano LIKE ANY(ARRAY[:filtroanos])`,
       {
         replacements: { filtroanos },
         type: sequelize.QueryTypes.SELECT,
@@ -413,13 +410,13 @@ export const filtroaño = async (req, res) => {
     );
 
     if (producto.length === 0) {
-      return res.status(404).send("No se encontraron autores");
+      return res.status(404).send("No se encontraron productos");
     }
 
     res.send(producto);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error al obtener los autores");
+    res.status(500).send("Error al obtener los productos");
   }
 };
 
@@ -428,6 +425,101 @@ export const upload = async (req, res) => {
     console.log(rows);
   });
 };
+
+
+export const filtroproyecto = async (req, res) => {
+  const buscarproyecto = req.query.proyectos_nombre;
+  console.log(buscarproyecto);
+  if (!Array.isArray(buscarproyecto)) {
+    return res.status(400).send("Los proyectos deben ser proporcionados como un array");
+  }
+  const filtroproyectos = buscarproyecto.map((ano) => `%${ano}%`);
+
+  try {
+    const producto = await sequelize.query(
+      `SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
+      FROM productos
+      JOIN funcionario_productos 
+      ON productos.producto_id = funcionario_productos.producto_fk
+      JOIN funcionario
+      ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
+      JOIN  semilleros
+      ON semilleros.semillero_id = productos.semillero_fk
+      JOIN  proyecto
+      ON proyecto.proyecto_id = productos.proyecto_fk
+      JOIN producto_programa
+      ON producto_programa.productos_fk = productos.producto_id
+      JOIN programa
+      ON programa.programa_id = producto_programa.programa_fk   
+	   WHERE proyecto.proyecto_nombre LIKE ANY(ARRAY[:filtroproyectos])`,
+      {
+        replacements: { filtroproyectos },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    if (producto.length === 0) {
+      return res.status(404).send("No se encontraron productos");
+    }
+
+    res.send(producto);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al obtener los productos");
+  }
+};
+
+
+export const filtroprograma = async (req, res) => {
+  const buscarprograma = req.query.programas_nombre;
+  console.log(buscarprograma);
+  if (!Array.isArray(buscarprograma)) {
+    return res.status(400).send("Los programas deben ser proporcionados como un array");
+  }
+  const filtroprogramas = buscarprograma.map((ano) => `%${ano}%`);
+
+  try {
+    const producto = await sequelize.query(
+      `SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
+      FROM productos
+      JOIN funcionario_productos 
+      ON productos.producto_id = funcionario_productos.producto_fk
+      JOIN funcionario
+      ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
+      JOIN  semilleros
+      ON semilleros.semillero_id = productos.semillero_fk
+      JOIN  proyecto
+      ON proyecto.proyecto_id = productos.proyecto_fk
+      JOIN producto_programa
+      ON producto_programa.productos_fk = productos.producto_id
+      JOIN programa
+      ON programa.programa_id = producto_programa.programa_fk   
+	   WHERE programa.programa_nombre LIKE ANY(ARRAY[:filtroprogramas])`,
+      {
+        replacements: { filtroprogramas },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    if (producto.length === 0) {
+      return res.status(404).send("No se encontraron productos");
+    }
+
+    res.send(producto);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al obtener los productos");
+  }
+};
+
+
+
+
+
+
+
+
+
 
 
 
