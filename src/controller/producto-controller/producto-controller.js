@@ -525,66 +525,67 @@ export const filtroprograma = async (req, res) => {
 
 
 
-export const searchProducts = async (req, res, next) => {
-  try {
-    const titulo = req.query.titulo;
-    const productos = await producto.findAll({
-      where: {
-        producto_titulo: {
-          [Op.iLike]: "%" + titulo + "%",
-        },
-      },
-    });
-    if (productos.length === 0) {
-      const error = new Error(
-        `No se encontraron productos que coincidan con '${titulo}'`
-      );
-      error.statusCode = 404;
-      throw error;
-    }
-    res
-      .status(200)
-      .json({ message: "item obtenido por productos_titulo", productos });
-  } catch (error) {
-    // return res.status(500).json({ message: error.message })
-    next(error);
-  }
-};
-
-
-
-
-
-
-
 // export const searchProducts = async (req, res, next) => {
 //   try {
-//     const { query } = req.query;
-//     console.log(query);
-//     const productos = await sequelize.query(
-//       `SELECT productos.*, funcionarios.*,proyectos.*,semilleros.*,programas.*
-//       FROM productos
-//       JOIN funcionario_productos
-//       ON productos.producto_id = funcionario_productos.id_producto
-//       JOIN funcionarios
-//       ON funcionarios.funcionario_id = funcionario_productos.id_funcionario
-//       JOIN  semilleros
-//       ON semilleros.semillero_id = productos.semillero_fk
-//       JOIN  proyectos
-//       ON proyectos.proyecto_id = productos.proyecto_fk
-//   JOIN producto_programa
-//   ON producto_programa.fk_productos = productos.producto_id
-//   JOIN programas
-//   ON programas.programa_id = producto_programa.fk_programa
-//       WHERE productos.productos_titulo ILIKE :query`,
-//       {
-//         replacements: { query: `%${query}%` },
-//         type: sequelize.QueryTypes.SELECT,
-//       }
-//     );
-//     console.log(productos);
-//     res.status(200).json({ productos });
+//     const titulo = req.query.titulo;
+//     const productos = await producto.findAll({
+//       where: {
+//         producto_titulo: {
+//           [Op.iLike]: "%" + titulo + "%",
+//         },
+//       },
+//     });
+//     if (productos.length === 0) {
+//       const error = new Error(
+//         `No se encontraron productos que coincidan con '${titulo}'`
+//       );
+//       error.statusCode = 404;
+//       throw error;
+//     }
+//     res
+//       .status(200)
+//       .json({ message: "item obtenido por productos_titulo", productos });
 //   } catch (error) {
+//     // return res.status(500).json({ message: error.message })
 //     next(error);
 //   }
 // };
+
+
+
+
+
+
+
+export const searchProducts = async (req, res, next) => {
+  try {
+    const query = req.query.titulo;
+    console.log(query);
+
+    const productos = await sequelize.query(
+      `SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
+      FROM productos
+      JOIN funcionario_productos 
+      ON productos.producto_id = funcionario_productos.producto_fk
+      JOIN funcionario
+      ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
+      JOIN  semilleros
+      ON semilleros.semillero_id = productos.semillero_fk
+      JOIN  proyecto
+      ON proyecto.proyecto_id = productos.proyecto_fk
+      JOIN producto_programa
+      ON producto_programa.productos_fk = productos.producto_id
+      JOIN programa
+      ON programa.programa_id = producto_programa.programa_fk
+    WHERE productos.producto_titulo LIKE :query`,
+      {
+        replacements: { query: `%${query}%` },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    console.log(productos);
+    res.status(200).json({ productos });
+  } catch (error) {
+    next(error);
+  }
+};
