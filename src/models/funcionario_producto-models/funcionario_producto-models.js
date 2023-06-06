@@ -12,10 +12,13 @@ export const funcionario_producto = sequelize.define('funcionario_producto',{
         
     },
     producto_fk:{
-        type:DataTypes.INTEGER
+        type:DataTypes.INTEGER,
+        allowNull: false,
+
     },
     funcionario_fk:{
-        type:DataTypes.INTEGER
+        type:DataTypes.INTEGER,
+        allowNull: false,
     }
 
 },
