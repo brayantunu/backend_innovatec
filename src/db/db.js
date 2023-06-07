@@ -5,7 +5,7 @@ import {Sequelize} from "sequelize";
 export const sequelize = new Sequelize(
    process.env.DB_DATABASE || 'final',//nombre de la base de datos
    process.env.DB_USER || 'postgres',//usuario
-    process.env.DB_PASSWORD || 'root',//contraseña de la base de datos
+    process.env.DB_PASSWORD || 'yuliana',//contraseña de la base de datos
     {
         host:process.env.DB_HOST || 'localhost',      
         dialect: 'postgres',

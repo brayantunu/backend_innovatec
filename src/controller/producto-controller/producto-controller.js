@@ -16,30 +16,28 @@ import fs from "fs";
 
 export const getproducto = async (req, res) => {
   // creamos una constante y export la const getproducto para ser utilizado por el frontend o servicios
-  try {
-    const nuevo_producto = await sequelize.query(
-      `SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
-          FROM productos
-          JOIN funcionario_productos 
-          ON productos.producto_id = funcionario_productos.producto_fk
-          JOIN funcionario
-          ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
-          JOIN  semilleros
-          ON semilleros.semillero_id = productos.semillero_fk
-          JOIN  proyecto
-          ON proyecto.proyecto_id = productos.proyecto_fk
-          JOIN producto_programa
-          ON producto_programa.productos_fk = productos.producto_id
-          JOIN programa
-          ON programa.programa_id = producto_programa.programa_fk`
-    );
+    try {
+      const nuevo_producto =
+        await sequelize.query(`SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
+            FROM productos
+            JOIN funcionario_productos 
+            ON productos.producto_id = funcionario_productos.producto_fk
+            JOIN funcionario
+            ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
+            JOIN  semilleros
+            ON semilleros.semillero_id = productos.semillero_fk
+            JOIN  proyecto
+            ON proyecto.proyecto_id = productos.proyecto_fk
+  		       JOIN producto_programa
+  		      ON producto_programa.productos_fk = productos.producto_id
+  		      JOIN programa
+  		      ON programa.programa_id = producto_programa.programa_fk`);
 
-    res.status(200).json({ succes: true, message: "listado", nuevo_producto });
-
-  } catch (error) {
-    return res.status(400).json({ message: error.message });
-  }
-};
+      res.status(200).json({ succes: true, message: "listado", nuevo_producto });
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
+    }
+  };
 
 //   try {
 //     const nuevo_producto = await producto.findAll();
@@ -68,7 +66,6 @@ export const create_producto = async (req, res) => {
     producto_tipo,
     producto_subtipo,
     producto_url,
-
     proyecto_fk,
     semillero_fk,
     funcionario_fk,
