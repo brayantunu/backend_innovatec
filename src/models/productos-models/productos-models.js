@@ -41,6 +41,8 @@ export const producto = sequelize.define('producto',{
 
     proyecto_fk: {
       type: DataTypes.INTEGER,
+      allowNull: true,
+
       references: {
         model: "proyecto",
         key: "proyecto_id",
@@ -48,6 +50,8 @@ export const producto = sequelize.define('producto',{
     },
     semillero_fk: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+
       references: {
         model: "semilleros",
         key: "semillero_id",
