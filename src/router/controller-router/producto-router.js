@@ -7,7 +7,7 @@ import cors from "cors"
 const router = Router()
 // router.get('/producto/buscar',cors(),searchProducts)
 router.get('/producto/buscar', cors(), searchProducts)
-router.get('/producto', cors(), getproducto)
+router.get('/', cors(), getproducto)
 router.get('/producto/:producto_id', cors(), get_producto_id)
 router.post('/producto', cors(), create_producto)
 router.delete('/producto/:producto_id', delete_producto)
