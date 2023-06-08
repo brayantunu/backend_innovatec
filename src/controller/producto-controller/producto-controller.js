@@ -6,6 +6,7 @@ import { sequelize } from "../../db/db.js";
 // se hace la conexion con la base de datos esto sirve para hacer las consultas de los crud de obtener para realizar la consulta por query
 const Op = Sequelize.Op;
 
+import { semilleros } from "../../models/semilleros-models/semilleros-models.js";
 
 
 import { Sequelize } from "sequelize";
@@ -616,5 +617,27 @@ export const searchProducts = async (req, res, next) => {
     res.status(200).json({ productos });
   } catch (error) {
     next(error);
+  }
+};
+
+
+
+export const getData = async (req, res) => {
+  try {
+    const { option } = req.params;
+    console.log(option);
+    let data;
+
+    if (option === 'semilleros') {
+      data = await producto.count({
+        attributes: ['semillero_fk'],
+        group: ['semillero_fk']
+      });
+    }
+
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener los datos.' });
   }
 };
