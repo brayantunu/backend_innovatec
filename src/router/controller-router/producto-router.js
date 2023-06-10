@@ -1,6 +1,6 @@
 import { Router } from "express";
 // importamos la libreria de express llamamos un objeto router para hacer la conexcion de frontend con el backend 
-import {getproducto, get_producto_id, create_producto, delete_producto, update_producto,searchProducts, filtrosemilleros, subtipoproducto, filtroaño, filtroproyecto, filtroprograma,get_funcionario_identificacion,getData} from "../../controller/producto-controller/producto-controller.js";
+import {aplicarFiltros, getproducto, get_producto_id, create_producto, delete_producto, update_producto,searchProducts, filtrosemilleros, subtipoproducto, filtroaño, filtroproyecto, filtroprograma,get_funcionario_identificacion,getData} from "../../controller/producto-controller/producto-controller.js";
 import cors from "cors"
 import multer from "multer";
 import path from "path"
@@ -31,6 +31,9 @@ router.get('/filtroproyecto', cors(), filtroproyecto)
 router.get('/filtroprograma', cors(), filtroprograma)
 router.get('/grafica/:option', cors(), getData)
 router.get('/productos/:funcionario_iden',get_funcionario_identificacion)
+
+router.get('/aplicarfiltros', cors(), aplicarFiltros)
+
 
 
 

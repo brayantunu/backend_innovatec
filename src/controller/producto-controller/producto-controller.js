@@ -644,3 +644,97 @@ export const searchProducts = async (req, res, next) => {
 
 // Controlador para subir una imagen
 
+export const aplicarFiltros = async (req, res) => {
+
+  const semilleroNombre = req.query.semillero_nombre ?? [];
+
+  const productosSubtipos = req.query.producto_subtipo ?? [];
+
+  const buscarAno = req.query.productos_ano ?? [];
+
+  const buscarProyecto = req.query.proyectos_nombre ?? [];
+
+  const buscarPrograma = req.query.programas_nombre ?? [];
+
+  const filtrosSemillero = semilleroNombre.map((nombre) => `%${nombre}%`);
+  const filtrosProducto = productosSubtipos.map((subtipo) => `%${subtipo}%`);
+  const filtroAnos = buscarAno.map((ano) => `%${ano}%`);
+  const filtroProyectos = buscarProyecto.map((proyecto) => `%${proyecto}%`);
+  const filtroProgramas = buscarPrograma.map((programa) => `%${programa}%`);
+
+
+
+  try {
+    // Crea una variable para almacenar las condiciones de filtrado
+    let condiciones = [];
+
+    // Crea una variable para almacenar los valores de los filtros
+    let valoresFiltros = {};
+
+    // Verificar si se ha seleccionado algún filtro y agregar la condición correspondiente
+    if (filtrosSemillero.length > 0) {
+      condiciones.push(`semilleros.semillero_nombre LIKE ANY(ARRAY[:filtrosSemillero])`);
+      valoresFiltros.filtrosSemillero = filtrosSemillero;
+    }
+
+    if (filtrosProducto.length > 0) {
+      condiciones.push(`productos.producto_subtipo LIKE ANY(ARRAY[:filtrosProducto])`);
+      valoresFiltros.filtrosProducto = filtrosProducto;
+    }
+
+    if (filtroAnos.length > 0) {
+      condiciones.push(`productos.producto_ano LIKE ANY(ARRAY[:filtroAnos])`);
+      valoresFiltros.filtroAnos = filtroAnos;
+    }
+
+    if (filtroProyectos.length > 0) {
+      condiciones.push(`proyecto.proyecto_nombre LIKE ANY(ARRAY[:filtroProyectos])`);
+      valoresFiltros.filtroProyectos = filtroProyectos;
+    }
+
+    if (filtroProgramas.length > 0) {
+      condiciones.push(`programa.programa_nombre LIKE ANY(ARRAY[:filtroProgramas])`);
+      valoresFiltros.filtroProgramas = filtroProgramas;
+    }
+
+
+
+    // Crear la consulta SQL base
+    let consultaSQL = `
+      SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
+      FROM productos
+      JOIN funcionario_productos 
+      ON productos.producto_id = funcionario_productos.producto_fk
+      JOIN funcionario
+      ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
+      JOIN semilleros
+      ON semilleros.semillero_id = productos.semillero_fk
+      JOIN proyecto
+      ON proyecto.proyecto_id = productos.proyecto_fk
+      JOIN producto_programa
+      ON producto_programa.productos_fk = productos.producto_id
+      JOIN programa
+      ON programa.programa_id = producto_programa.programa_fk
+    `;
+
+    // Agregar las condiciones de filtrado a la consulta si existen
+    if (condiciones.length > 0) {
+      consultaSQL += `WHERE ${condiciones.join(' AND ')}`;
+    }
+
+    // Ejecutar la consulta con los filtros correspondientes
+    const productos = await sequelize.query(consultaSQL, {
+      replacements: valoresFiltros,
+      type: sequelize.QueryTypes.SELECT,
+    });
+
+    if (productos.length === 0) {
+      return res.status(404).send("No se encontraron productos");
+    }
+
+    res.send(productos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al obtener los productos");
+  }
+};
