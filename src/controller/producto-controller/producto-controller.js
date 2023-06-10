@@ -6,12 +6,32 @@ import { sequelize } from "../../db/db.js";
 // se hace la conexion con la base de datos esto sirve para hacer las consultas de los crud de obtener para realizar la consulta por query
 const Op = Sequelize.Op;
 
-
-
 import { Sequelize } from "sequelize";
 // permite manipular varios modelos o tablas de sql
 import readXlsxFile from "read-excel-file/node";
 import fs from "fs";
+import { semilleros } from "../../models/semilleros-models/semilleros-models.js";
+
+
+export const getData = async (req, res) => {
+  try {
+    const { option } = req.params;
+    console.log(option);
+    let data;
+
+    if (option === 'semilleros') {
+      data = await producto.count({
+        attributes: ['semillero_fk'],
+        group: ['semillero_fk']
+      });
+    }
+
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener los datos.' });
+  }
+};
 
 export const getproducto = async (req, res) => {
   // creamos una constante y export la const getproducto para ser utilizado por el frontend o servicios
@@ -625,3 +645,36 @@ export const searchProducts = async (req, res, next) => {
     next(error);
   }
 };
+
+
+
+// creando imagenes
+
+
+// Controlador para subir una imagen
+export const uploadImage = async (req, res) => {
+  const { filename } = req.file;
+
+  try {
+    // Crear una nueva imagen en la base de datos
+    await producto.create({ nombre: filename });
+    res.send('Imagen subida correctamente');
+  } catch (error) {
+    console.error('Error al subir la imagen a la base de datos:', error);
+    res.status(500).send('Error al subir la imagen a la base de datos');
+  }
+};
+
+// Controlador para obtener todas las imágenes
+export const getAllImages = async (req, res) => {
+  try {
+    // Obtener todos los nombres de archivo de la base de datos
+    const images = await producto.findAll();
+    const imageNames = images.map(image => image.nombre);
+    res.send(imageNames);
+  } catch (error) {
+    console.error('Error al obtener las imágenes:', error);
+    res.status(500).send('Error al obtener las imágenes');
+  }
+};
+
