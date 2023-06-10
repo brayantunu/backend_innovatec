@@ -78,8 +78,8 @@ export const getproducto = async (req, res) => {
 // };
 
 
-
 export const create_producto =  async (req, res) => {
+  const { filename } = req.file;
   const {
     producto_titulo,
     producto_ano,
@@ -91,19 +91,10 @@ export const create_producto =  async (req, res) => {
     funcionario_fk,
     programa_fk,
   } = req.body;
-  const producto_imagen = req.file;
-  console.log(producto_imagen)
-  if (!producto_imagen) {
-    return res.status(400).json({ message: 'Debe seleccionar una imagen' });
-  }
 
   try {
-   
-    const imagenData = fs.readFileSync(producto_imagen.path);
-    const encodedImageData = imagenData.toString('base64');
-
     const nuevo_producto = await producto.create({
-      producto_imagen: encodedImageData,
+      nombre: filename ,
       producto_titulo,
       producto_ano,
       producto_tipo,
@@ -652,29 +643,4 @@ export const searchProducts = async (req, res, next) => {
 
 
 // Controlador para subir una imagen
-export const uploadImage = async (req, res) => {
-  const { filename } = req.file;
-
-  try {
-    // Crear una nueva imagen en la base de datos
-    await producto.create({ nombre: filename });
-    res.send('Imagen subida correctamente');
-  } catch (error) {
-    console.error('Error al subir la imagen a la base de datos:', error);
-    res.status(500).send('Error al subir la imagen a la base de datos');
-  }
-};
-
-// Controlador para obtener todas las imágenes
-export const getAllImages = async (req, res) => {
-  try {
-    // Obtener todos los nombres de archivo de la base de datos
-    const images = await producto.findAll();
-    const imageNames = images.map(image => image.nombre);
-    res.send(imageNames);
-  } catch (error) {
-    console.error('Error al obtener las imágenes:', error);
-    res.status(500).send('Error al obtener las imágenes');
-  }
-};
 
