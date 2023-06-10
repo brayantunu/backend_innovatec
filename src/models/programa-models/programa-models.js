@@ -8,7 +8,7 @@ export const programas = sequelize.define('programas', {
         autoIncrement: true
     },
     programa_nombre: {
-        type: DataTypes.STRING ,
+        type: DataTypes.STRING,
         unique:true,
         allowNull: false
     }  

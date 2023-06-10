@@ -6,6 +6,8 @@ import { sequelize } from "../../db/db.js";
 // se hace la conexion con la base de datos esto sirve para hacer las consultas de los crud de obtener para realizar la consulta por query
 const Op = Sequelize.Op;
 
+
+
 import { Sequelize } from "sequelize";
 // permite manipular varios modelos o tablas de sql
 import readXlsxFile from "read-excel-file/node";
@@ -621,37 +623,5 @@ export const searchProducts = async (req, res, next) => {
     res.status(200).json({ productos });
   } catch (error) {
     next(error);
-  }
-};
-
-
-
-// creando imagenes
-
-
-// Controlador para subir una imagen
-export const uploadImage = async (req, res) => {
-  const { filename } = req.file;
-
-  try {
-    // Crear una nueva imagen en la base de datos
-    await producto.create({ producto_imagen: filename });
-    res.send('Imagen subida correctamente');
-  } catch (error) {
-    console.error('Error al subir la imagen a la base de datos:', error);
-    res.status(500).send('Error al subir la imagen a la base de datos');
-  }
-};
-
-// Controlador para obtener todas las imágenes
-export const getAllImages = async (req, res) => {
-  try {
-    // Obtener todos los nombres de archivo de la base de datos
-    const images = await producto.findAll();
-    const imageNames = images.map(image => image.producto_imagen);
-    res.send(imageNames);
-  } catch (error) {
-    console.error('Error al obtener las imágenes:', error);
-    res.status(500).send('Error al obtener las imágenes');
   }
 };
