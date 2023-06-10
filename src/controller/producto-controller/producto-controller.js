@@ -6,13 +6,10 @@ import { sequelize } from "../../db/db.js";
 // se hace la conexion con la base de datos esto sirve para hacer las consultas de los crud de obtener para realizar la consulta por query
 const Op = Sequelize.Op;
 
-
-
 import { Sequelize } from "sequelize";
 // permite manipular varios modelos o tablas de sql
 import readXlsxFile from "read-excel-file/node";
 import fs from "fs";
-
 
 export const getproducto = async (req, res) => {
   // creamos una constante y export la const getproducto para ser utilizado por el frontend o servicios
@@ -58,9 +55,10 @@ export const getproducto = async (req, res) => {
 //   }
 // };
 
-export const create_producto = async (req, res) => {
+
+
+export const create_producto =  async (req, res) => {
   const {
-    producto_imagen,
     producto_titulo,
     producto_ano,
     producto_tipo,
@@ -70,18 +68,25 @@ export const create_producto = async (req, res) => {
     semillero_fk,
     funcionario_fk,
     programa_fk,
-
   } = req.body;
+  const producto_imagen = req.file;
+  console.log(producto_imagen)
+  if (!producto_imagen) {
+    return res.status(400).json({ message: 'Debe seleccionar una imagen' });
+  }
 
   try {
+   
+    const imagenData = fs.readFileSync(producto_imagen.path);
+    const encodedImageData = imagenData.toString('base64');
+
     const nuevo_producto = await producto.create({
-      producto_imagen,
+      producto_imagen: encodedImageData,
       producto_titulo,
       producto_ano,
       producto_tipo,
       producto_subtipo,
       producto_url,
-
       proyecto_fk,
       semillero_fk,
     });
@@ -97,13 +102,13 @@ export const create_producto = async (req, res) => {
     });
 
     res.status(200).json({
-      message: "se creo el producto correctamente ",
+      message: 'Se creó el producto correctamente.',
       nuevo_producto,
       nuevo_funcionario_producto,
       nuevo_producto_programa,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(400).json({ message: error.message });
   }
 };
@@ -616,5 +621,37 @@ export const searchProducts = async (req, res, next) => {
     res.status(200).json({ productos });
   } catch (error) {
     next(error);
+  }
+};
+
+
+
+// creando imagenes
+
+
+// Controlador para subir una imagen
+export const uploadImage = async (req, res) => {
+  const { filename } = req.file;
+
+  try {
+    // Crear una nueva imagen en la base de datos
+    await producto.create({ producto_imagen: filename });
+    res.send('Imagen subida correctamente');
+  } catch (error) {
+    console.error('Error al subir la imagen a la base de datos:', error);
+    res.status(500).send('Error al subir la imagen a la base de datos');
+  }
+};
+
+// Controlador para obtener todas las imágenes
+export const getAllImages = async (req, res) => {
+  try {
+    // Obtener todos los nombres de archivo de la base de datos
+    const images = await producto.findAll();
+    const imageNames = images.map(image => image.producto_imagen);
+    res.send(imageNames);
+  } catch (error) {
+    console.error('Error al obtener las imágenes:', error);
+    res.status(500).send('Error al obtener las imágenes');
   }
 };

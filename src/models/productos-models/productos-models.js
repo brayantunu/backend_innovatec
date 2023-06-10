@@ -29,9 +29,11 @@ export const producto = sequelize.define('producto',{
       type: DataTypes.STRING,
     },
     producto_imagen: {
-      type: DataTypes.BLOB("long"),
+      type: DataTypes.STRING,
       allowNull: false,
     },
+
+    // BLOB("long"),
     // productos_autor: {
     //   type: DataTypes.STRING,
     //   allowNull: false,
