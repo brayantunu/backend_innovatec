@@ -8,19 +8,23 @@ import path from "path"
 // se importa cors esto permite que los clientes pueda consumir los datos
 const router = Router()
 
+// Configuración de almacenamiento y nombre de archivo con multer
 const storage = multer.diskStorage({
-  destination: './uploads/',
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Directorio donde se guardarán las imágenes
+  },
   filename: (req, file, cb) => {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  }
+    cb(null, file.originalname);
+  },
 });
 const upload = multer({ storage });
 
+
 // router.get('/producto/buscar',cors(),searchProducts)
 router.get('/producto/buscar', cors(), searchProducts)
-router.get('/', cors(), getproducto)
+router.get('/',getproducto)
 router.get('/producto/:producto_id', cors(), get_producto_id)
-router.post('/producto',cors(),upload.single('image'),  create_producto)
+router.post('/producto',upload.single('producto_imagen'),create_producto)
 router.delete('/producto/:producto_id', delete_producto)
 router.patch('/producto/:producto_id', update_producto)
 router.get('/filtrosemillero', cors(), filtrosemilleros)//LISTO

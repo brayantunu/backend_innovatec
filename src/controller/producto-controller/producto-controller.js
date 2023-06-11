@@ -77,28 +77,31 @@ export const getproducto = async (req, res) => {
 //   }
 // };
 
-
-export const create_producto =  async (req, res) => {
-  const { filename } = req.file;
-  const {
-    producto_titulo,
-    producto_ano,
-    producto_tipo,
-    producto_subtipo,
-    producto_url,
-    proyecto_fk,
-    semillero_fk,
-    funcionario_fk,
-    programa_fk,
-  } = req.body;
-
+export const create_producto = async (req, res) => {
   try {
-    const nuevo_producto = await producto.create({
-      nombre: filename ,
+    // const { filename } = req.file;
+    const {
       producto_titulo,
       producto_ano,
       producto_tipo,
       producto_subtipo,
+      // producto_imagen,
+      producto_url,
+      proyecto_fk,
+      semillero_fk,
+      funcionario_fk,
+      programa_fk,
+    } = req.body;
+    const producto_imagen = fs.readFileSync(req.file.path);
+
+
+    const nuevo_producto = await producto.create({
+      // nombre: filename,
+      producto_titulo,
+      producto_ano,
+      producto_tipo,
+      producto_subtipo,
+      producto_imagen,
       producto_url,
       proyecto_fk,
       semillero_fk,
@@ -126,12 +129,7 @@ export const create_producto =  async (req, res) => {
   }
 };
 
-// const storage = multer.diskStorage({
-//   destination:path.join(dirname, "../../images"),
-//   filename:(req,file,cb) =>{
-//     cb(null, `${Date.now()}-${file.originalname}`);
-//   }
-// })
+
 
 // controlador de cargar imagen en el crud de crear
 // https://www.youtube.com/watch?v=Bj3Gcpohbu4

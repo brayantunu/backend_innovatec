@@ -1,6 +1,6 @@
 import Express from "express";
 // express es una libreria para desarrollo de aplicaciones web para el programadores de nodejs
-
+import cors from "cors"
 import bodyParser from "body-parser";
 import funcionario from  "./router/controller-router/funcionario-router.js"
 import producto from "./router/controller-router/producto-router.js"
@@ -15,6 +15,7 @@ import producto_programa from "./router/controller-router/producto_programa-rout
 
 const app = Express()
 
+app.use(cors());
 
 app.use(Express.json())
 app.use(programas,funcionario,producto,proyecto,puntaje,semillero,fucionario_productos,producto_programa)

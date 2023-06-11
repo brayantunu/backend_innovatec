@@ -29,7 +29,7 @@ export const producto = sequelize.define('producto',{
       type: DataTypes.STRING,
     },
     producto_imagen: {
-      type: DataTypes.STRING,
+      type: DataTypes.BLOB, 
       allowNull: false,
     },
 
