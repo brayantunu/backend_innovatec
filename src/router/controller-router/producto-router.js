@@ -9,22 +9,19 @@ import path from "path"
 const router = Router()
 
 // Configuración de almacenamiento y nombre de archivo con multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'src/uploads/'); // Directorio donde se guardarán las imágenes
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
+import { fileURLToPath } from 'url';
+const filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(filename);
+const storage = multer({ dest: '/public' });
 const upload = multer({ storage });
+
 
 
 // router.get('/producto/buscar',cors(),searchProducts)
 router.get('/producto/buscar', cors(), searchProducts)
 router.get('/',getproducto)
 router.get('/producto/:producto_id', cors(), get_producto_id)
-router.post('/producto',upload.single('producto_imagen'),create_producto)
+router.post('/producto',storage.single('producto_imagen'),create_producto)
 router.delete('/producto/:producto_id', delete_producto)
 router.patch('/producto/:producto_id', update_producto)
 router.get('/filtrosemillero', cors(), filtrosemilleros)//LISTO
