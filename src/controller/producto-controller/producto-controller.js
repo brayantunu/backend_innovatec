@@ -12,6 +12,13 @@ import readXlsxFile from "read-excel-file/node";
 import fs from "fs";
 import { semilleros } from "../../models/semilleros-models/semilleros-models.js";
 
+import multer from "multer";
+import path from "path";
+
+import { fileURLToPath } from 'url';
+const filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(filename);
+
 
 export const getData = async (req, res) => {
   try {
@@ -79,7 +86,10 @@ export const getproducto = async (req, res) => {
 
 export const create_producto = async (req, res) => {
   try {
-    // const { filename } = req.file;
+    const { mimetype,path  } = req.file;
+    fs.renameSync(path, path + '.' + mimetype.split('/')[1]);
+
+    const imagenData = fs.readFileSync(path + '.' + mimetype.split('/')[1]);
     const {
       producto_titulo,
       producto_ano,
@@ -92,7 +102,7 @@ export const create_producto = async (req, res) => {
       funcionario_fk,
       programa_fk,
     } = req.body;
-    const producto_imagen = fs.readFileSync(req.file.path);
+    // const producto_imagen = fs.readFileSync(req.file.path);
 
 
     const nuevo_producto = await producto.create({
@@ -101,11 +111,12 @@ export const create_producto = async (req, res) => {
       producto_ano,
       producto_tipo,
       producto_subtipo,
-      producto_imagen,
+      producto_imagen: imagenData,
       producto_url,
       proyecto_fk,
       semillero_fk,
     });
+    fs.unlinkSync(path + '.' + mimetype.split('/')[1]);
 
     //const nuevo_funcionario_producto = await funcionario_producto.create({
 
