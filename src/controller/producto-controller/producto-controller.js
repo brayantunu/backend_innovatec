@@ -86,7 +86,7 @@ export const getproducto = async (req, res) => {
 
 export const create_producto = async (req, res) => {
   try {
-    const { mimetype, path  } =req.file;
+    const { mimetype,path  } = req.file;
     fs.renameSync(path, path + '.' + mimetype.split('/')[1]);
 
     const imagenData = fs.readFileSync(path + '.' + mimetype.split('/')[1]);

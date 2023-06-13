@@ -12,7 +12,7 @@ const router = Router()
 import { fileURLToPath } from 'url';
 const filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(filename);
-const storage = multer({ dest: '/public' });
+const storage = multer({ dest: 'src/public' });
 const upload = multer({ storage });
 
 
