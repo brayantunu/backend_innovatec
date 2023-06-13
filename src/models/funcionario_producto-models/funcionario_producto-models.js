@@ -17,7 +17,7 @@ export const funcionario_producto = sequelize.define('funcionario_producto',{
 
     },
     funcionario_fk:{
-        type:DataTypes.INTEGER,
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: false,
     }
 

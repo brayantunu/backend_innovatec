@@ -11,7 +11,7 @@ export const producto_programa = sequelize.define('producto_programa', {
         autoIncrement: true
     },
     programa_fk: {
-        type:DataTypes.INTEGER,
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
         foreignKey:true
     },
     productos_fk: {

@@ -107,21 +107,55 @@ export const create_producto = async (req, res) => {
       semillero_fk,
     });
 
-    const nuevo_funcionario_producto = await funcionario_producto.create({
-      funcionario_fk,
-      producto_fk: nuevo_producto.producto_id,
-    });
+    //const nuevo_funcionario_producto = await funcionario_producto.create({
 
-    const nuevo_producto_programa = await producto_programa.create({
-      productos_fk: nuevo_producto.producto_id,
-      programa_fk,
-    });
+      //funcionario_fk,
+      //producto_fk: nuevo_producto.producto_id,
+    //});
+    
+    //array de funcionarios
+    const nuevo_funcionario = [];
+    if (funcionario_fk && funcionario_fk.length > 0) {
+      await Promise.all(
+        funcionario_fk.map(async (id) => {
+          const nuevo_funcionario_producto = await funcionario_producto.create({
+            funcionario_fk: id,
+            producto_fk: nuevo_producto.producto_id,
+          });
+          nuevo_funcionario.push(nuevo_funcionario_producto);
+        })
+      );
+    }
+
+
+//array de productos
+    const nuevo_programa = [];
+    if (programa_fk && programa_fk.length > 0) {
+      await Promise.all(
+        programa_fk.map(async ( id) => {
+          const nuevo_programa_producto = await producto_programa.create({
+            programa_fk: id,
+            productos_fk: nuevo_producto.producto_id,
+          });
+          nuevo_programa.push(nuevo_programa_producto);
+        })
+      );
+    }
+
+
+
+
+
+    //const nuevo_producto_programa = await producto_programa.create({
+     // productos_fk: nuevo_producto.producto_id,
+      //programa_fk,
+    //});
 
     res.status(200).json({
       message: 'Se creó el producto correctamente.',
       nuevo_producto,
-      nuevo_funcionario_producto,
-      nuevo_producto_programa,
+      nuevo_funcionario,
+      nuevo_programa,
     });
   } catch (error) {
     console.error(error);
