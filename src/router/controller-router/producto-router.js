@@ -11,7 +11,7 @@ const router = Router()
 // Configuración de almacenamiento y nombre de archivo con multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Directorio donde se guardarán las imágenes
+    cb(null, 'src/uploads/'); // Directorio donde se guardarán las imágenes
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
