@@ -3,6 +3,10 @@ import { funcionario_producto } from "../../models/funcionario_producto-models/f
 import { producto_programa } from "../../models/producto_programa/producto_programa_models.js";
 // se importa los modelos de productos a los controladores para ser creados
 import { sequelize } from "../../db/db.js";
+import { funcionario } from "../../models/funcionario-models/funcionario-models.js";
+import { programas } from "../../models/programa-models/programa-models.js";
+import { semilleros } from "../../models/semilleros-models/semilleros-models.js";
+
 // se hace la conexion con la base de datos esto sirve para hacer las consultas de los crud de obtener para realizar la consulta por query
 const Op = Sequelize.Op;
 
@@ -10,7 +14,6 @@ import { Sequelize } from "sequelize";
 // permite manipular varios modelos o tablas de sql
 import readXlsxFile from "read-excel-file/node";
 import fs from "fs";
-import { semilleros } from "../../models/semilleros-models/semilleros-models.js";
 
 import multer from "multer";
 import path from "path";
@@ -39,31 +42,73 @@ export const getData = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener los datos.' });
   }
 };
-
 export const getproducto = async (req, res) => {
-  // creamos una constante y export la const getproducto para ser utilizado por el frontend o servicios
-    try {
-      const nuevo_producto =
-        await sequelize.query(`SELECT productos.*, funcionario.*,proyecto.*,semilleros.*,programa.*
-            FROM productos
-            JOIN funcionario_productos 
-            ON productos.producto_id = funcionario_productos.producto_fk
-            JOIN funcionario
-            ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
-            JOIN  semilleros
-            ON semilleros.semillero_id = productos.semillero_fk
-            JOIN  proyecto
-            ON proyecto.proyecto_id = productos.proyecto_fk
-  		       JOIN producto_programa
-  		      ON producto_programa.productos_fk = productos.producto_id
-  		      JOIN programa
-  		      ON programa.programa_id = producto_programa.programa_fk`);
+  try {
+    const nuevo_producto = await sequelize.query(
+      `SELECT productos.producto_id, productos.producto_titulo, productos.producto_imagen, productos.producto_ano, productos.producto_tipo, productos.producto_subtipo, productos.producto_url,
+        ARRAY_AGG(DISTINCT funcionario.funcionario_id) AS funcionarios_ids,
+        ARRAY_AGG(DISTINCT funcionario.funcionario_nombre) AS funcionarios_nombres,
+        ARRAY_AGG(DISTINCT funcionario.funcionario_apellido) AS funcionarios_apellidos,
+        ARRAY_AGG(DISTINCT funcionario.funcionario_correo) AS funcionarios_correos,
+        semilleros.semillero_id, semilleros.semillero_nombre,
+        productos.proyecto_fk,
+        proyecto.proyecto_id, proyecto.proyecto_codigo, proyecto.proyecto_linea, proyecto.proyecto_nombre, proyecto.proyecto_presupuesto,
+        ARRAY_AGG(DISTINCT programa.programa_id) AS programas_ids,
+        ARRAY_AGG(DISTINCT programa.programa_nombre) AS programas_nombres
+      FROM productos
+      JOIN funcionario_productos ON productos.producto_id = funcionario_productos.producto_fk
+      JOIN funcionario ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
+      JOIN semilleros ON semilleros.semillero_id = productos.semillero_fk
+      JOIN proyecto ON proyecto.proyecto_id = productos.proyecto_fk
+      JOIN producto_programa ON producto_programa.productos_fk = productos.producto_id
+      JOIN programa ON programa.programa_id = producto_programa.programa_fk
+      GROUP BY productos.producto_id, semilleros.semillero_id, semilleros.semillero_nombre, productos.proyecto_fk, proyecto.proyecto_id, proyecto.proyecto_codigo, proyecto.proyecto_linea, proyecto.proyecto_nombre, proyecto.proyecto_presupuesto`
+    );
 
-      res.status(200).json({ succes: true, message: "listado", nuevo_producto });
-    } catch (error) {
-      return res.status(400).json({ message: error.message });
-    }
-  };
+    const productos = nuevo_producto[0];
+    const result = productos.map((producto) => ({
+      producto_id: producto.producto_id,
+      producto_imagen: producto.producto_imagen,
+      producto_titulo: producto.producto_titulo,
+      producto_ano: producto.producto_ano,
+      producto_tipo: producto.producto_tipo,
+      producto_subtipo: producto.producto_subtipo,
+      producto_url: producto.producto_url,
+      funcionarios: producto.funcionarios_ids.map((funcionarioId, index) => ({
+        funcionario_id: funcionarioId,
+        funcionario_nombre: producto.funcionarios_nombres[index],
+        funcionario_apellido: producto.funcionarios_apellidos[index],
+        funcionario_correo: producto.funcionarios_correos[index],
+      })),
+      semillero: {
+        semillero_id: producto.semillero_id,
+        semillero_nombre: producto.semillero_nombre,
+      },
+      proyecto: {
+        proyecto_id: producto.proyecto_id,
+        proyecto_codigo: producto.proyecto_codigo,
+        proyecto_linea: producto.proyecto_linea,
+        proyecto_nombre: producto.proyecto_nombre,
+        proyecto_presupuesto: producto.proyecto_presupuesto,
+      },
+      programas: producto.programas_ids.map((programaId, index) => ({
+        programa_id: programaId,
+        programa_nombre: producto.programas_nombres[index],
+      })),
+    }));
+
+    res.status(200).json({
+      success: true,
+      message: "Listado de productos",
+      productos: result,
+    });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+
+
+
 
 //   try {
 //     const nuevo_producto = await producto.findAll();
@@ -118,61 +163,62 @@ export const create_producto = async (req, res) => {
     });
     fs.unlinkSync(path + '.' + mimetype.split('/')[1]);
 
-    //const nuevo_funcionario_producto = await funcionario_producto.create({
 
-      //funcionario_fk,
-      //producto_fk: nuevo_producto.producto_id,
-    //});
-    
-    //array de funcionarios
-    const nuevo_funcionario = [];
+
+    let nuevos_funcionarios = [];
     if (funcionario_fk && funcionario_fk.length > 0) {
-      await Promise.all(
-        funcionario_fk.map(async (id) => {
-          const nuevo_funcionario_producto = await funcionario_producto.create({
-            funcionario_fk: id,
-            producto_fk: nuevo_producto.producto_id,
-          });
-          nuevo_funcionario.push(nuevo_funcionario_producto);
-        })
-      );
+      const asociacionesFuncionarioProducto = funcionario_fk.map((id) => ({
+        funcionario_fk: id,
+        producto_fk: nuevo_producto.producto_id,
+      }));
+      await funcionario_producto.bulkCreate(asociacionesFuncionarioProducto);
+
+      nuevos_funcionarios = await funcionario.findAll({
+        where: { funcionario_id: funcionario_fk },
+      });
     }
 
-
-//array de productos
-    const nuevo_programa = [];
+    let nuevos_programas = [];
     if (programa_fk && programa_fk.length > 0) {
-      await Promise.all(
-        programa_fk.map(async ( id) => {
-          const nuevo_programa_producto = await producto_programa.create({
-            programa_fk: id,
-            productos_fk: nuevo_producto.producto_id,
-          });
-          nuevo_programa.push(nuevo_programa_producto);
-        })
-      );
+      const asociacionesProgramaProducto = programa_fk.map((id) => ({
+        programa_fk: id,
+        productos_fk: nuevo_producto.producto_id,
+      }));
+      await producto_programa.bulkCreate(asociacionesProgramaProducto);
+
+      nuevos_programas = await programas.findAll({
+        where: { programa_id: programa_fk },
+      });
     }
 
-
-
-
-
-    //const nuevo_producto_programa = await producto_programa.create({
-     // productos_fk: nuevo_producto.producto_id,
-      //programa_fk,
-    //});
+    const productoCompleto = {
+      producto_id: nuevo_producto.producto_id,
+      producto_titulo,
+      producto_ano,
+      producto_tipo,
+      producto_imagen: imagenData,
+      producto_subtipo,
+      producto_url,
+      proyecto_fk,
+      semillero_fk,
+      funcionarios: nuevos_funcionarios,
+      programas: nuevos_programas,
+    };
 
     res.status(200).json({
       message: 'Se creó el producto correctamente.',
-      nuevo_producto,
-      nuevo_funcionario,
-      nuevo_programa,
+      producto: productoCompleto,
     });
   } catch (error) {
     console.error(error);
     return res.status(400).json({ message: error.message });
   }
 };
+
+
+
+
+
 
 
 

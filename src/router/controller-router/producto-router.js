@@ -21,7 +21,7 @@ const upload = multer({ storage });
 router.get('/producto/buscar', cors(), searchProducts)
 router.get('/',getproducto)
 router.get('/producto/:producto_id', cors(), get_producto_id)
-router.post('/producto',storage.single('producto_imagen'),create_producto)
+router.post('/producto',create_producto)
 router.delete('/producto/:producto_id', delete_producto)
 router.patch('/producto/:producto_id', update_producto)
 router.get('/filtrosemillero', cors(), filtrosemilleros)//LISTO

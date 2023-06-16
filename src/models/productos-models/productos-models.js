@@ -30,7 +30,7 @@ export const producto = sequelize.define('producto',{
     },
     producto_imagen: {
       type: DataTypes.BLOB, 
-      allowNull: false,
+      allowNull: true,
     },
 
     // BLOB("long"),
