@@ -50,7 +50,7 @@ export const getproducto = async (req, res) => {
         ARRAY_AGG(DISTINCT funcionario.funcionario_nombre) AS funcionarios_nombres,
         ARRAY_AGG(DISTINCT funcionario.funcionario_apellido) AS funcionarios_apellidos,
         ARRAY_AGG(DISTINCT funcionario.funcionario_correo) AS funcionarios_correos,
-        semilleros.semillero_id, semilleros.semillero_nombre,
+        semilleros.*,
         productos.proyecto_fk,
         proyecto.proyecto_id, proyecto.proyecto_codigo, proyecto.proyecto_linea, proyecto.proyecto_nombre, proyecto.proyecto_presupuesto,
         ARRAY_AGG(DISTINCT programa.programa_id) AS programas_ids,
@@ -131,10 +131,10 @@ export const getproducto = async (req, res) => {
 
 export const create_producto = async (req, res) => {
   try {
-    const { mimetype,path  } = req.file;
+    const { mimetype, path } = req.file;
     fs.renameSync(path, path + '.' + mimetype.split('/')[1]);
 
-    const imagenData = fs.readFileSync(path + '.' + mimetype.split('/')[1]);
+    const imagenData = fs.readFileSync(path + '.' + mimetype.split('/')[1]).toString("base64");
     const {
       producto_titulo,
       producto_ano,
@@ -144,9 +144,19 @@ export const create_producto = async (req, res) => {
       producto_url,
       proyecto_fk,
       semillero_fk,
-      funcionario_fk,
-      programa_fk,
+
     } = req.body;
+
+    console.log(req.body.funcionario_fk);
+    const funcionario_fk = Array.isArray(req.body.funcionario_fk)
+      ? req.body.funcionario_fk
+      : req.body.funcionario_fk.split(',');
+
+    const programa_fk = Array.isArray(req.body.programa_fk)
+      ? req.body.programa_fk
+      : req.body.programa_fk.split(',');
+    // const producto_imagen = fs.readFileSync(req.file.path);
+    console.log(funcionario_fk);
     // const producto_imagen = fs.readFileSync(req.file.path);
 
 
@@ -161,7 +171,6 @@ export const create_producto = async (req, res) => {
       proyecto_fk,
       semillero_fk,
     });
-    fs.unlinkSync(path + '.' + mimetype.split('/')[1]);
 
 
 
@@ -204,6 +213,8 @@ export const create_producto = async (req, res) => {
       funcionarios: nuevos_funcionarios,
       programas: nuevos_programas,
     };
+    fs.unlinkSync(path + '.' + mimetype.split('/')[1]);
+
 
     res.status(200).json({
       message: 'Se creó el producto correctamente.',
@@ -393,7 +404,7 @@ export const get_producto_id = async (req, res) => {
 
 export const get_funcionario_identificacion = async (req, res) => {
   const funcionarioiden = req.params.funcionario_iden;
-console.log(funcionarioiden)
+  console.log(funcionarioiden)
   try {
     const producto = await sequelize.query(
       `SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
@@ -691,8 +702,6 @@ export const filtroprograma = async (req, res) => {
 
 
 
-
-
 export const searchProducts = async (req, res, next) => {
   try {
     const query = req.query.titulo;
@@ -736,13 +745,9 @@ export const searchProducts = async (req, res, next) => {
 export const aplicarFiltros = async (req, res) => {
 
   const semilleroNombre = req.query.semillero_nombre ?? [];
-
   const productosSubtipos = req.query.producto_subtipo ?? [];
-
   const buscarAno = req.query.productos_ano ?? [];
-
   const buscarProyecto = req.query.proyectos_nombre ?? [];
-
   const buscarPrograma = req.query.programas_nombre ?? [];
 
   const filtrosSemillero = semilleroNombre.map((nombre) => `%${nombre}%`);
@@ -750,7 +755,6 @@ export const aplicarFiltros = async (req, res) => {
   const filtroAnos = buscarAno.map((ano) => `%${ano}%`);
   const filtroProyectos = buscarProyecto.map((proyecto) => `%${proyecto}%`);
   const filtroProgramas = buscarPrograma.map((programa) => `%${programa}%`);
-
 
 
   try {
@@ -764,6 +768,9 @@ export const aplicarFiltros = async (req, res) => {
     if (filtrosSemillero.length > 0) {
       condiciones.push(`semilleros.semillero_nombre LIKE ANY(ARRAY[:filtrosSemillero])`);
       valoresFiltros.filtrosSemillero = filtrosSemillero;
+
+      
+
     }
 
     if (filtrosProducto.length > 0) {
@@ -789,8 +796,8 @@ export const aplicarFiltros = async (req, res) => {
 
 
     // Crear la consulta SQL base
-    let consultaSQL = `
-      SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
+    let consultaSQL =
+      `SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
       FROM productos
       JOIN funcionario_productos 
       ON productos.producto_id = funcionario_productos.producto_fk
@@ -803,13 +810,13 @@ export const aplicarFiltros = async (req, res) => {
       JOIN producto_programa
       ON producto_programa.productos_fk = productos.producto_id
       JOIN programa
-      ON programa.programa_id = producto_programa.programa_fk
-    `;
+      ON programa.programa_id = producto_programa.programa_fk `;
 
     // Agregar las condiciones de filtrado a la consulta si existen
     if (condiciones.length > 0) {
       consultaSQL += `WHERE ${condiciones.join(' AND ')}`;
     }
+    console.log("aqui estan los filtros de los semillero000000000000000000000000000000000000000000", condiciones);
 
     // Ejecutar la consulta con los filtros correspondientes
     const productos = await sequelize.query(consultaSQL, {
