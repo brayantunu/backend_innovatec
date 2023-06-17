@@ -371,21 +371,24 @@ export const get_producto_id = async (req, res) => {
 
   try {
     const producto = await sequelize.query(
-      `SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
+      `SELECT productos.*, 
+        ARRAY_AGG(DISTINCT funcionario.funcionario_id) AS funcionario_fk, 
+        ARRAY_AGG(DISTINCT programa.programa_id) AS programa_fk
       FROM productos
-      JOIN funcionario_productos 
+      LEFT JOIN funcionario_productos 
       ON productos.producto_id = funcionario_productos.producto_fk
-      JOIN funcionario
+      LEFT JOIN funcionario
       ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
-      JOIN semilleros
+      LEFT JOIN semilleros
       ON semilleros.semillero_id = productos.semillero_fk
-      JOIN proyecto
+      LEFT JOIN proyecto
       ON proyecto.proyecto_id = productos.proyecto_fk
-      JOIN producto_programa
+      LEFT JOIN producto_programa
       ON producto_programa.productos_fk = productos.producto_id
-      JOIN programa
+      LEFT JOIN programa
       ON programa.programa_id = producto_programa.programa_fk
-      WHERE productos.producto_id = :productoId`,
+      WHERE productos.producto_id = :productoId
+      GROUP BY productos.producto_id`,
       {
         replacements: { productoId },
         type: sequelize.QueryTypes.SELECT,
@@ -396,11 +399,19 @@ export const get_producto_id = async (req, res) => {
       return res.status(404).json({ success: false, message: "No se encontró el producto" });
     }
 
-    res.status(200).json({ success: true, message: "Producto encontrado", producto });
+    const formattedProducto = {
+      ...producto[0],
+      funcionario_fk: producto[0].funcionario_fk.map(Number),
+      programa_fk: producto[0].programa_fk.map(Number),
+    };
+
+    res.status(200).json({ success: true, message: "Producto encontrado", producto: formattedProducto });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
 };
+
+
 
 export const get_funcionario_identificacion = async (req, res) => {
   const funcionarioiden = req.params.funcionario_iden;
