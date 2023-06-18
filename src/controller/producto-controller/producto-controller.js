@@ -45,7 +45,7 @@ export const getData = async (req, res) => {
 export const getproducto = async (req, res) => {
   try {
     const nuevo_producto = await sequelize.query(
-      `SELECT productos.producto_id, productos.producto_titulo, productos.producto_imagen, productos.producto_ano, productos.producto_tipo, productos.producto_subtipo, productos.producto_url,
+      `SELECT productos.*,
         ARRAY_AGG(DISTINCT funcionario.funcionario_id) AS funcionarios_ids,
         ARRAY_AGG(DISTINCT funcionario.funcionario_nombre) AS funcionarios_nombres,
         ARRAY_AGG(DISTINCT funcionario.funcionario_apellido) AS funcionarios_apellidos,
@@ -55,6 +55,7 @@ export const getproducto = async (req, res) => {
         proyecto.proyecto_id, proyecto.proyecto_codigo, proyecto.proyecto_linea, proyecto.proyecto_nombre, proyecto.proyecto_presupuesto,
         ARRAY_AGG(DISTINCT programa.programa_id) AS programas_ids,
         ARRAY_AGG(DISTINCT programa.programa_nombre) AS programas_nombres
+
       FROM productos
       JOIN funcionario_productos ON productos.producto_id = funcionario_productos.producto_fk
       JOIN funcionario ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
@@ -769,7 +770,7 @@ export const aplicarFiltros = async (req, res) => {
       condiciones.push(`semilleros.semillero_nombre LIKE ANY(ARRAY[:filtrosSemillero])`);
       valoresFiltros.filtrosSemillero = filtrosSemillero;
 
-      
+
 
     }
 
@@ -798,19 +799,60 @@ export const aplicarFiltros = async (req, res) => {
     // Crear la consulta SQL base
     let consultaSQL =
       `SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
-      FROM productos
-      JOIN funcionario_productos 
-      ON productos.producto_id = funcionario_productos.producto_fk
-      JOIN funcionario
-      ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
-      JOIN semilleros
-      ON semilleros.semillero_id = productos.semillero_fk
-      JOIN proyecto
-      ON proyecto.proyecto_id = productos.proyecto_fk
-      JOIN producto_programa
-      ON producto_programa.productos_fk = productos.producto_id
-      JOIN programa
-      ON programa.programa_id = producto_programa.programa_fk `;
+    FROM productos
+
+    JOIN (
+    SELECT DISTINCT ON (producto_fk) *
+    FROM funcionario_productos
+    ) AS funcionario_productos
+
+
+    ON productos.producto_id = funcionario_productos.producto_fk
+    JOIN funcionario
+    ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
+    JOIN semilleros
+    ON semilleros.semillero_id = productos.semillero_fk
+    JOIN proyecto
+    ON proyecto.proyecto_id = productos.proyecto_fk
+
+    JOIN (
+      SELECT DISTINCT ON (productos_fk) *
+      FROM producto_programa
+      ) AS producto_programa
+
+
+
+    ON producto_programa.productos_fk = productos.producto_id
+    JOIN programa
+    ON programa.programa_id = producto_programa.programa_fk `;
+
+
+    // `SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
+    // FROM productos
+
+    // JOIN funcionario_productos 
+
+
+    // ON productos.producto_id = funcionario_productos.producto_fk
+    // JOIN funcionario
+    // ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
+    // JOIN semilleros
+    // ON semilleros.semillero_id = productos.semillero_fk
+    // JOIN proyecto
+    // ON proyecto.proyecto_id = productos.proyecto_fk
+
+
+    // JOIN producto_programa
+
+
+    // ON producto_programa.productos_fk = productos.producto_id
+    // JOIN programa
+    // ON programa.programa_id = producto_programa.programa_fk `;
+
+
+
+
+
 
     // Agregar las condiciones de filtrado a la consulta si existen
     if (condiciones.length > 0) {
@@ -828,7 +870,7 @@ export const aplicarFiltros = async (req, res) => {
       return res.status(404).send("No se encontraron productos");
     }
 
-    res.send(productos);
+    res.status(200).json({ productos });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error al obtener los productos");
