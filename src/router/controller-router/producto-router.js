@@ -30,7 +30,10 @@ router.get('/filtroproducto', cors(), subtipoproducto)
 router.get('/filtroano', cors(), filtroaño)
 router.get('/filtroproyecto', cors(), filtroproyecto)
 router.get('/filtroprograma', cors(), filtroprograma)
-router.get('/grafica/:option', cors(), getData)
+
+router.get('/grafica', cors(), getData)
+
+
 router.get('/productos/:funcionario_iden',get_funcionario_identificacion)
 
 router.get('/aplicarfiltros', cors(), aplicarFiltros)

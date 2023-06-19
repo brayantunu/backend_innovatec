@@ -23,25 +23,68 @@ const filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(filename);
 
 
+
+
 export const getData = async (req, res) => {
+  const option = req.query;
+
   try {
-    const { option } = req.params;
-    console.log(option);
-    let data;
+    const resultados = await sequelize.query(
+      `SELECT productos.producto_subtipo, COUNT(*) AS cantidad
+      FROM productos
+      JOIN (
+        SELECT DISTINCT ON (producto_fk) *
+        FROM funcionario_productos
+        ) AS funcionario_productos
+  
+        ON productos.producto_id = funcionario_productos.producto_fk
+      JOIN funcionario
+        ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
+      JOIN semilleros
+        ON semilleros.semillero_id = productos.semillero_fk
+      JOIN proyecto
+        ON proyecto.proyecto_id = productos.proyecto_fk
+        JOIN (
+          SELECT DISTINCT ON (productos_fk) *
+          FROM producto_programa
+          ) AS producto_programa
+    
+    
+        ON producto_programa.productos_fk = productos.producto_id
+      JOIN programa
+        ON programa.programa_id = producto_programa.programa_fk
+      GROUP BY productos.producto_subtipo`,
+      {
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
 
-    if (option === 'semilleros') {
-      data = await producto.count({
-        attributes: ['semillero_fk'],
-        group: ['semillero_fk']
-      });
-    }
-
-    res.json(data);
+    res.status(200).json({
+      message: 'Datos obtenidos',
+      resultados,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al obtener los datos.' });
+    res.status(500).json({
+      message: 'Error al obtener los datos.',
+      error: error,
+    });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const getproducto = async (req, res) => {
   try {
     const nuevo_producto = await sequelize.query(
@@ -887,3 +930,7 @@ export const aplicarFiltros = async (req, res) => {
     res.status(500).send("Error al obtener los productos");
   }
 };
+
+
+
+
