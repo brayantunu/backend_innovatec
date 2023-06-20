@@ -1,6 +1,6 @@
 import { Router } from "express";
 // importamos la libreria de express llamamos un objeto router para hacer la conexcion de frontend con el backend 
-import {aplicarFiltros, getproducto, get_producto_id, create_producto, delete_producto, update_producto,searchProducts, filtrosemilleros, subtipoproducto, filtroaño, filtroproyecto, filtroprograma,get_funcionario_identificacion,getData} from "../../controller/producto-controller/producto-controller.js";
+import {aplicarFiltrosGraficas, aplicarFiltros, getproducto, get_producto_id, create_producto, delete_producto, update_producto,searchProducts, filtrosemilleros, subtipoproducto, filtroaño, filtroproyecto, filtroprograma,get_funcionario_identificacion,getData} from "../../controller/producto-controller/producto-controller.js";
 import cors from "cors"
 import multer from "multer";
 import path from "path"
@@ -24,19 +24,18 @@ router.get('/producto/:producto_id', cors(), get_producto_id)
 router.post('/producto',storage.single('producto_imagen'),create_producto)
 router.delete('/producto/:producto_id', delete_producto)
 router.patch('/producto/:producto_id', update_producto)
-router.get('/filtrosemillero', cors(), filtrosemilleros)//LISTO
-
-router.get('/filtroproducto', cors(), subtipoproducto)
-router.get('/filtroano', cors(), filtroaño)
-router.get('/filtroproyecto', cors(), filtroproyecto)
-router.get('/filtroprograma', cors(), filtroprograma)
-
-router.get('/grafica', cors(), getData)
-
-
+// router.get('/filtrosemillero', cors(), filtrosemilleros)
+// router.get('/filtroproducto', cors(), subtipoproducto)
+// router.get('/filtroano', cors(), filtroaño)
+// router.get('/filtroproyecto', cors(), filtroproyecto)
+// router.get('/filtroprograma', cors(), filtroprograma)
 router.get('/productos/:funcionario_iden',get_funcionario_identificacion)
 
+
 router.get('/aplicarfiltros', cors(), aplicarFiltros)
+router.get('/aplicarfiltrosgraficas', cors(), aplicarFiltrosGraficas)
+
+// router.get('/grafica', cors(), getData)
 
 
 
