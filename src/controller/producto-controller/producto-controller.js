@@ -12,21 +12,18 @@ const Op = Sequelize.Op;
 
 import { Sequelize } from "sequelize";
 // permite manipular varios modelos o tablas de sql
-import readXlsxFile from "read-excel-file/node";
+// import readXlsxFile from "read-excel-file/node";
 import fs from "fs";
 
 import multer from "multer";
 import path from "path";
 
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 const filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(filename);
 
-
-
 export const getData = async (req, res) => {
-
-  const query = req.query.valor
+  const query = req.query.valor;
 
   try {
     const resultados = await sequelize.query(
@@ -61,29 +58,16 @@ export const getData = async (req, res) => {
     );
 
     res.status(200).json({
-      message: 'Subtipo',
+      message: "Subtipo",
       resultados,
     });
   } catch (error) {
     res.status(500).json({
-      message: 'Error al obtener los datos.',
+      message: "Error al obtener los datos.",
       error: error,
     });
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const getproducto = async (req, res) => {
   try {
@@ -151,61 +135,35 @@ export const getproducto = async (req, res) => {
   }
 };
 
-
-
-
-//   try {
-//     const nuevo_producto = await producto.findAll();
-//     //       await sequelize.query(`SELECT productos.productos_titulo,puntajes.puntaje_puntuacion
-//     // FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
-
-//     //   const new_producto = await sequelize.query(`SELECT productos.*,puntajes.*
-//     //  FROM productos JOIN puntajes ON puntajes.producto_id = productos.producto_id`);
-//     // hacemos la consulta en una promesa try catch lo que permite mediante en una variable guarda los objetos 
-//     res.status(200).json({ succes: true, message: "listado", nuevo_producto });
-//     // este permite ver el estado de la peticion del servicio en este caso en 200 significa 200 mostrando un mensaje listado con obtencion de los datos solcitados por el cliente 
-
-
-//     // res.status(200).json({ succes: true, message: "Listado de los productos", nuevo_producto });
-//   } catch (error) {
-//     return res.status(400).json({ message: error.message });
-//     // este permite si la solicitud del cliente es erronea el servicio no sea mostrado al cliente mostrando un mensaje que no ha sido listado
-//   }
-// };
-
 export const create_producto = async (req, res) => {
   try {
     const { mimetype, path } = req.file;
-    fs.renameSync(path, path + '.' + mimetype.split('/')[1]);
+    fs.renameSync(path, path + "." + mimetype.split("/")[1]);
 
-    const imagenData = fs.readFileSync(path + '.' + mimetype.split('/')[1]).toString("base64");
+    const imagenData = fs
+      .readFileSync(path + "." + mimetype.split("/")[1])
+      .toString("base64");
     const {
       producto_titulo,
       producto_ano,
       producto_tipo,
       producto_subtipo,
-      // producto_imagen,
       producto_url,
       proyecto_fk,
       semillero_fk,
-
     } = req.body;
 
     console.log(req.body.funcionario_fk);
     const funcionario_fk = Array.isArray(req.body.funcionario_fk)
       ? req.body.funcionario_fk
-      : req.body.funcionario_fk.split(',');
+      : req.body.funcionario_fk.split(",");
 
     const programa_fk = Array.isArray(req.body.programa_fk)
       ? req.body.programa_fk
-      : req.body.programa_fk.split(',');
-    // const producto_imagen = fs.readFileSync(req.file.path);
+      : req.body.programa_fk.split(",");
     console.log(funcionario_fk);
-    // const producto_imagen = fs.readFileSync(req.file.path);
-
 
     const nuevo_producto = await producto.create({
-      // nombre: filename,
       producto_titulo,
       producto_ano,
       producto_tipo,
@@ -215,8 +173,6 @@ export const create_producto = async (req, res) => {
       proyecto_fk,
       semillero_fk,
     });
-
-
 
     let nuevos_funcionarios = [];
     if (funcionario_fk && funcionario_fk.length > 0) {
@@ -257,11 +213,10 @@ export const create_producto = async (req, res) => {
       funcionarios: nuevos_funcionarios,
       programas: nuevos_programas,
     };
-    fs.unlinkSync(path + '.' + mimetype.split('/')[1]);
-
+    fs.unlinkSync(path + "." + mimetype.split("/")[1]);
 
     res.status(200).json({
-      message: 'Se creó el producto correctamente.',
+      message: "Se creó el producto correctamente.",
       producto: productoCompleto,
     });
   } catch (error) {
@@ -269,16 +224,6 @@ export const create_producto = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 };
-
-
-
-
-
-
-
-
-// controlador de cargar imagen en el crud de crear
-// https://www.youtube.com/watch?v=Bj3Gcpohbu4
 
 export const update_producto = async (req, res) => {
   const {
@@ -292,7 +237,7 @@ export const update_producto = async (req, res) => {
     proyecto_fk,
     semillero_fk,
     funcionario_fk,
-    programa_fk
+    programa_fk,
   } = req.body;
 
   try {
@@ -304,7 +249,6 @@ export const update_producto = async (req, res) => {
         producto_tipo,
         producto_subtipo,
         producto_url,
-
         proyecto_fk,
         semillero_fk,
         // funcionario_fk,
@@ -362,7 +306,6 @@ export const update_producto = async (req, res) => {
   }
 };
 
-
 export const delete_producto = async (req, res) => {
   const { producto_id } = req.params;
 
@@ -398,18 +341,6 @@ export const delete_producto = async (req, res) => {
 };
 
 
-// export const get_producto_id = async (req, res) => {
-//   const { producto_id } = req.params;
-//   try {
-//     const nuevo_producto = await producto.findOne({
-//       where: { producto_id },
-//     });
-//     res.status(200).json({ message: "item obtenido por id", nuevo_producto });
-//   } catch (error) {
-//     return res.status(500).json({ message: error.message });
-//   }
-// };
-
 export const get_producto_id = async (req, res) => {
   const productoId = req.params.producto_id;
 
@@ -440,7 +371,9 @@ export const get_producto_id = async (req, res) => {
     );
 
     if (producto.length === 0) {
-      return res.status(404).json({ success: false, message: "No se encontró el producto" });
+      return res
+        .status(404)
+        .json({ success: false, message: "No se encontró el producto" });
     }
 
     const formattedProducto = {
@@ -449,17 +382,22 @@ export const get_producto_id = async (req, res) => {
       programa_fk: producto[0].programa_fk.map(Number),
     };
 
-    res.status(200).json({ success: true, message: "Producto encontrado", producto: formattedProducto });
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Producto encontrado",
+        producto: formattedProducto,
+      });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
 };
 
 
-
 export const get_funcionario_identificacion = async (req, res) => {
   const funcionarioiden = req.params.funcionario_iden;
-  console.log(funcionarioiden)
+  console.log(funcionarioiden);
   try {
     const producto = await sequelize.query(
       `SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
@@ -484,24 +422,30 @@ export const get_funcionario_identificacion = async (req, res) => {
     );
 
     if (producto.length === 0) {
-      return res.status(404).json({ success: false, message: "No se encontró el producto de funcionario" });
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: "No se encontró el producto de funcionario",
+        });
     }
 
-    res.status(200).json({ success: true, message: "funcionario encontrado", producto });
+    res
+      .status(200)
+      .json({ success: true, message: "funcionario encontrado", producto });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
 };
 
-
 export const filtrosemilleros = async (req, res) => {
-
-  const semilleroNombre = req.query.semillero_nombre
+  const semilleroNombre = req.query.semillero_nombre;
   console.log(semilleroNombre);
   if (!Array.isArray(semilleroNombre)) {
-    return res.status(400).send("Los autores deben ser proporcionados como un array");
+    return res
+      .status(400)
+      .send("Los autores deben ser proporcionados como un array");
   }
-
 
   const filtrosSemillero = semilleroNombre.map((autor) => `%${autor}%`);
 
@@ -538,7 +482,7 @@ export const filtrosemilleros = async (req, res) => {
 };
 
 export const subtipoproducto = async (req, res) => {
-  const productossubtipos = req.query.producto_subtipo
+  const productossubtipos = req.query.producto_subtipo;
 
   if (!Array.isArray(productossubtipos)) {
     return res
@@ -584,7 +528,9 @@ export const filtroaño = async (req, res) => {
   const buscarano = req.query.productos_ano;
   console.log(buscarano);
   if (!Array.isArray(buscarano)) {
-    return res.status(400).send("Los anos deben ser proporcionados como un array");
+    return res
+      .status(400)
+      .send("Los anos deben ser proporcionados como un array");
   }
   const filtroanos = buscarano.map((ano) => `%${ano}%`);
 
@@ -628,12 +574,13 @@ export const upload = async (req, res) => {
   });
 };
 
-
 export const filtroproyecto = async (req, res) => {
   const buscarproyecto = req.query.proyectos_nombre;
   console.log(buscarproyecto);
   if (!Array.isArray(buscarproyecto)) {
-    return res.status(400).send("Los proyectos deben ser proporcionados como un array");
+    return res
+      .status(400)
+      .send("Los proyectos deben ser proporcionados como un array");
   }
   const filtroproyectos = buscarproyecto.map((ano) => `%${ano}%`);
 
@@ -671,12 +618,13 @@ export const filtroproyecto = async (req, res) => {
   }
 };
 
-
 export const filtroprograma = async (req, res) => {
   const buscarprograma = req.query.programas_nombre;
   console.log(buscarprograma);
   if (!Array.isArray(buscarprograma)) {
-    return res.status(400).send("Los programas deben ser proporcionados como un array");
+    return res
+      .status(400)
+      .send("Los programas deben ser proporcionados como un array");
   }
   const filtroprogramas = buscarprograma.map((ano) => `%${ano}%`);
 
@@ -714,49 +662,6 @@ export const filtroprograma = async (req, res) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// export const searchProducts = async (req, res, next) => {
-//   try {
-//     const titulo = req.query.titulo;
-//     const productos = await producto.findAll({
-//       where: {
-//         producto_titulo: {
-//           [Op.iLike]: "%" + titulo + "%",
-//         },
-//       },
-//     });
-//     if (productos.length === 0) {
-//       const error = new Error(
-//         `No se encontraron productos que coincidan con '${titulo}'`
-//       );
-//       error.statusCode = 404;
-//       throw error;
-//     }
-//     res
-//       .status(200)
-//       .json({ message: "item obtenido por productos_titulo", productos });
-//   } catch (error) {
-//     // return res.status(500).json({ message: error.message })
-//     next(error);
-//   }
-// };
-
-
-
-
-
 export const searchProducts = async (req, res, next) => {
   try {
     const query = req.query.titulo;
@@ -790,15 +695,11 @@ export const searchProducts = async (req, res, next) => {
   }
 };
 
-
-
 // creando imagenes
-
 
 // Controlador para subir una imagen
 
 export const aplicarFiltros = async (req, res) => {
-
   const semilleroNombre = req.query.semillero_nombre ?? [];
   const productosSubtipos = req.query.producto_subtipo ?? [];
   const buscarAno = req.query.productos_ano ?? [];
@@ -811,7 +712,6 @@ export const aplicarFiltros = async (req, res) => {
   const filtroProyectos = buscarProyecto.map((proyecto) => `%${proyecto}%`);
   const filtroProgramas = buscarPrograma.map((programa) => `%${programa}%`);
 
-
   try {
     // Crea una variable para almacenar las condiciones de filtrado
     let condiciones = [];
@@ -821,15 +721,16 @@ export const aplicarFiltros = async (req, res) => {
 
     // Verificar si se ha seleccionado algún filtro y agregar la condición correspondiente
     if (filtrosSemillero.length > 0) {
-      condiciones.push(`semilleros.semillero_nombre LIKE ANY(ARRAY[:filtrosSemillero])`);
+      condiciones.push(
+        `semilleros.semillero_nombre LIKE ANY(ARRAY[:filtrosSemillero])`
+      );
       valoresFiltros.filtrosSemillero = filtrosSemillero;
-
-
-
     }
 
     if (filtrosProducto.length > 0) {
-      condiciones.push(`productos.producto_subtipo LIKE ANY(ARRAY[:filtrosProducto])`);
+      condiciones.push(
+        `productos.producto_subtipo LIKE ANY(ARRAY[:filtrosProducto])`
+      );
       valoresFiltros.filtrosProducto = filtrosProducto;
     }
 
@@ -839,20 +740,21 @@ export const aplicarFiltros = async (req, res) => {
     }
 
     if (filtroProyectos.length > 0) {
-      condiciones.push(`proyecto.proyecto_nombre LIKE ANY(ARRAY[:filtroProyectos])`);
+      condiciones.push(
+        `proyecto.proyecto_nombre LIKE ANY(ARRAY[:filtroProyectos])`
+      );
       valoresFiltros.filtroProyectos = filtroProyectos;
     }
 
     if (filtroProgramas.length > 0) {
-      condiciones.push(`programa.programa_nombre LIKE ANY(ARRAY[:filtroProgramas])`);
+      condiciones.push(
+        `programa.programa_nombre LIKE ANY(ARRAY[:filtroProgramas])`
+      );
       valoresFiltros.filtroProgramas = filtroProgramas;
     }
 
-
-
     // Crear la consulta SQL base
-    let consultaSQL =
-      `SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
+    let consultaSQL = `SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
     FROM productos
 
     JOIN (
@@ -873,44 +775,13 @@ export const aplicarFiltros = async (req, res) => {
       SELECT DISTINCT ON (productos_fk) *
       FROM producto_programa
       ) AS producto_programa
-
-
-
     ON producto_programa.productos_fk = productos.producto_id
     JOIN programa
     ON programa.programa_id = producto_programa.programa_fk `;
 
-
-    // `SELECT productos.*, funcionario.*, proyecto.*, semilleros.*, programa.*
-    // FROM productos
-
-    // JOIN funcionario_productos 
-
-
-    // ON productos.producto_id = funcionario_productos.producto_fk
-    // JOIN funcionario
-    // ON funcionario.funcionario_id = funcionario_productos.funcionario_fk
-    // JOIN semilleros
-    // ON semilleros.semillero_id = productos.semillero_fk
-    // JOIN proyecto
-    // ON proyecto.proyecto_id = productos.proyecto_fk
-
-
-    // JOIN producto_programa
-
-
-    // ON producto_programa.productos_fk = productos.producto_id
-    // JOIN programa
-    // ON programa.programa_id = producto_programa.programa_fk `;
-
-
-
-
-
-
     // Agregar las condiciones de filtrado a la consulta si existen
     if (condiciones.length > 0) {
-      consultaSQL += `WHERE ${condiciones.join(' AND ')}`;
+      consultaSQL += `WHERE ${condiciones.join(" AND ")}`;
     }
 
     // Ejecutar la consulta con los filtros correspondientes
@@ -930,58 +801,63 @@ export const aplicarFiltros = async (req, res) => {
   }
 };
 
-
-
 export const aplicarFiltrosGraficas = async (req, res) => {
+  const filtro = req.query.filtroSelect ?? "producto_tipo";
+  const semilleroNombre = req.query.semillero_nombre ?? [];
+  const productosSubtipos = req.query.producto_subtipo ?? [];
+  const buscarAno = req.query.productos_ano ?? [];
+  const buscarProyecto = req.query.proyectos_nombre ?? [];
+  const buscarPrograma = req.query.programas_nombre ?? [];
 
-const filtro = req.query.filtroSelect ?? 'producto_tipo'
-const semilleroNombre = req.query.semillero_nombre ?? [];
-const productosSubtipos = req.query.producto_subtipo ?? [];
-const buscarAno = req.query.productos_ano ?? [];
-const buscarProyecto = req.query.proyectos_nombre ?? [];
-const buscarPrograma = req.query.programas_nombre ?? [];
+  const filtrosSemillero = semilleroNombre.map((nombre) => `%${nombre}%`);
+  const filtrosProducto = productosSubtipos.map((subtipo) => `%${subtipo}%`);
+  const filtroAnos = buscarAno.map((ano) => `%${ano}%`);
+  const filtroProyectos = buscarProyecto.map((proyecto) => `%${proyecto}%`);
+  const filtroProgramas = buscarPrograma.map((programa) => `%${programa}%`);
 
-const filtrosSemillero = semilleroNombre.map((nombre) => `%${nombre}%`);
-const filtrosProducto = productosSubtipos.map((subtipo) => `%${subtipo}%`);
-const filtroAnos = buscarAno.map((ano) => `%${ano}%`);
-const filtroProyectos = buscarProyecto.map((proyecto) => `%${proyecto}%`);
-const filtroProgramas = buscarPrograma.map((programa) => `%${programa}%`);
+  try {
+    // Crea una variable para almacenar las condiciones de filtrado
+    let condiciones = [];
 
-try {
-  // Crea una variable para almacenar las condiciones de filtrado
-  let condiciones = [];
+    // Crea una variable para almacenar los valores de los filtros
+    let valoresFiltros = {};
 
-  // Crea una variable para almacenar los valores de los filtros
-  let valoresFiltros = {};
+    // Verificar si se ha seleccionado algún filtro y agregar la condición correspondiente
+    if (filtrosSemillero.length > 0) {
+      condiciones.push(
+        `semilleros.semillero_nombre LIKE ANY(ARRAY[:filtrosSemillero])`
+      );
+      valoresFiltros.filtrosSemillero = filtrosSemillero;
+    }
 
-  // Verificar si se ha seleccionado algún filtro y agregar la condición correspondiente
-  if (filtrosSemillero.length > 0) {
-    condiciones.push(`semilleros.semillero_nombre LIKE ANY(ARRAY[:filtrosSemillero])`);
-    valoresFiltros.filtrosSemillero = filtrosSemillero;
-  }
+    if (filtrosProducto.length > 0) {
+      condiciones.push(
+        `productos.producto_subtipo LIKE ANY(ARRAY[:filtrosProducto])`
+      );
+      valoresFiltros.filtrosProducto = filtrosProducto;
+    }
 
-  if (filtrosProducto.length > 0) {
-    condiciones.push(`productos.producto_subtipo LIKE ANY(ARRAY[:filtrosProducto])`);
-    valoresFiltros.filtrosProducto = filtrosProducto;
-  }
+    if (filtroAnos.length > 0) {
+      condiciones.push(`productos.producto_ano LIKE ANY(ARRAY[:filtroAnos])`);
+      valoresFiltros.filtroAnos = filtroAnos;
+    }
 
-  if (filtroAnos.length > 0) {
-    condiciones.push(`productos.producto_ano LIKE ANY(ARRAY[:filtroAnos])`);
-    valoresFiltros.filtroAnos = filtroAnos;
-  }
+    if (filtroProyectos.length > 0) {
+      condiciones.push(
+        `proyecto.proyecto_nombre LIKE ANY(ARRAY[:filtroProyectos])`
+      );
+      valoresFiltros.filtroProyectos = filtroProyectos;
+    }
 
-  if (filtroProyectos.length > 0) {
-    condiciones.push(`proyecto.proyecto_nombre LIKE ANY(ARRAY[:filtroProyectos])`);
-    valoresFiltros.filtroProyectos = filtroProyectos;
-  }
+    if (filtroProgramas.length > 0) {
+      condiciones.push(
+        `programa.programa_nombre LIKE ANY(ARRAY[:filtroProgramas])`
+      );
+      valoresFiltros.filtroProgramas = filtroProgramas;
+    }
 
-  if (filtroProgramas.length > 0) {
-    condiciones.push(`programa.programa_nombre LIKE ANY(ARRAY[:filtroProgramas])`);
-    valoresFiltros.filtroProgramas = filtroProgramas;
-  }
-
-  // Crear la consulta SQL base
-  let consultaSQL = `
+    // Crear la consulta SQL base
+    let consultaSQL = `
     SELECT productos.${filtro}, COUNT(*) AS cantidad
     FROM productos
     JOIN (
@@ -1003,27 +879,27 @@ try {
     JOIN programa
     ON programa.programa_id = producto_programa.programa_fk`;
 
-  // Agregar las condiciones de filtrado a la consulta si existen
-  if (condiciones.length > 0) {
-    consultaSQL += ` WHERE ${condiciones.join(' AND ')}`;
+    // Agregar las condiciones de filtrado a la consulta si existen
+    if (condiciones.length > 0) {
+      consultaSQL += ` WHERE ${condiciones.join(" AND ")}`;
+    }
+
+    // Agregar la cláusula GROUP BY a la consulta
+    consultaSQL += ` GROUP BY productos.${filtro}`;
+
+    // Ejecutar la consulta con los filtros correspondientes
+    const productos = await sequelize.query(consultaSQL, {
+      replacements: valoresFiltros,
+      type: sequelize.QueryTypes.SELECT,
+    });
+
+    if (productos.length === 0) {
+      return res.status(404).send("No se encontraron productos");
+    }
+
+    res.status(200).json({ productos });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al obtener los productos");
   }
-
-  // Agregar la cláusula GROUP BY a la consulta
-  consultaSQL += ` GROUP BY productos.${filtro}`;
-
-  // Ejecutar la consulta con los filtros correspondientes
-  const productos = await sequelize.query(consultaSQL, {
-    replacements: valoresFiltros,
-    type: sequelize.QueryTypes.SELECT,
-  });
-
-  if (productos.length === 0) {
-    return res.status(404).send("No se encontraron productos");
-  }
-
-  res.status(200).json({ productos });
-} catch (error) {
-  console.error(error);
-  res.status(500).send("Error al obtener los productos");
-}
 };
